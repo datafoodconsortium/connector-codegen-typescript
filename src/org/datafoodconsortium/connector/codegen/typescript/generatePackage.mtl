@@ -1,0 +1,15 @@
+[comment encoding = UTF-8 /]
+[module generatePackage('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[import org::datafoodconsortium::connector::codegen::typescript::generateInterface /]
+[import org::datafoodconsortium::connector::codegen::typescript::generateClass /]
+
+[template public generatePackage(aPackage: Package)]
+[for (anInterface: Interface | aPackage.getOwnedMembers()->selectByType(Interface))]
+[generateInterface(anInterface)/]
+[/for]
+
+[for (aClass: Class | aPackage.getOwnedMembers()->selectByType(Class))]
+[generateClass(aClass)/]
+[/for]
+[/template]

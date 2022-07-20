@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module commonTypescript('http://www.eclipse.org/uml2/5.0.0/UML')/]
+
+[import org::datafoodconsortium::connector::codegen::typescript::common /]
+
+[template public generateGeneralization(classifier: Classifier)]
+[if (not (classifier.generalization->isEmpty()))]extends [for (generalization: Generalization | classifier.generalization) separator(', ')][generalization.general.name/][/for] [/if]
+[/template]
+
+[template public generateType(aType: Type, upper: Integer)][if not (aType.isPrimitive())]([/if][aType.getTypeName()/][if not (aType.isPrimitive())] & SemanticObject)[/if][if (upper = -1)]['[]'/][/if][/template]

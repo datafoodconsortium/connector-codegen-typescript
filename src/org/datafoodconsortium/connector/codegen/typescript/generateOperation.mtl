@@ -1,0 +1,65 @@
+[comment encoding = UTF-8 /]
+[module generateOperation('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[import org::datafoodconsortium::connector::codegen::typescript::common /]
+[import org::datafoodconsortium::connector::codegen::typescript::commonTypescript /]
+
+[template public generateOperationImplementation(aClass: Class, operation: Operation)]
+[generateOperationSignature(operation)/] {
+	[if (isGetter(operation))]
+	[generateGetterBody(aClass, operation)/]
+	[elseif (isSetter(operation))]
+	[generateSetterBody(aClass, operation)/]
+	[elseif (isAdder(operation))]
+	[generateAdderBody(aClass, operation)/]
+	[elseif (isConstructor(operation))]
+	[generateConstructorBody(aClass, operation)/]
+	[/if]
+}
+[/template]
+
+[comment TODO: handle super() parameters/]
+[template public generateConstructorBody(class: Class, operation: Operation)]
+[if not (class.generalization->isEmpty())]super([generateConstructorSuper(operation)/]);[/if]
+[for (parameter: Parameter | operation.ownedParameter->select(p: Parameter | p.isInitializer())) separator('\n')]this.[parameter.getValue(parameter.getAppliedStereotype('datafoodconsortium_connector::initializer'), 'property').oclAsType(Property).name/] = [parameter.name/];[/for]
+[for (property: Property | getConstructorUninitializedAttributes(operation)) separator('\n')]this.[property.name/] = [getInitializationValueForType(property.type.name, property.upper)/];[/for]
+[/template]
+
+[comment handle position (detect automatically?) with initializerParent referencing the super constructor parameter, autodetect the super parameter position. /]
+[template public generateConstructorSuper(constructor: Operation)]
+[for (p: Parameter | constructor.ownedParameter->select(p: Parameter | p.isInitializerParent())) separator(', ')][p.name/][/for]
+[/template]
+
+[template public getInitializationValueForType(type: String, upper: Integer)]
+[if upper = -1]['[]'/][elseif type = 'String']""[elseif type = 'Boolean']false[elseif type = 'Integer']0[elseif type = 'Real']0.0[else][type/][/if]
+[/template]
+
+[template public generateGetterBody(aClass: Class, operation: Operation)]
+return this.[aClass.getGetter(operation)/];
+[/template]
+
+[template public generateSetterBody(aClass: Class, operation: Operation)]
+this.[aClass.getSetter(operation)/] = [operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in)).name/];
+[/template]
+
+[template public generateAdderBody(aClass: Class, operation: Operation)]
+this.[getAdder(aClass, operation)/].push([operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in)).name/]);
+[/template]
+
+[template public generateOperationSignature(operation: Operation)]
+[if (operation.isConstructor())]constructor[else][operation.name/][/if]([genOperationParameters(operation)/])[if not (operation.isConstructor())]: [generateOperationReturn(operation)/][/if]
+[/template]
+
+[template public generateOperationReturn(operation: Operation)]
+[if (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return))->isEmpty())]
+void[else]
+[operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return)).genOperationParameter()/][/if]
+[/template]
+
+[template public genOperationParameters(anOperation: Operation)]
+[anOperation.ownedParameter->select(param : Parameter | (param.direction = ParameterDirectionKind::_in)).genOperationParameter()->sep(', ')/]
+[/template]
+
+[template public genOperationParameter(parameter: Parameter)]
+[if (parameter.direction = ParameterDirectionKind::_in)][parameter.name/]: [/if][generateType(parameter.type, parameter.upper)/]
+[/template]

@@ -1,0 +1,29 @@
+[comment encoding = UTF-8 /]
+[module generatePackageImport('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[import org::datafoodconsortium::connector::codegen::typescript::common /]
+[import org::datafoodconsortium::connector::codegen::typescript::generatePackage /]
+
+[comment This generates imports of realized interfaces imports./]
+[template public generateRealizedInterfacesImports(class: Class)]
+[for (imported: PackageableElement | class.interfaceRealization.contract.importedMember->select(i: PackageableElement | (class.importedMember->excludes(i))))]
+
+[comment generateImport(imported)/][/for]
+[/template]
+
+[template public generatePackageImport(aPackageImport: PackageImport)]
+[if (not aPackageImport.isExternal())][generatePackage(aPackageImport.importedPackage)/][/if]
+[/template]
+
+[template public generateImports(classifier: Classifier)]
+[for (ei: ElementImport | classifier.elementImport) separator('\n')][generateImport(ei)/][if (ei.isExternal())][generateGeneralizationImports(ei)/][/if][/for]
+
+[/template]
+
+[template public generateImport(ei: ElementImport)]import [if (ei.isExternal())]{ [ei.importedElement.name/] }[else][ei.importedElement.name/][/if] from "[if (ei.isExternal())][generateExternalImport(ei)/][else]./[ei.importedElement.name/].js[/if]"[/template]
+
+[template public generateExternalImport(ei: ElementImport)][if (ei.importedElement.namespace.name = 'org.datafoodconsortium.semantizer')]@dfc/semantizer[/if][/template]
+
+[template public generateGeneralizationImports(ei: ElementImport)]
+[comment for (ei./]
+[/template]

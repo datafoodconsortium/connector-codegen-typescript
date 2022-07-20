@@ -1,0 +1,35 @@
+[comment encoding = UTF-8 /]
+[module generate('http://www.eclipse.org/uml2/5.0.0/UML')/]
+
+[import org::datafoodconsortium::connector::codegen::typescript::generateInterface /]
+[import org::datafoodconsortium::connector::codegen::typescript::generateClass /]
+[import org::datafoodconsortium::connector::codegen::typescript::generatePackageImport /]
+
+[template public generate(aClass: Class)]
+[comment @main /]
+[generateClass(aClass)/]
+[/template]
+
+[template public generate(anInterface: Interface)]
+[comment @main /]
+[generateInterface(anInterface)/]
+[/template]
+
+[template public generate(aPackage: PackageImport)]
+[comment @main /]
+[generatePackageImport(aPackage)/]
+[/template]
+
+[template public generate(model: Model)]
+[comment @main/]
+[file ('index.ts', false, 'UTF-8')]
+[for (importedPackage: PackageImport | model.packageImport->select(pi: PackageImport | pi.importedPackage.name <> 'org.datafoodconsortium.semantizer'))][generateIndex(importedPackage.importedPackage.ownedMember)/][/for]
+[generateIndex(model.ownedMember)/]
+[/file]
+[/template]
+
+[template public generateIndex(members: Set(NamedElement))]
+[for (member: NamedElement | members->select(ne: NamedElement | ne.oclIsTypeOf(Class)))]
+export { default as [member.name/] } from './[member.name/].js'
+[/for]
+[/template]
