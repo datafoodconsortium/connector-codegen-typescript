@@ -12,10 +12,14 @@ package org.datafoodconsortium.connector.codegen.typescript;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -167,7 +171,7 @@ public class Generate extends AbstractAcceleoGenerator {
                 generator.doGenerate(new BasicMonitor());
                 
                 // Copy static files to gen/ folder
-                copyStaticFiles();
+                generator.copyStaticFiles();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -179,23 +183,48 @@ public class Generate extends AbstractAcceleoGenerator {
      * It can be used to add configuration files to the generated files.
      * @generated NOT 
      */
-    public static void copyStaticFiles() throws IOException {
+    public void copyStaticFiles() throws IOException {
     	Path staticPath = Paths.get("static").toAbsolutePath();
         File staticDirectory = staticPath.toFile();
-        File genDirectory = Paths.get("gen").toFile();
+        Path genPath = Paths.get("gen").toAbsolutePath();
+        File genDirectory = Paths.get("gen").toAbsolutePath().toFile();
 
         if (staticDirectory.exists()) {
-        	if (genDirectory.exists()) {
+        	if (!genDirectory.exists()) {
         		System.err.println("A gen directory has not been found so no static files will be copied");
         		return;
         	}
         	
-            for (String filename: staticDirectory.list()) {
+            /*for (String filename: staticDirectory.list()) {
             	Path filePath = Paths.get(staticPath.toString() + '/' + filename);
             	Path targetPath = Paths.get("gen/" + filename).toAbsolutePath();
             	Files.copy(filePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
-            }
+            	System.out.println("Copied file " + filePath + " to " + targetPath);
+            }*/
+            
+            this.copyFolder(staticPath, genPath, StandardCopyOption.REPLACE_EXISTING);
         }
+    }
+    
+    public void copyFolder(Path source, Path target, CopyOption options)
+            throws IOException {
+        Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
+
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+                    throws IOException {
+                Files.createDirectories(target.resolve(source.relativize(dir)));
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                    throws IOException {
+                Files.copy(file, target.resolve(source.relativize(file)), options);
+                System.out.println("Copied static file " + file + ".");
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 
     /**
@@ -417,8 +446,10 @@ public class Generate extends AbstractAcceleoGenerator {
         resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(UMLResource.FILE_EXTENSION, UMLResource.Factory.INSTANCE);
         Map<URI, URI> uriMap = resourceSet.getURIConverter().getURIMap();
         
-        // TODO: change to local URI
-        URI uri = URI.createURI("jar:file:org.eclipse.uml2.uml.resources_5.5.0.v20210228-1829.jar!/"); // for example
+        // This loads the UML Resources packages when running in standalone.
+        // This is required to use the UML primitives types, UML metamodels and UML profiles libraries.
+        Path umlResourcesPath = Paths.get("org.eclipse.uml2.uml.resources_5.5.0.v20210228-1829.jar").toAbsolutePath();
+        URI uri = URI.createURI("jar:file:" + umlResourcesPath.toString() + "!/");
         uriMap.put(URI.createURI(UMLResource.LIBRARIES_PATHMAP), uri.appendSegment("libraries").appendSegment(""));
         uriMap.put(URI.createURI(UMLResource.METAMODELS_PATHMAP), uri.appendSegment("metamodels").appendSegment(""));
         uriMap.put(URI.createURI(UMLResource.PROFILES_PATHMAP), uri.appendSegment("profiles").appendSegment(""));
