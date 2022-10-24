@@ -17,10 +17,11 @@
 
 [template public generateImports(classifier: Classifier)]
 [for (ei: ElementImport | classifier.elementImport) separator('\n')][generateImport(ei)/][if (ei.isExternal())][generateGeneralizationImports(ei)/][/if][/for]
-
+[if (classifier.oclIsTypeOf(Class))]import { SemanticObject } from "@virtual-assembly/semantizer"[/if]
+import { Semanticable } from "@virtual-assembly/semantizer"
 [/template]
 
-[template public generateImport(ei: ElementImport)]import [if (ei.isExternal())]{ [ei.importedElement.name/] }[else][ei.importedElement.name/][/if] from "[if (ei.isExternal())][generateExternalImport(ei)/][else]./[ei.importedElement.name/].js[/if]"[/template]
+[template public generateImport(ei: ElementImport)]import [ei.importedElement.name/] from "./[ei.importedElement.name/].js"[/template]
 
 [template public generateExternalImport(ei: ElementImport)][if (ei.importedElement.namespace.name = 'org.datafoodconsortium.semantizer')]@dfc/semantizer[/if][/template]
 

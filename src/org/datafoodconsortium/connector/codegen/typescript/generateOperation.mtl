@@ -5,7 +5,7 @@
 [import org::datafoodconsortium::connector::codegen::typescript::commonTypescript /]
 
 [template public generateOperationImplementation(aClass: Class, operation: Operation)]
-[generateOperationSignature(operation)/] {
+[generateOperationSignature(operation)/][if (operation.isAbstract)];[else] {
 	[if (isGetter(operation))]
 	[generateGetterBody(aClass, operation)/]
 	[elseif (isSetter(operation))]
@@ -16,13 +16,24 @@
 	[generateConstructorBody(aClass, operation)/]
 	[/if]
 }
+[/if]
 [/template]
 
 [comment TODO: handle super() parameters/]
 [template public generateConstructorBody(class: Class, operation: Operation)]
-[if not (class.generalization->isEmpty())]super([generateConstructorSuper(operation)/]);[/if]
+[if not (class.generalization->isEmpty()) or class.isSemantic()]super([generateConstructorSuper(operation)/]);[/if]
+[if (class.isSemantic())][generateSetSemanticType(class)/][/if]
 [for (parameter: Parameter | operation.ownedParameter->select(p: Parameter | p.isInitializer())) separator('\n')]this.[parameter.getValue(parameter.getAppliedStereotype('datafoodconsortium_connector::initializer'), 'property').oclAsType(Property).name/] = [parameter.name/];[/for]
 [for (property: Property | getConstructorUninitializedAttributes(operation)) separator('\n')]this.[property.name/] = [getInitializationValueForType(property.type.name, property.upper)/];[/for]
+[for (property: Property | class.ownedAttribute->select(p: Property | p.isSemantic())) separator('\n')][generateSemanticProperty(property)/][/for]
+[/template]
+
+[template public generateSetSemanticType(class: Class)]
+this.setSemanticType("[class.getValue(class.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]");
+[/template]
+
+[template public generateSemanticProperty(property: Property)]
+this.registerSemanticProperty("[property.getValue(property.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]", () => this.[property.getGetter()/]());
 [/template]
 
 [comment handle position (detect automatically?) with initializerParent referencing the super constructor parameter, autodetect the super parameter position. /]
@@ -31,11 +42,11 @@
 [/template]
 
 [template public getInitializationValueForType(type: String, upper: Integer)]
-[if upper = -1]['[]'/][elseif type = 'String']""[elseif type = 'Boolean']false[elseif type = 'Integer']0[elseif type = 'Real']0.0[else][type/][/if]
+[if upper = -1]['[]'/][elseif type = 'String']""[elseif type = 'Boolean']false[elseif type = 'Integer']0[elseif type = 'Real']0.0[else]undefined[/if]
 [/template]
 
 [template public generateGetterBody(aClass: Class, operation: Operation)]
-return this.[aClass.getGetter(operation)/];
+return this.[aClass.getGetter(operation)/][if (operation.ownedParameter->exists(p: Parameter | (p.direction = ParameterDirectionKind::return and p.upper = -1)))].values()[/if];
 [/template]
 
 [template public generateSetterBody(aClass: Class, operation: Operation)]
@@ -47,7 +58,7 @@ this.[getAdder(aClass, operation)/].push([operation.ownedParameter->select(p: Pa
 [/template]
 
 [template public generateOperationSignature(operation: Operation)]
-[if (operation.isConstructor())]constructor[else][operation.name/][/if]([genOperationParameters(operation)/])[if not (operation.isConstructor())]: [generateOperationReturn(operation)/][/if]
+[if (operation.isConstructor())]constructor[else][if (operation.isAbstract)]abstract [/if][operation.name/][/if]([genOperationParameters(operation)/])[if not (operation.isConstructor())]: [generateOperationReturn(operation)/][/if]
 [/template]
 
 [template public generateOperationReturn(operation: Operation)]
@@ -61,5 +72,5 @@ void[else]
 [/template]
 
 [template public genOperationParameter(parameter: Parameter)]
-[if (parameter.direction = ParameterDirectionKind::_in)][parameter.name/]: [/if][generateType(parameter.type, parameter.upper)/]
+[if (parameter.direction = ParameterDirectionKind::_in)][parameter.name/]: [/if][generateType2(parameter)/]
 [/template]

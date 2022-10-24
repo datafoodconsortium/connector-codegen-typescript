@@ -4,7 +4,9 @@
 [import org::datafoodconsortium::connector::codegen::typescript::common /]
 
 [template public generateGeneralization(classifier: Classifier)]
-[if (not (classifier.generalization->isEmpty()))]extends [for (generalization: Generalization | classifier.generalization) separator(', ')][generalization.general.name/][/for] [/if]
+[if (not (classifier.generalization->isEmpty()))]extends [for (generalization: Generalization | classifier.generalization) separator(', ')][generalization.general.name/][/for][if (classifier.isSemantic() and classifier.generalization->isEmpty())] SemanticObject[/if] [elseif (classifier.isSemantic())]extends SemanticObject [/if]
 [/template]
 
-[template public generateType(aType: Type, upper: Integer)][if not (aType.isPrimitive())]([/if][aType.getTypeName()/][if not (aType.isPrimitive())] & SemanticObject)[/if][if (upper = -1)]['[]'/][/if][/template]
+[template public generateType(p: Property)][if not (p.type.isPrimitive())]([/if][p.type.getTypeName()/][if not (p.type.isPrimitive())] & Semanticable)[if (p.lower = 0 and p.upper = 1)] | undefined[/if][/if][if (p.upper = -1)]['[]'/][/if][/template]
+
+[template public generateType2(p: Parameter)][if not (p.type.isPrimitive())][if (p.upper = -1)]IterableIterator<[/if]([/if][p.type.getTypeName()/][if not (p.type.isPrimitive())] & Semanticable)[/if][if (not (p.type.isPrimitive()) and p.upper = -1)]>[/if][if (p.type.isPrimitive() and p.upper = -1)]['[]'/][/if][if (not (p.type.isPrimitive()) and p.lower = 0 and p.upper = 1)] | undefined[/if][/template]

@@ -13,18 +13,20 @@
 export default [if (aClass.isAbstract)]abstract [/if]class [aClass.name.toUpperFirst()/] [generateGeneralization(aClass)/][generateInterfaceRealizationHeader(aClass)/]{
 
 	[for (property: Property | aClass.ownedAttribute)]
-	private [property.name/]: [generateType(property.type, property.upper)/];
+	private [property.name/]: [generateType(property)/];
 	[/for]
 
 	[for (operation: Operation | aClass.ownedOperation) separator('\n')]
 	[generateOperationImplementation(aClass, operation)/]
 	[/for]
 
-	[for (interface: InterfaceRealization | aClass.interfaceRealization)]
-		[for (operation: Operation | interface.contract.getAllOperations()) separator ('\n')]
+	[if not (aClass.interfaceRealization->isEmpty())]
+	[for (interface: Interface | aClass.getAllImplementedInterfaces()->select(i: Interface | aClass.generalization->asSequence()->at(1).general.allRealizedInterfaces()->excludes(i)))]
+		[for (operation: Operation | interface.getOperations()->select(o: Operation | aClass.ownedOperation->excludesAll(aClass.ownedOperation->select(op: Operation | op.isAbstract and o.name = op.name)))) separator ('\n')]
 	[generateOperationImplementation(aClass, operation)/]
 		[/for]
 	[/for]
+	[/if]
 
 }
 [/file]

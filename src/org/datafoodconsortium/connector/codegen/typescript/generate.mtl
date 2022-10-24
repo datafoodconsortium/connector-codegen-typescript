@@ -25,11 +25,13 @@
 [file ('index.ts', false, 'UTF-8')]
 [for (importedPackage: PackageImport | model.packageImport->select(pi: PackageImport | pi.importedPackage.name <> 'org.datafoodconsortium.semantizer'))][generateIndex(importedPackage.importedPackage.ownedMember)/][/for]
 [generateIndex(model.ownedMember)/]
+export { default as Connector } from './Connector.js';
+export { default as JsonLdSerializer } from './JsonLdSerializer.js';
 [/file]
 [/template]
 
 [template public generateIndex(members: Set(NamedElement))]
 [for (member: NamedElement | members->select(ne: NamedElement | ne.oclIsTypeOf(Class)))]
-export { default as [member.name/] } from './[member.name/].js'
+export { default as [member.name/] } from './[member.name/].js';
 [/for]
 [/template]
