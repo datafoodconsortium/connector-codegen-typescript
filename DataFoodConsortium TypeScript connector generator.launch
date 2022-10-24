@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.acceleo.ide.ui.launching.launchConfigurationType">
+    <stringAttribute key="org.eclipse.acceleo.ide.ui.ARGUMENTS" value=""/>
+    <booleanAttribute key="org.eclipse.acceleo.ide.ui.COMPUTE_PROFILING" value="false"/>
+    <booleanAttribute key="org.eclipse.acceleo.ide.ui.COMPUTE_TRACEABILITY" value="false"/>
+    <stringAttribute key="org.eclipse.acceleo.ide.ui.LAUNCHING_STRATEGY_DESCRIPTION" value="Java Application"/>
+    <stringAttribute key="org.eclipse.acceleo.ide.ui.MODEL_PATH" value="/uml/connector/connector.uml"/>
+    <stringAttribute key="org.eclipse.acceleo.ide.ui.TARGET_PATH" value="/connector-codegen-typescript/gen/src"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/connector-codegen-typescript/src/org/datafoodconsortium/connector/codegen/typescript/Generate.java"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.datafoodconsortium.connector.codegen.typescript.Generate"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="connector-codegen-typescript"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="&quot;/home/maxime/Projets/DFC/github/ontology/uml/connector/connector.uml&quot; &quot;/home/maxime/Projets/DFC/github/connector-codegen-typescript/gen/src&quot;"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="connector-codegen-typescript"/>
+</launchConfiguration>
