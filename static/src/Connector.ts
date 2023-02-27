@@ -36,7 +36,8 @@ export default class Connector {
         return this.instance;
     }
 
-    public async export(subject: Semanticable): Promise<string> {
+    public async export(subject: Semanticable, space: number | undefined): Promise<string> {
+        this.exporter.setSpace(space);
         return await this.exporter.process(subject);
     }
 

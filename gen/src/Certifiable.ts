@@ -6,5 +6,6 @@ export default interface Certifiable {
 
 	addCertification(certification: (ICertification & Semanticable)): void;
 	getCertifications(): IterableIterator<(ICertification & Semanticable)>;
+	removeCertification(certification: (ICertification & Semanticable)): void;
 
 }

@@ -1,7 +1,7 @@
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
 import Characteristic from "./Characteristic.js"
 import IAllergenDimension from "./IAllergenDimension.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
-import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 

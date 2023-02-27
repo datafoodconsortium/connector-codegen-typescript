@@ -24,28 +24,8 @@ export default class Address extends SemanticObject implements Localizable {
 	}
 	
 
-	setCountry(country: string): void {
-		this.country = country;
-	}
-	
-
-	getStreet(): string {
-		return this.street;
-	}
-	
-
-	getPostalCode(): string {
-		return this.postalCode;
-	}
-	
-
 	getCity(): string {
 		return this.city;
-	}
-	
-
-	getCountry(): string {
-		return this.country;
 	}
 	
 
@@ -54,13 +34,33 @@ export default class Address extends SemanticObject implements Localizable {
 	}
 	
 
-	setStreet(street: string): void {
-		this.street = street;
+	setCountry(country: string): void {
+		this.country = country;
+	}
+	
+
+	getPostalCode(): string {
+		return this.postalCode;
 	}
 	
 
 	setPostalCode(postalCode: string): void {
 		this.postalCode = postalCode;
+	}
+	
+
+	getCountry(): string {
+		return this.country;
+	}
+	
+
+	setStreet(street: string): void {
+		this.street = street;
+	}
+	
+
+	getStreet(): string {
+		return this.street;
 	}
 	
 

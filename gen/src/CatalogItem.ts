@@ -1,6 +1,6 @@
 import IDefinedProduct from "./IDefinedProduct.js"
-import ICatalogItem from "./ICatalogItem.js"
 import IOffer from "./IOffer.js"
+import ICatalogItem from "./ICatalogItem.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 
@@ -32,8 +32,8 @@ export default class CatalogItem extends SemanticObject implements ICatalogItem 
 	}
 	
 
-	getOfferedProduct(): (IDefinedProduct & Semanticable) {
-		return this.product;
+	getOfferers(): IterableIterator<(IOffer & Semanticable)> {
+		return this.offers.values();
 	}
 	
 
@@ -42,8 +42,8 @@ export default class CatalogItem extends SemanticObject implements ICatalogItem 
 	}
 	
 
-	getOfferers(): IterableIterator<(IOffer & Semanticable)> {
-		return this.offers.values();
+	getOfferedProduct(): (IDefinedProduct & Semanticable) {
+		return this.product;
 	}
 	
 	getStockLimitation(): number {

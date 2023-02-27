@@ -1,6 +1,6 @@
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import IPhysicalDimension from "./IPhysicalDimension.js"
 import Characteristic from "./Characteristic.js"
+import IPhysicalDimension from "./IPhysicalDimension.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"

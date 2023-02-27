@@ -1,7 +1,7 @@
 import Characteristic from "./Characteristic.js"
 import INutrientCharacteristic from "./INutrientCharacteristic.js"
-import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import INutrientDimension from "./INutrientDimension.js"
+import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 

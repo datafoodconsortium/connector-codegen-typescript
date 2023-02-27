@@ -1,6 +1,6 @@
-import ICharacteristic from "./ICharacteristic.js"
 import QuantitativeValue from "./QuantitativeValue.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import ICharacteristic from "./ICharacteristic.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 

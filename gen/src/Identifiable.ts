@@ -1,5 +1,5 @@
-import Localizable from "./Localizable.js"
 import Contactable from "./Contactable.js"
+import Localizable from "./Localizable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 

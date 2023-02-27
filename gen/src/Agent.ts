@@ -1,6 +1,6 @@
-import Identifiable from "./Identifiable.js"
-import Localizable from "./Localizable.js"
 import Contactable from "./Contactable.js"
+import Localizable from "./Localizable.js"
+import Identifiable from "./Identifiable.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 
@@ -19,17 +19,13 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 	}
 	
 
+	addLocalization(localization: (Localizable & Semanticable)): void {
+		this.localizations.push(localization);
+	}
+	
+
 	addContact(contact: (Contactable & Semanticable)): void {
 		this.contacts.push(contact);
-	}
-	
-
-	getContacts(): IterableIterator<(Contactable & Semanticable)> {
-		return this.contacts.values();
-	}
-	
-
-	removeContact(contact: (Contactable & Semanticable)): void {
 	}
 	
 
@@ -38,12 +34,16 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 	}
 	
 
-	addLocalization(localization: (Localizable & Semanticable)): void {
-		this.localizations.push(localization);
+	getContacts(): IterableIterator<(Contactable & Semanticable)> {
+		return this.contacts.values();
 	}
 	
 
 	removeLocalization(localization: (Localizable & Semanticable)): void {
+	}
+	
+
+	removeContact(contact: (Contactable & Semanticable)): void {
 	}
 	
 

@@ -18,6 +18,6 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.datafoodconsortium.connector.codegen.typescript.Generate"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="connector-codegen-typescript"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="&quot;/home/maxime/Projets/DFC/github/ontology/uml/connector/connector.uml&quot; &quot;/home/maxime/Projets/DFC/github/connector-codegen-typescript/gen/src&quot;"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="&quot;&quot; &quot;/home/maxime/Projets/DFC/github/connector-codegen-typescript/gen/src&quot;"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="connector-codegen-typescript"/>
 </launchConfiguration>

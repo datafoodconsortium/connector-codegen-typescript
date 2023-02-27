@@ -18,13 +18,13 @@ export default class QuantitativeValue extends SemanticObject implements Quantif
 	}
 	
 
-	setQuantityValue(quantityValue: number): void {
-		this.quantityValue = quantityValue;
+	getQuantityValue(): number {
+		return this.quantityValue;
 	}
 	
 
-	getQuantityValue(): number {
-		return this.quantityValue;
+	setQuantityValue(quantityValue: number): void {
+		this.quantityValue = quantityValue;
 	}
 	
 

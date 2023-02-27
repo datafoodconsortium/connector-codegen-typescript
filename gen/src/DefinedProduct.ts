@@ -1,15 +1,15 @@
+import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
 import ICatalogItem from "./ICatalogItem.js"
-import IDefinedProduct from "./IDefinedProduct.js"
-import ICertification from "./ICertification.js"
-import Quantifiable from "./Quantifiable.js"
-import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import IGeographicalOrigin from "./IGeographicalOrigin.js"
 import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import INatureOrigin from "./INatureOrigin.js"
-import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import IGeographicalOrigin from "./IGeographicalOrigin.js"
-import IProductType from "./IProductType.js"
 import IPartOrigin from "./IPartOrigin.js"
+import ICertification from "./ICertification.js"
+import Quantifiable from "./Quantifiable.js"
+import IDefinedProduct from "./IDefinedProduct.js"
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
 import Claimable from "./Claimable.js"
+import IProductType from "./IProductType.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 
@@ -84,48 +84,48 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 		this.certifications.push(certification);
 	}
 	
+
+	removeCertification(certification: (ICertification & Semanticable)): void {
+		
+	}
+	
 	getDescription(): string {
 		return this.description;
 	}
 	
-	getClaims(): IterableIterator<(Claimable & Semanticable)> {
-		return this.claims.values();
-	}
-	
 
-	setProductType(productType: (IProductType & Semanticable)): void {
-		this.productType = productType;
+	setDescription(description: string): void {
+		this.description = description;
 	}
 	
-
-	addClaim(claim: (Claimable & Semanticable)): void {
-		this.claims.push(claim);
-	}
-	
-
-	getQuantity(): (Quantifiable & Semanticable) | undefined {
-		return this.quantity;
-	}
-	
-
-	setQuantity(quantity: (Quantifiable & Semanticable)): void {
-		this.quantity = quantity;
-	}
-	
-
-	getProductType(): (IProductType & Semanticable) | undefined {
-		return this.productType;
-	}
-	
-	addCatalogItem(catalogItem: (ICatalogItem & Semanticable)): void {
-		this.catalogItems.push(catalogItem);
-	}
-	
-
 	getCatalogItems(): IterableIterator<(ICatalogItem & Semanticable)> {
 		return this.catalogItems.values();
 	}
 	
+
+	addCatalogItem(catalogItem: (ICatalogItem & Semanticable)): void {
+		this.catalogItems.push(catalogItem);
+	}
+	
+	setLifetime(lifetime: string): void {
+		this.lifetime = lifetime;
+	}
+	
+
+	removeNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void {
+	}
+	
+
+	getNutrientCharacteristics(): IterableIterator<(INutrientCharacteristic & Semanticable)> {
+		return this.nutrientCharacteristics.values();
+	}
+	
+
+	setUsageOrStorageConditions(usageOrStorageConditions: string): void {
+		this.usageOrStorageConditions = usageOrStorageConditions;
+	}
+	
+
 	getAllergenCharacteristics(): IterableIterator<(IAllergenCharacteristic & Semanticable)> {
 		return this.allergenCharacteristics.values();
 	}
@@ -136,33 +136,21 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	}
 	
 
-	addAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void {
-		this.allergenCharacteristics.push(allergenCharacteristic);
-	}
-	
-
-	getPhysicalCharacteristics(): IterableIterator<(IPhysicalCharacteristic & Semanticable)> {
-		return this.physicalCharacteristics.values();
-	}
-	
-
 	getPartOrigin(): IterableIterator<(IPartOrigin & Semanticable)> {
 		return this.partOrigin.values();
 	}
 	
 
-	addPhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void {
-		this.physicalCharacteristics.push(physicalCharacteristic);
+	getNatureOrigin(): IterableIterator<(INatureOrigin & Semanticable)> {
+		return this.natureOrigin.values();
 	}
 	
 
-	addNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void {
-		this.natureOrigin.push(natureOrigin);
+	removePhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void {
 	}
 	
 
-	getAlcoholPercentage(): number {
-		return this.alcoholPercentage;
+	removePartOrigin(partOrigin: (IPartOrigin & Semanticable)): void {
 	}
 	
 
@@ -171,8 +159,51 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	}
 	
 
-	getNutrientCharacteristics(): IterableIterator<(INutrientCharacteristic & Semanticable)> {
-		return this.nutrientCharacteristics.values();
+	removeNutrientCharacteristic(nutrientCharacteristic: (INutrientCharacteristic & Semanticable)): void {
+	}
+	
+
+	getPhysicalCharacteristics(): IterableIterator<(IPhysicalCharacteristic & Semanticable)> {
+		return this.physicalCharacteristics.values();
+	}
+	
+
+	addPartOrigin(partOrigin: (IPartOrigin & Semanticable)): void {
+		this.partOrigin.push(partOrigin);
+	}
+	
+
+	setAlcoholPercentage(alcoholPercentage: number): void {
+		this.alcoholPercentage = alcoholPercentage;
+	}
+	
+
+	addAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void {
+		this.allergenCharacteristics.push(allergenCharacteristic);
+	}
+	
+
+	addNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void {
+		this.natureOrigin.push(natureOrigin);
+	}
+	
+
+	setGeographicalOrigin(geographicalOrigin: (IGeographicalOrigin & Semanticable)): void {
+		this.geographicalOrigin = geographicalOrigin;
+	}
+	
+
+	addPhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void {
+		this.physicalCharacteristics.push(physicalCharacteristic);
+	}
+	
+
+	getAlcoholPercentage(): number {
+		return this.alcoholPercentage;
+	}
+	
+
+	removeAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void {
 	}
 	
 
@@ -185,23 +216,46 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 		return this.geographicalOrigin;
 	}
 	
-
-	getNatureOrigin(): IterableIterator<(INatureOrigin & Semanticable)> {
-		return this.natureOrigin.values();
+	setQuantity(quantity: (Quantifiable & Semanticable)): void {
+		this.quantity = quantity;
 	}
 	
 
-	addPartOrigin(partOrigin: (IPartOrigin & Semanticable)): void {
-		this.partOrigin.push(partOrigin);
+	getProductType(): (IProductType & Semanticable) | undefined {
+		return this.productType;
 	}
 	
 
-	setGeographicalOrigin(geographicalOrigin: (IGeographicalOrigin & Semanticable)): void {
-		this.geographicalOrigin = geographicalOrigin;
+	removeClaim(claim: (Claimable & Semanticable)): void {
+	}
+	
+
+	addClaim(claim: (Claimable & Semanticable)): void {
+		this.claims.push(claim);
+	}
+	
+
+	getClaims(): IterableIterator<(Claimable & Semanticable)> {
+		return this.claims.values();
+	}
+	
+
+	getQuantity(): (Quantifiable & Semanticable) | undefined {
+		return this.quantity;
+	}
+	
+
+	setProductType(productType: (IProductType & Semanticable)): void {
+		this.productType = productType;
 	}
 	
 	getName(): string {
 		return this.name;
+	}
+	
+
+	setName(name: string): void {
+		this.name = name;
 	}
 	
 

@@ -25,8 +25,18 @@ export default class CustomerCategory extends SemanticObject implements ICustome
 		return this.description;
 	}
 	
+
+	setDescription(description: string): void {
+		this.description = description;
+	}
+	
 	getName(): string {
 		return this.name;
+	}
+	
+
+	setName(name: string): void {
+		this.name = name;
 	}
 	
 

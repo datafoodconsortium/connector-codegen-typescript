@@ -1,6 +1,6 @@
 import ISKOSConcept from "./ISKOSConcept.js"
-import ISKOSConceptScheme from "./ISKOSConceptScheme.js"
 import ISKOSLabel from "./ISKOSLabel.js"
+import ISKOSConceptScheme from "./ISKOSConceptScheme.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 
@@ -26,8 +26,30 @@ export default class SKOSConcept extends SemanticObject implements ISKOSConcept 
 	}
 	
 
+	removeScheme(scheme: (ISKOSConceptScheme & Semanticable)): void {
+	}
+	
+
+	getScheme(): IterableIterator<(ISKOSConceptScheme & Semanticable)> {
+		return this.schemes.values();
+	}
+	
+
 	addScheme(scheme: (ISKOSConceptScheme & Semanticable)): void {
 		this.schemes.push(scheme);
+	}
+	
+
+	removePrefLabel(prefLabel: (ISKOSLabel & Semanticable)): void {
+	}
+	
+
+	removeBroader(broader: (ISKOSConcept & Semanticable)): void {
+	}
+	
+
+	addPrefLabel(prefLabel: (ISKOSLabel & Semanticable)): void {
+		this.prefLabels.push(prefLabel);
 	}
 	
 
@@ -40,31 +62,8 @@ export default class SKOSConcept extends SemanticObject implements ISKOSConcept 
 	}
 	
 
-	addPrefLabel(prefLabel: (ISKOSLabel & Semanticable)): void {
-		this.prefLabels.push(prefLabel);
-	}
-	
-
 	getPrefLabel(): IterableIterator<(ISKOSLabel & Semanticable)> {
 		return this.prefLabels.values();
-	}
-	
-
-	getScheme(): IterableIterator<(ISKOSConceptScheme & Semanticable)> {
-		return this.schemes.values();
-	}
-	
-
-	removeScheme(scheme: (ISKOSConceptScheme & Semanticable)): void {
-	}
-	
-
-	getNarrower(): IterableIterator<(ISKOSConcept & Semanticable)> {
-		return this.narrowers.values();
-	}
-	
-
-	removePrefLabel(prefLabel: (ISKOSLabel & Semanticable)): void {
 	}
 	
 
@@ -73,7 +72,8 @@ export default class SKOSConcept extends SemanticObject implements ISKOSConcept 
 	}
 	
 
-	removeBroader(broader: (ISKOSConcept & Semanticable)): void {
+	getNarrower(): IterableIterator<(ISKOSConcept & Semanticable)> {
+		return this.narrowers.values();
 	}
 	
 

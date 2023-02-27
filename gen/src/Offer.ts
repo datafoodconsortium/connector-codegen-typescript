@@ -1,6 +1,6 @@
-import IOffer from "./IOffer.js"
 import ICatalogItem from "./ICatalogItem.js"
 import ICustomerCategory from "./ICustomerCategory.js"
+import IOffer from "./IOffer.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 

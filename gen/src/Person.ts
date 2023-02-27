@@ -1,6 +1,6 @@
+import Onboardable from "./Onboardable.js"
 import Agent from "./Agent.js"
 import IPerson from "./IPerson.js"
-import Onboardable from "./Onboardable.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 
@@ -18,32 +18,14 @@ export default class Person extends Agent implements IPerson {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.affiliatedOrganizations = [];
-		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasFirstName", () => this.getFirstName());
-		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasLastName", () => this.getLastName());
-		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#affiliatedBy", () => this.getAffiliatedOrganizations());
+		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#firstName", () => this.getFirstName());
+		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#familyName", () => this.getLastName());
+		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#affiliates", () => this.getAffiliatedOrganizations());
 	}
 	
 
-	getFirstName(): string {
-		return this.firstName;
-	}
-	
-
-	setLastName(lastName: string): void {
-		this.lastName = lastName;
-	}
-	
-
-	setFirstName(firstName: string): void {
-		this.firstName = firstName;
-	}
-	
-
-	getLastName(): string {
-		return this.lastName;
-	}
-	
-	leaveAffiliatedOrganization(organization: (Onboardable & Semanticable)): void {
+	affiliateTo(organization: (Onboardable & Semanticable)): void {
+		this.affiliatedOrganizations.push(organization);
 	}
 	
 
@@ -52,8 +34,26 @@ export default class Person extends Agent implements IPerson {
 	}
 	
 
-	affiliateTo(organization: (Onboardable & Semanticable)): void {
-		this.affiliatedOrganizations.push(organization);
+	leaveAffiliatedOrganization(organization: (Onboardable & Semanticable)): void {
+	}
+	
+	getLastName(): string {
+		return this.lastName;
+	}
+	
+
+	setLastName(lastName: string): void {
+		this.lastName = lastName;
+	}
+	
+
+	getFirstName(): string {
+		return this.firstName;
+	}
+	
+
+	setFirstName(firstName: string): void {
+		this.firstName = firstName;
 	}
 	
 

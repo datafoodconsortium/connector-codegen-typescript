@@ -12,6 +12,8 @@
 	[generateSetterBody(aClass, operation)/]
 	[elseif (isAdder(operation))]
 	[generateAdderBody(aClass, operation)/]
+	[elseif (isRemover(operation))]
+	[generateRemoverBody(aClass, operation)/]
 	[elseif (isConstructor(operation))]
 	[generateConstructorBody(aClass, operation)/]
 	[/if]
@@ -55,6 +57,10 @@ this.[aClass.getSetter(operation)/] = [operation.ownedParameter->select(p: Param
 
 [template public generateAdderBody(aClass: Class, operation: Operation)]
 this.[getAdder(aClass, operation)/].push([operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in)).name/]);
+[/template]
+
+[template public generateRemoverBody(aClass: Class, operation: Operation)]
+// TODO
 [/template]
 
 [template public generateOperationSignature(operation: Operation)]

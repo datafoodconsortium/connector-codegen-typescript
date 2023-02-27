@@ -1,9 +1,9 @@
-import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import IGeographicalOrigin from "./IGeographicalOrigin.js"
+import IPartOrigin from "./IPartOrigin.js"
 import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import INatureOrigin from "./INatureOrigin.js"
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import IPartOrigin from "./IPartOrigin.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
@@ -18,11 +18,19 @@ export default interface Manufacturable {
 	getGeographicalOrigin(): (IGeographicalOrigin & Semanticable) | undefined;
 	getNatureOrigin(): IterableIterator<(INatureOrigin & Semanticable)>;
 	getPartOrigin(): IterableIterator<(IPartOrigin & Semanticable)>;
+	setGeographicalOrigin(geographicalOrigin: (IGeographicalOrigin & Semanticable)): void;
+	setAlcoholPercentage(alcoholPercentage: number): void;
+	setLifetime(lifetime: string): void;
+	setUsageOrStorageConditions(usageOrStorageConditions: string): void;
 	addAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void;
 	addNutrientCharacteristic(nutrientCharacteristic: (INutrientCharacteristic & Semanticable)): void;
 	addPhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void;
 	addNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void;
 	addPartOrigin(partOrigin: (IPartOrigin & Semanticable)): void;
-	setGeographicalOrigin(geographicalOrigin: (IGeographicalOrigin & Semanticable)): void;
+	removeAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void;
+	removeNutrientCharacteristic(nutrientCharacteristic: (INutrientCharacteristic & Semanticable)): void;
+	removePhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void;
+	removeNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void;
+	removePartOrigin(partOrigin: (IPartOrigin & Semanticable)): void;
 
 }
