@@ -1,105 +1,117 @@
-import ICatalogItem from "./ICatalogItem.js"
+/*
+ * MIT License
+ * 
+ * Copyright (c) 2023 Maxime Lecoq <maxime@lecoqlibre.fr>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+*/
+
+import Onboardable from "./Onboardable.js"
 import Agent from "./Agent.js"
 import IEnterprise from "./IEnterprise.js"
+import Supplier from "./Supplier.js"
 import SuppliedProduct from "./SuppliedProduct.js"
+import ICatalogItem from "./ICatalogItem.js"
+import Localizable from "./Localizable.js"
 import ICustomerCategory from "./ICustomerCategory.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
+import Connector from "./Connector.js"
 
+export default class Enterprise extends Agent implements Supplier, IEnterprise, Onboardable {
 
-
-
-
-
-export default class Enterprise extends Agent implements IEnterprise {
-
-	private name: string;
-	private description: string;
-	private vatNumber: string;
-	private customerCategories: (ICustomerCategory & Semanticable)[];
-	private suppliedProducts: (SuppliedProduct & Semanticable)[];
-	private catalogItems: (ICatalogItem & Semanticable)[];
-	private solidThing: object = {};
-
-	constructor(name: string) {
-		super();
-		this.setSemanticType("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Enterprise");
-		this.name = name;
-		this.description = "";
-		this.vatNumber = "";
-		this.customerCategories = [];
-		this.suppliedProducts = [];
-		this.catalogItems = [];
-		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasName", () => this.getName());
-		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription", () => this.getDescription());
-		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATnumber", () => this.getVatNumber());
-		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#defines", () => this.getCustomerCategories());
-		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies", () => this.getSuppliedProducts());
-		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#manages", () => this.getCatalogItems());
-	}
-	
-	getSolidThing(): void {
-		// 1. Itérer sur les propriétés 
-		// 2. extraire le type de chaque propriété
-		// 3. addType en fonction du type de la propriété
-		// Note : cela peut être fait depuis l'extérieur du prototype 
-		// sur tous les Semanticable
-		return new Thing(this.name);
+	public constructor(parameters: {semanticId: string, localizations?: (Localizable & Semanticable)[], description?: string});
+	public constructor(parameters: {other: Semanticable, localizations?: (Localizable & Semanticable)[], description?: string});
+	public constructor(parameters: {semanticId?: string, other?: Semanticable, localizations?: (Localizable & Semanticable)[], description?: string}) {
+		super({semanticId: parameters.semanticId, semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Enterprise", other: parameters.other, localizations: parameters.localizations});
+		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
+		if (parameters.description) this.setDescription(parameters.description);
 	}
 
-	getCustomerCategories(): IterableIterator<(ICustomerCategory & Semanticable)> {
-		return this.customerCategories.values();
+	public async getSuppliedProducts(): Promise<Array<(SuppliedProduct & Semanticable)>>
+	 {
+		const results = new Array<(SuppliedProduct & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies");
+		properties.forEach(async p => {
+			const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(p);
+			if (semanticObject) results.push(<(SuppliedProduct & Semanticable)> semanticObject);
+		});
+		return results;
 	}
 	
 
-	addCustomerCategory(customerCategory: (ICustomerCategory & Semanticable)): void {
-		this.customerCategories.push(customerCategory);
-	}
-	
-	getDescription(): string {
-		return this.description;
+	public addCatalogItem(catalogItem: (ICatalogItem & Semanticable)): void {
 	}
 	
 
-	setDescription(description: string): void {
-		this.description = description;
-	}
-	
-	getVatNumber(): string {
-		return this.vatNumber;
-	}
-	
-
-	setVatNumber(vatNumber: string): void {
-		this.vatNumber = vatNumber;
-	}
-	
-	getCatalogItems(): IterableIterator<(ICatalogItem & Semanticable)> {
-		return this.catalogItems.values();
+	public async getCatalogItems(): Promise<Array<(ICatalogItem & Semanticable)>>
+	 {
+		const results = new Array<(ICatalogItem & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#manages");
+		properties.forEach(async p => {
+			const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(p);
+			if (semanticObject) results.push(<(ICatalogItem & Semanticable)> semanticObject);
+		});
+		return results;
 	}
 	
 
-	getSuppliedProducts(): IterableIterator<(SuppliedProduct & Semanticable)> {
-		return this.suppliedProducts.values();
+	public addSupplyProduct(suppliedProduct: (SuppliedProduct & Semanticable)): void {
+	}
+	
+	public getDescription(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription");
 	}
 	
 
-	addSupplyProduct(suppliedProduct: (SuppliedProduct & Semanticable)): void {
-		this.suppliedProducts.push(suppliedProduct);
+	public setDescription(description: string): void {
+		
+		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription", description);
+	}
+	
+	public getVatNumber(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATnumber");
 	}
 	
 
-	addCatalogItem(catalogItem: (ICatalogItem & Semanticable)): void {
-		this.catalogItems.push(catalogItem);
+	public setVatNumber(vatNumber: string): void {
+		
+		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATnumber", vatNumber);
 	}
 	
-	getName(): string {
-		return this.name;
+	public addCustomerCategory(customerCategory: (ICustomerCategory & Semanticable)): void {
+		Connector.getInstance().store(customerCategory);
+		this.addSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#defines", customerCategory);
 	}
 	
 
-	setName(name: string): void {
-		this.name = name;
+	public async getCustomerCategories(): Promise<Array<(ICustomerCategory & Semanticable)>>
+	 {
+		const results = new Array<(ICustomerCategory & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#defines");
+		properties.forEach(async p => {
+			const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(p);
+			if (semanticObject) results.push(<(ICustomerCategory & Semanticable)> semanticObject);
+		});
+		return results;
 	}
 	
 

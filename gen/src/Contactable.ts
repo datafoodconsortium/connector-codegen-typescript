@@ -6,10 +6,14 @@ import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Contactable {
 
-	getContactName(): string;
-	getPostalAddresses(): IterableIterator<(Localizable & Semanticable)>;
-	getPhoneNumbers(): IterableIterator<(Dialable & Semanticable)>;
-	getEmailAddresses(): IterableIterator<(Emailable & Semanticable)>;
+	getContactName(): string
+	;
+	getPostalAddresses(): Promise<Array<(Localizable & Semanticable)>>
+	;
+	getPhoneNumbers(): Promise<Array<(Dialable & Semanticable)>>
+	;
+	getEmailAddresses(): Promise<Array<(Emailable & Semanticable)>>
+	;
 	addPostalAddress(postalAddress: (Localizable & Semanticable)): void;
 	addPhoneNumber(phoneNumber: (Dialable & Semanticable)): void;
 	addEmailAddress(emailAddress: (Emailable & Semanticable)): void;

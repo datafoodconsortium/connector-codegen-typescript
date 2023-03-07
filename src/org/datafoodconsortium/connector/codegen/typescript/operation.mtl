@@ -1,0 +1,110 @@
+[comment encoding = UTF-8 /]
+[module operation('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[import org::datafoodconsortium::connector::codegen::typescript::common /]
+[import org::datafoodconsortium::connector::codegen::typescript::commonTypescript /]
+
+[template public generateOperationImplementation(aClass: Class, operation: Operation)]
+[if (operation.isConstructor())][if not (aClass.isAbstract)][genConstructorSignatureWithSemanticId(aClass, operation)/]
+[genConstructorSignatureCopy(aClass, operation)/]
+[/if][genConstructorSignatureImplementation(aClass, operation)/][else]public [generateOperationSignature(aClass, operation) /] {
+[if (isGetter(operation))]
+	[generateGetterBody(aClass, operation)/]
+[elseif (isSetter(operation))]
+	[generateSetterBody(aClass, operation)/]
+[elseif (isAdder(operation))]
+	[generateAdderBody(aClass, operation)/]
+[elseif (isRemover(operation))]
+	[generateRemoverBody(aClass, operation)/]
+[/if]
+}
+[/if]
+[/template]
+
+[template public genConstructorSignatureWithSemanticId(aClass: Class, operation: Operation)]public constructor(parameters: {[if (aClass.isSemantic() and aClass.isBlankNode() and operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())]other?: Semanticable[else][if (aClass.isSemantic() and not aClass.isBlankNode())]semanticId: string[/if][if aClass.isSemantic() and not aClass.isBlankNode() and not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/][/if]});[/template]
+[template public genConstructorSignatureCopy(aClass: Class, operation: Operation)]public constructor(parameters: {[if (aClass.isSemantic())]other: Semanticable[/if][if aClass.isSemantic() and not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/]});[/template]
+[template public genConstructorSignatureImplementation(aClass: Class, operation: Operation)][if (aClass.isAbstract)]protected[else]public[/if] constructor(parameters: {[if (aClass.isSemantic())][if (not aClass.isBlankNode())]semanticId?: string, [/if][if (aClass.isAbstract)]semanticType?: string, [/if]other?: Semanticable[/if][if aClass.isSemantic() and not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/]}) {
+	[generateConstructorBody(aClass, operation)/]
+}[/template]
+
+[template public generateConstructorBody(class: Class, operation: Operation)]
+[if not (class.generalization->isEmpty()) or class.isSemantic()]super([generateConstructorSuper(operation, class)/]);[/if]
+[if not (class.isAbstract)]if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();[/if]
+[for (p: Parameter | operation.ownedParameter->select(p: Parameter | not p.isInitializerParent())) separator('\n')]if (parameters.[p.name/]) [if (p.upper = 1)]this.[getSetter(p).name /](parameters.[p.name /])[else]parameters.[p.name /].forEach(e => this.[getAdder(p).name /](e))[/if];[/for]
+[/template]
+
+[comment handle initializer / initializer parent /]
+[template public generateConstructorSuper(constructor: Operation, aClass: Class)]
+[if (not aClass.generalization->isEmpty())]{[/if][if (aClass.isSemantic() and not aClass.isBlankNode())][if (not aClass.generalization->isEmpty())]semanticId: [/if]parameters.semanticId, [if (not aClass.generalization->isEmpty())]semanticType: [/if][if (aClass.isAbstract)]parameters.semanticType, [else]"[class.getValue(class.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]", [/if][if (not aClass.generalization->isEmpty())]other: [/if]parameters.other[/if][if (aClass.isSemantic() and not aClass.isBlankNode() and not constructor.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in and p.isInitializerParent()))->isEmpty())], [/if][for (parameter: Parameter | constructor.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in and p.isInitializerParent()))) separator(', ')][parameter.name/]: parameters.[parameter.name/][/for][if (not aClass.generalization->isEmpty())]}[/if]
+[/template]
+
+[template public genConstructorParameters(aClass: Class, operation: Operation)]
+[for (parameter: Parameter | operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))) separator(', ')][parameter.name/]?: [generateType(parameter.type.name, parameter.upper) /][/for]
+[/template]
+
+[template public getInitializationValueForType(type: String, upper: Integer)]
+[if upper = -1]['[]'/][elseif type = 'String']""[elseif type = 'Boolean']false[elseif type = 'Integer']0[elseif type = 'Real']0.0[else]nil[/if]
+[/template]
+
+[template public generateAdderBody(aClass: Class, operation: Operation)]
+Connector.getInstance().store([operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in)).name/]);
+this.addSemanticProperty[if (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->at(1).type.isPrimitive())]Literal[else]Reference[/if]("[getPropertyOfAdder(aClass, operation).getValue(getPropertyOfAdder(aClass, operation).getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]", [operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in)).name/]);
+[/template]
+
+[template public generateGetterBody(aClass: Class, operation: Operation)]
+[let property: Property = getPropertyOfGetter(aClass, operation)]
+[let returned: Parameter = operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return))->at(1)]
+[let type: String = generateTypeWithDefaultUndefined(returned)]
+[let map: OclAny = property.getValue(property.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')]
+[if (property.isPropertyMultiple())]const results = new [type/]();
+const properties = this.getSemanticPropertyAll("[map/]");
+properties.forEach(async p => {
+	const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(p);
+	if (semanticObject) results.push(<([returned.type.name/] & Semanticable)> semanticObject);
+});
+return results;[elseif (not returned.type.isPrimitive())]
+let result: [type/] = undefined;
+const property = this.getSemanticProperty("[map/]");
+if (property) {
+	const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(property);
+	if (semanticObject) result = <[type/]> semanticObject;
+}
+return result;
+[else]
+return this.getSemanticProperty("[map/]");[/if]
+[/let][/let][/let][/let]
+[/template]
+
+[template public generateSetterBody(aClass: Class, operation: Operation)]
+[comment if object is a reference, store it /]
+[comment throws getObject is null/]
+[let parameter: Parameter = operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->at(1)]
+[if (not parameter.type.isPrimitive())]Connector.getInstance().store([parameter.name/]);[/if]
+this.setSemanticProperty[if (parameter.type.isPrimitive())]Literal[else]Reference[/if]("[getPropertyOfSetter(aClass, operation).getValue(getPropertyOfSetter(aClass, operation).getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]", [operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in)).name/]);[/let]
+[/template]
+
+[template public generateRemoverBody(aClass: Class, operation: Operation)]
+throw new Error("Not yet implemented.");
+[/template]
+
+[template public generateOperationSignature(aClass: Class, operation: Operation)]
+[if (operation.isConstructor())]constructor[else][if (operation.isAbstract)]abstract [/if][if (operation.isGetter() and (getPropertyOfGetter(aClass, operation).isPropertyMultiple() or not operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return))->at(1).type.isPrimitive()))]async [/if][operation.name/][/if]([genOperationParameters(operation)/])[if not (operation.isConstructor())]: [generateOperationReturn(operation)/][/if]
+[/template]
+
+[template public generateOperationReturn(operation: Operation)]
+[if (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return))->isEmpty())]
+void[else]
+[let parameter: Parameter = operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return))->at(1)]
+[if (operation.isGetter() and not parameter.type.isPrimitive() and not parameter.type.isBlankNode())]Promise<[operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return)).genOperationParameter()/][if (parameter.upper = 1)] | undefined[/if]>[else][operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return)).genOperationParameter()/][/if]
+[/let]
+[/if]
+[/template]
+
+[template public genOperationParameters(anOperation: Operation)]
+[anOperation.ownedParameter->select(param : Parameter | (param.direction = ParameterDirectionKind::_in)).genOperationParameter()->sep(', ')/]
+[/template]
+
+[template public genOperationParameter(parameter: Parameter)]
+[if (parameter.direction = ParameterDirectionKind::_in)][parameter.name/]: [/if][generateType(parameter)/]
+[/template]
+

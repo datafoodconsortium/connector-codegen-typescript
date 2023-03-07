@@ -22,30 +22,44 @@
  * SOFTWARE.
 */
 
-import ICustomerCategory from "./ICustomerCategory.js"
-import { SemanticObject } from "@virtual-assembly/semantizer"
+import IUnit from "./IUnit.js"
+import IPrice from "./IPrice.js"
+import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import Connector from "./Connector.js"
 
-export default class CustomerCategory extends SemanticObject implements ICustomerCategory {
+export default class Price extends SemanticObjectAnonymous implements IPrice {
 
-	public constructor(parameters: {semanticId: string, description?: string});
-	public constructor(parameters: {other: Semanticable, description?: string});
-	public constructor(parameters: {semanticId?: string, other?: Semanticable, description?: string}) {
-		super(parameters.semanticId, "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#CustomerCategory", parameters.other);
+	public constructor(parameters: {other?: Semanticable});
+	public constructor(parameters: {other: Semanticable});
+	public constructor(parameters: {other?: Semanticable}) {
+		super();
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
-		if (parameters.description) this.setDescription(parameters.description);
+		
 	}
 
-	public getDescription(): string
+	public getVatRate(): number
 	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description");
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate");
 	}
 	
 
-	public setDescription(description: string): void {
+	public getValue(): number
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
+	}
+	
+
+	public async getUnit(): Promise<(IUnit & Semanticable) | undefined>
+	 {
+		let result: (IUnit & Semanticable) | undefined = undefined;
+		const property = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit");
+		if (property) {
+			const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(property);
+			if (semanticObject) result = <(IUnit & Semanticable) | undefined> semanticObject;
+		}
+		return result;
 		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description", description);
 	}
 	
 

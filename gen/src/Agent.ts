@@ -1,49 +1,61 @@
-import Contactable from "./Contactable.js"
-import Localizable from "./Localizable.js"
+/*
+ * MIT License
+ * 
+ * Copyright (c) 2023 Maxime Lecoq <maxime@lecoqlibre.fr>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+*/
+
 import Identifiable from "./Identifiable.js"
+import Localizable from "./Localizable.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
+import Connector from "./Connector.js"
 
 export default abstract class Agent extends SemanticObject implements Identifiable {
 
-	private contacts: (Contactable & Semanticable)[];
-	private localizations: (Localizable & Semanticable)[];
-
-	constructor() {
-		super();
-		this.setSemanticType("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Agent");
+	protected constructor(parameters: {semanticId?: string, semanticType?: string, other?: Semanticable, localizations?: (Localizable & Semanticable)[]}) {
+		super(parameters.semanticId, parameters.semanticType, parameters.other);
 		
-		this.contacts = [];
-		this.localizations = [];
-		this.registerSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress", () => this.getLocalizations());
+		if (parameters.localizations) parameters.localizations.forEach(e => this.addLocalization(e));
+	}
+
+	public removeLocalization(localization: (Localizable & Semanticable)): void {
+		throw new Error("Not yet implemented.");
 	}
 	
 
-	addLocalization(localization: (Localizable & Semanticable)): void {
-		this.localizations.push(localization);
+	public addLocalization(localization: (Localizable & Semanticable)): void {
+		Connector.getInstance().store(localization);
+		this.addSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress", localization);
 	}
 	
 
-	addContact(contact: (Contactable & Semanticable)): void {
-		this.contacts.push(contact);
-	}
-	
-
-	getLocalizations(): IterableIterator<(Localizable & Semanticable)> {
-		return this.localizations.values();
-	}
-	
-
-	getContacts(): IterableIterator<(Contactable & Semanticable)> {
-		return this.contacts.values();
-	}
-	
-
-	removeLocalization(localization: (Localizable & Semanticable)): void {
-	}
-	
-
-	removeContact(contact: (Contactable & Semanticable)): void {
+	public async getLocalizations(): Promise<Array<(Localizable & Semanticable)>>
+	 {
+		const results = new Array<(Localizable & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress");
+		properties.forEach(async p => {
+			const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(p);
+			if (semanticObject) results.push(<(Localizable & Semanticable)> semanticObject);
+		});
+		return results;
 	}
 	
 

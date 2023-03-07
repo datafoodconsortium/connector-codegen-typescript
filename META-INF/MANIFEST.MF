@@ -20,4 +20,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true
 Import-Package: org.datafoodconsortium.connector.codegen.common;version="1.0.0"
+Automatic-Module-Name: connector.codegen.typescript
 

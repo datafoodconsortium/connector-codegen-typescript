@@ -25,6 +25,10 @@
 	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'isGetter(org.eclipse.uml2.uml.Operation)', Sequence{o})
 /]
 
+[query public isPropertyMultiple(p: Property): Boolean 
+	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'isPropertyMultiple(org.eclipse.uml2.uml.Property)', Sequence{p})
+/]
+
 [query public isSetter(o: Operation): Boolean 
 	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'isSetter(org.eclipse.uml2.uml.Operation)', Sequence{o})
 /]
@@ -39,6 +43,10 @@
 
 [query public isSemantic(e: Element): Boolean 
 	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'isSemantic(org.eclipse.uml2.uml.Element)', Sequence{e})
+/]
+
+[query public isBlankNode(e: Element): Boolean 
+	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'isBlankNode(org.eclipse.uml2.uml.Element)', Sequence{e})
 /]
 
 [query public isExternal(e: Element): Boolean 
@@ -69,12 +77,32 @@
 	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getGetter(org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Operation)', Sequence{c, o})
 /]
 
+[query public getPropertyOfAdder(c: Class, o: Operation): Property 
+	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getPropertyOfAdder(org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Operation)', Sequence{c, o})
+/]
+
+[query public getPropertyOfGetter(c: Class, o: Operation): Property 
+	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getPropertyOfGetter(org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Operation)', Sequence{c, o})
+/]
+
+[query public getPropertyOfSetter(c: Class, o: Operation): Property 
+	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getPropertyOfSetter(org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Operation)', Sequence{c, o})
+/]
+
 [query public getSetter(c: Class, o: Operation): String 
 	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getSetter(org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Operation)', Sequence{c, o})
 /]
 
+[query public getSetter(p: Parameter): Operation 
+	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getSetter(org.eclipse.uml2.uml.Parameter)', Sequence{p})
+/]
+
 [query public getAdder(c: Class, o: Operation): String 
 	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getAdder(org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Operation)', Sequence{c, o})
+/]
+
+[query public getAdder(p: Parameter): Operation 
+	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getAdder(org.eclipse.uml2.uml.Parameter)', Sequence{p})
 /]
 
 [query public getRemover(c: Class, o: Operation): String 
@@ -84,3 +112,11 @@
 [query public getGetter(p: Property): String 
 	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getGetter(org.eclipse.uml2.uml.Property)', Sequence{p})
 /]
+
+[query public getUnimplementedOperations(c: Classifier): Sequence(Operation)
+	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getUnimplementedOperations(org.eclipse.uml2.uml.Classifier)', Sequence{c})
+/]
+
+[template public generateType(p: Property)][if not (p.type.isPrimitive())]([/if][p.type.getTypeName()/][if not (p.type.isPrimitive())] & Semanticable)[if (p.lower = 0 and p.upper = 1)] | undefined[/if][/if][if (p.upper = -1)]['[ fdf d ]'/] | ['[]'/][/if][/template]
+
+[template public generateType(name: String, upper: Integer)][if (name = 'String')]string[elseif (name = 'Real' or name = 'Integer' )]number[elseif (name = 'Boolean')]boolean[else]([name/] & Semanticable)[/if][if (upper = 1)][elseif (upper = -1)]['[]'/][/if][/template]

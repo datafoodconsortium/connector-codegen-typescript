@@ -1,0 +1,26 @@
+[comment encoding = UTF-8 /]
+[module interface('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[import org::datafoodconsortium::connector::codegen::typescript::common /]
+[import org::datafoodconsortium::connector::codegen::typescript::commonTypescript /]
+[import org::datafoodconsortium::connector::codegen::typescript::operation /]
+[import org::datafoodconsortium::connector::codegen::typescript::classifier /]
+
+[template public generateInterface(anInterface : Interface)]
+[file (anInterface.name.concat('.ts'), false, 'UTF-8')]
+[generateImports(anInterface)/]
+
+export default interface [anInterface.name.toUpperFirst() /] [generateGeneralization(anInterface)/]{
+
+	[for (operation: Operation | anInterface.ownedOperation)]
+	[for (c: Comment | operation.ownedComment)]
+	/* [c._body/] */
+	[/for]
+	[generateOperationSignature(operation)/];
+	[/for] 
+
+}
+[/file]
+[/template]
+
+[template public generateOperationSignature(operation: Operation)][operation.name/]([genOperationParameters(operation)/])[if not (operation.isConstructor())]: [generateOperationReturn(operation)/][/if][/template]

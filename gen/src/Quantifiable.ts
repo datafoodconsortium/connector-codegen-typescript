@@ -1,12 +1,14 @@
-
+import IUnit from "./IUnit.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Quantifiable {
 
-	getQuantityUnit(): string;
-	getQuantityValue(): number;
-	setQuantityUnit(quantityUnit: string): void;
+	getQuantityUnit(): Promise<(IUnit & Semanticable) | undefined>
+	;
+	getQuantityValue(): number
+	;
+	setQuantityUnit(quantityUnit: (IUnit & Semanticable)): void;
 	setQuantityValue(quantityValue: number): void;
 
 }

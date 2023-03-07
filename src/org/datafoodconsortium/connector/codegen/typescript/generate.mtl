@@ -1,19 +1,9 @@
 [comment encoding = UTF-8 /]
 [module generate('http://www.eclipse.org/uml2/5.0.0/UML')/]
 
-[import org::datafoodconsortium::connector::codegen::typescript::generateInterface /]
-[import org::datafoodconsortium::connector::codegen::typescript::generateClass /]
-[import org::datafoodconsortium::connector::codegen::typescript::generatePackageImport /]
-
-[template public generate(aClass: Class)]
-[comment @main /]
-[generateClass(aClass)/]
-[/template]
-
-[template public generate(anInterface: Interface)]
-[comment @main /]
-[generateInterface(anInterface)/]
-[/template]
+[import org::datafoodconsortium::connector::codegen::typescript::class /]
+[import org::datafoodconsortium::connector::codegen::typescript::interface /]
+[import org::datafoodconsortium::connector::codegen::typescript::umlpackage /]
 
 [template public generate(aPackage: PackageImport)]
 [comment @main /]
@@ -26,7 +16,6 @@
 [for (importedPackage: PackageImport | model.packageImport->select(pi: PackageImport | pi.importedPackage.name <> 'org.datafoodconsortium.semantizer'))][generateIndex(importedPackage.importedPackage.ownedMember)/][/for]
 [generateIndex(model.ownedMember)/]
 export { default as Connector } from './Connector.js';
-export { default as JsonLdSerializer } from './JsonLdSerializer.js';
 [/file]
 [/template]
 

@@ -9,10 +9,14 @@ export default interface ISKOSConcept {
 	addScheme(scheme: (ISKOSConceptScheme & Semanticable)): void;
 	addNarrower(narrower: (ISKOSConcept & Semanticable)): void;
 	addPrefLabel(prefLabel: (ISKOSLabel & Semanticable)): void;
-	getBroader(): IterableIterator<(ISKOSConcept & Semanticable)>;
-	getScheme(): IterableIterator<(ISKOSConceptScheme & Semanticable)>;
-	getNarrower(): IterableIterator<(ISKOSConcept & Semanticable)>;
-	getPrefLabel(): IterableIterator<(ISKOSLabel & Semanticable)>;
+	getBroader(): Promise<Array<(ISKOSConcept & Semanticable)>>
+	;
+	getScheme(): Promise<Array<(ISKOSConceptScheme & Semanticable)>>
+	;
+	getNarrower(): Promise<Array<(ISKOSConcept & Semanticable)>>
+	;
+	getPrefLabel(): Promise<Array<(ISKOSLabel & Semanticable)>>
+	;
 	removeBroader(broader: (ISKOSConcept & Semanticable)): void;
 	removeScheme(scheme: (ISKOSConceptScheme & Semanticable)): void;
 	removeNarrower(narrower: (ISKOSConcept & Semanticable)): void;

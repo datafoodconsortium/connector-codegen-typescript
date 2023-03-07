@@ -4,7 +4,9 @@ import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Browsable {
 
-	getMaintainers(): IterableIterator<(Catalogable & Semanticable)>;
-	getListedItems(): IterableIterator<(Catalogable & Semanticable)>;
+	getMaintainers(): Promise<Array<(Catalogable & Semanticable)>>
+	;
+	getListedItems(): Promise<Array<(Catalogable & Semanticable)>>
+	;
 
 }
