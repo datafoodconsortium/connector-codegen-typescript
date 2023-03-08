@@ -23,9 +23,9 @@
 */
 
 import IPrice from "./IPrice.js"
+import ICatalogItem from "./ICatalogItem.js"
 import IOffer from "./IOffer.js"
 import ICustomerCategory from "./ICustomerCategory.js"
-import ICatalogItem from "./ICatalogItem.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import Connector from "./Connector.js"
@@ -41,9 +41,9 @@ export default class Offer extends SemanticObject implements IOffer {
 		if (parameters.offeredTo) this.setCustomerCategory(parameters.offeredTo);
 	}
 
-	public setOfferedItem(offeredItem: (ICatalogItem & Semanticable)): void {
-		Connector.getInstance().store(offeredItem);
-		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredItem", offeredItem);
+	public setCustomerCategory(customerCategory: (ICustomerCategory & Semanticable)): void {
+		Connector.getInstance().store(customerCategory);
+		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredTo", customerCategory);
 	}
 	
 
@@ -73,9 +73,9 @@ export default class Offer extends SemanticObject implements IOffer {
 	}
 	
 
-	public setCustomerCategory(customerCategory: (ICustomerCategory & Semanticable)): void {
-		Connector.getInstance().store(customerCategory);
-		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredTo", customerCategory);
+	public setOfferedItem(offeredItem: (ICatalogItem & Semanticable)): void {
+		Connector.getInstance().store(offeredItem);
+		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredItem", offeredItem);
 	}
 	
 	public async getPrice(): Promise<(IPrice & Semanticable) | undefined>

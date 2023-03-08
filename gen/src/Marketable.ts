@@ -1,5 +1,5 @@
-import ICatalogItem from "./ICatalogItem.js"
 import ICustomerCategory from "./ICustomerCategory.js"
+import ICatalogItem from "./ICatalogItem.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 

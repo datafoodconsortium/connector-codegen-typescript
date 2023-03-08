@@ -22,21 +22,21 @@
  * SOFTWARE.
 */
 
-import ICharacteristicDimension from "./ICharacteristicDimension.js"
-import IUnit from "./IUnit.js"
-import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import Characteristic from "./Characteristic.js"
+import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import INutrientDimension from "./INutrientDimension.js"
+import IUnit from "./IUnit.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import Connector from "./Connector.js"
 
 export default class NutrientCharacteristic extends Characteristic implements INutrientCharacteristic {
 
-	public constructor(parameters: {unit?: (IUnit & Semanticable), value?: number, nutrientDimension?: (INutrientDimension & Semanticable)});
+	public constructor(parameters: {semanticType: string, unit?: (IUnit & Semanticable), value?: number, nutrientDimension?: (INutrientDimension & Semanticable)});
 	public constructor(parameters: {other: Semanticable, unit?: (IUnit & Semanticable), value?: number, nutrientDimension?: (INutrientDimension & Semanticable)});
-	public constructor(parameters: {other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, nutrientDimension?: (INutrientDimension & Semanticable)}) {
-		super({unit: parameters.unit, value: parameters.value});
+	public constructor(parameters: {semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, nutrientDimension?: (INutrientDimension & Semanticable)}) {
+		super({semanticType: parameters.other? parameters.other.getSemanticType(): parameters.semanticType, unit: parameters.unit, value: parameters.value});
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
 		if (parameters.nutrientDimension) this.setQuantityDimension(parameters.nutrientDimension);
 	}

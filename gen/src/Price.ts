@@ -30,25 +30,13 @@ import Connector from "./Connector.js"
 
 export default class Price extends SemanticObjectAnonymous implements IPrice {
 
-	public constructor(parameters: {other?: Semanticable});
+	public constructor(parameters: {semanticType: string});
 	public constructor(parameters: {other: Semanticable});
-	public constructor(parameters: {other?: Semanticable}) {
-		super();
+	public constructor(parameters: {semanticType?: string, other?: Semanticable}) {
+		super(parameters.other? parameters.other.getSemanticType(): parameters.semanticType);
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
 		
 	}
-
-	public getVatRate(): number
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate");
-	}
-	
-
-	public getValue(): number
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
-	}
-	
 
 	public async getUnit(): Promise<(IUnit & Semanticable) | undefined>
 	 {
@@ -60,6 +48,18 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 		}
 		return result;
 		
+	}
+	
+
+	public getVatRate(): number
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate");
+	}
+	
+
+	public getValue(): number
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
 	}
 	
 

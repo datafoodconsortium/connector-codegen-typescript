@@ -22,34 +22,22 @@
  * SOFTWARE.
 */
 
-import IUnit from "./IUnit.js"
 import Quantifiable from "./Quantifiable.js"
+import IUnit from "./IUnit.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import Connector from "./Connector.js"
 
 export default class QuantitativeValue extends SemanticObjectAnonymous implements Quantifiable {
 
-	public constructor(parameters: {unit?: (IUnit & Semanticable), value?: number});
+	public constructor(parameters: {semanticType: string, unit?: (IUnit & Semanticable), value?: number});
 	public constructor(parameters: {other: Semanticable, unit?: (IUnit & Semanticable), value?: number});
-	public constructor(parameters: {other?: Semanticable, unit?: (IUnit & Semanticable), value?: number}) {
-		super();
+	public constructor(parameters: {semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number}) {
+		super(parameters.other? parameters.other.getSemanticType(): parameters.semanticType);
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
 		if (parameters.unit) this.setQuantityUnit(parameters.unit);
 		if (parameters.value) this.setQuantityValue(parameters.value);
 	}
-
-	public setQuantityUnit(quantityUnit: (IUnit & Semanticable)): void {
-		Connector.getInstance().store(quantityUnit);
-		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit", quantityUnit);
-	}
-	
-
-	public getQuantityValue(): number
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
-	}
-	
 
 	public async getQuantityUnit(): Promise<(IUnit & Semanticable) | undefined>
 	 {
@@ -61,6 +49,18 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 		}
 		return result;
 		
+	}
+	
+
+	public getQuantityValue(): number
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
+	}
+	
+
+	public setQuantityUnit(quantityUnit: (IUnit & Semanticable)): void {
+		Connector.getInstance().store(quantityUnit);
+		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit", quantityUnit);
 	}
 	
 

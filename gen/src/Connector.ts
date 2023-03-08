@@ -1,6 +1,14 @@
 
 import { Semanticable, SemanticObject } from "@virtual-assembly/semantizer"
 import jsonld from 'jsonld';
+import DatasetExt from "rdf-ext/lib/Dataset";
+import ConnectorExporterJsonldStream from "./ConnectorExporterJsonldStream.js";
+import ConnectorFactory from "./ConnectorFactory.js";
+import ConnectorImporterJsonldStream from "./ConnectorImporterJsonldStream.js";
+import ConnectorStoreMap from "./ConnectorStoreMap.js";
+import IConnectorExporter from "./IConnectorExporter";
+import IConnectorImporter from "./IConnectorImporter";
+import IConnectorStore from "./IConnectorStore";
 import ISKOSConcept from "./ISKOSConcept";
 import SKOSParser from "./SKOSParser.js";
 
@@ -12,10 +20,11 @@ export default class Connector {
 
     private static instance: Connector | undefined = undefined;
 
-    private storeObject: Map<string, Semanticable>;
+    private importer: IConnectorImporter | undefined = undefined;
+    private exporter: IConnectorExporter | undefined = undefined;
+    private storeObject: IConnectorStore | undefined = undefined;
 
     private context: jsonld.ContextDefinition;
-    //private exporter: JsonLdSerializer;
     private parser: SKOSParser;
 
     private constructor() {
@@ -23,10 +32,10 @@ export default class Connector {
             "dfc-b": "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"
         };
 
-        //this.exporter = new JsonLdSerializer(this.context);
+        this.storeObject = new ConnectorStoreMap();
+        this.importer = new ConnectorImporterJsonldStream();
+        this.exporter = new ConnectorExporterJsonldStream();
         this.parser = new SKOSParser;
-
-        this.storeObject = new Map<string, Semanticable>();
 
         this.FACETS = [];
         this.MEASURES = [];
@@ -39,9 +48,30 @@ export default class Connector {
         return this.instance;
     }
 
-    public async export(subject: Semanticable, space: number | undefined): Promise<string> {
-        //this.exporter.setSpace(space);
-        return ""; // await this.exporter.process(subject);
+    public async export(objects: Array<Semanticable>): Promise<string> {
+        if (!this.exporter)
+            throw new Error("Exporter not found");
+
+        return this.exporter.export(objects);
+    }
+
+    public async import(data: string): Promise<Array<Semanticable>> {
+        if (!this.importer)
+            throw new Error("Importer not found");
+
+        const results: Array<Semanticable> = new Array<Semanticable>();
+        const datasets: Array<DatasetExt> = await this.importer.import(data);
+
+        datasets.forEach(dataset => {
+            const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+            const type = Array.from(dataset.filter((quad) => quad.predicate.value === rdfType))[0].object.value;
+            const semanticObject = ConnectorFactory.createFromType(type);
+            semanticObject.setSemanticPropertyAllFromRdfDataset(dataset);
+            results.push(semanticObject);
+            this.store(semanticObject);
+        });
+
+        return new Promise((resolve, reject) => resolve(results));
     }
 
     private loadThesaurus(data: any): any {
@@ -61,16 +91,28 @@ export default class Connector {
     }
 
     public async fetch(semanticObjectId: string): Promise<Semanticable | undefined> {
-        if (!this.storeObject.has(semanticObjectId)) {
-            const document: string = ""; //(await fetch(semanticObjectId)).json;
-            const semanticObject = new SemanticObject(document);
-            this.storeObject.set(semanticObjectId, semanticObject);
-            return semanticObject;
-        }
-        return this.storeObject.get(semanticObjectId);
+        if (!this.storeObject)
+            throw new Error("Store not found");
+
+        return this.storeObject.fetch(semanticObjectId);
+    }
+
+    public setExporter(exporter: IConnectorExporter): void {
+        this.exporter = exporter;
+    }
+
+    public setImporter(importer: IConnectorImporter): void {
+        this.importer = importer;
+    }
+
+    public setStore(store: IConnectorStore): void {
+        this.storeObject = store;
     }
 
     public store(semanticObject: Semanticable): void {
-        this.storeObject.set(semanticObject.getSemanticId(), semanticObject);
+        if (!this.storeObject)
+            throw new Error("Store not found");
+        
+        this.storeObject.store(semanticObject);
     }
 }

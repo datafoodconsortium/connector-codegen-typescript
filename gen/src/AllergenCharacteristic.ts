@@ -25,18 +25,18 @@
 import Characteristic from "./Characteristic.js"
 import IUnit from "./IUnit.js"
 import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
-import IAllergenDimension from "./IAllergenDimension.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import IAllergenDimension from "./IAllergenDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import Connector from "./Connector.js"
 
 export default class AllergenCharacteristic extends Characteristic implements IAllergenCharacteristic {
 
-	public constructor(parameters: {unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)});
+	public constructor(parameters: {semanticType: string, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)});
 	public constructor(parameters: {other: Semanticable, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)});
-	public constructor(parameters: {other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)}) {
-		super({unit: parameters.unit, value: parameters.value});
+	public constructor(parameters: {semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)}) {
+		super({semanticType: parameters.other? parameters.other.getSemanticType(): parameters.semanticType, unit: parameters.unit, value: parameters.value});
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
 		if (parameters.allergenDimension) this.setQuantityDimension(parameters.allergenDimension);
 	}

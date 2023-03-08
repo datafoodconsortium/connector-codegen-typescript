@@ -44,6 +44,17 @@ export default class Enterprise extends Agent implements Supplier, IEnterprise, 
 		if (parameters.description) this.setDescription(parameters.description);
 	}
 
+	public getVatNumber(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATnumber");
+	}
+	
+
+	public setVatNumber(vatNumber: string): void {
+		
+		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATnumber", vatNumber);
+	}
+	
 	public async getSuppliedProducts(): Promise<Array<(SuppliedProduct & Semanticable)>>
 	 {
 		const results = new Array<(SuppliedProduct & Semanticable)>();
@@ -53,10 +64,6 @@ export default class Enterprise extends Agent implements Supplier, IEnterprise, 
 			if (semanticObject) results.push(<(SuppliedProduct & Semanticable)> semanticObject);
 		});
 		return results;
-	}
-	
-
-	public addCatalogItem(catalogItem: (ICatalogItem & Semanticable)): void {
 	}
 	
 
@@ -72,29 +79,22 @@ export default class Enterprise extends Agent implements Supplier, IEnterprise, 
 	}
 	
 
-	public addSupplyProduct(suppliedProduct: (SuppliedProduct & Semanticable)): void {
-	}
-	
-	public getDescription(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription");
+	public addCatalogItem(catalogItem: (ICatalogItem & Semanticable)): void {
 	}
 	
 
+	public addSupplyProduct(suppliedProduct: (SuppliedProduct & Semanticable)): void {
+	}
+	
 	public setDescription(description: string): void {
 		
 		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription", description);
 	}
 	
-	public getVatNumber(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATnumber");
-	}
-	
 
-	public setVatNumber(vatNumber: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATnumber", vatNumber);
+	public getDescription(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription");
 	}
 	
 	public addCustomerCategory(customerCategory: (ICustomerCategory & Semanticable)): void {

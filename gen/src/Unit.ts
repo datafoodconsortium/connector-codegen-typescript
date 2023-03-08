@@ -22,8 +22,8 @@
  * SOFTWARE.
 */
 
-import IUnit from "./IUnit.js"
 import SKOSConcept from "./SKOSConcept.js"
+import IUnit from "./IUnit.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import Connector from "./Connector.js"

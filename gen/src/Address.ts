@@ -25,7 +25,7 @@
 import Localizable from "./Localizable.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import Connector from "./Connector.js"
+import Connector from "./Connector.js";
 
 export default class Address extends SemanticObject implements Localizable {
 
@@ -33,11 +33,16 @@ export default class Address extends SemanticObject implements Localizable {
 	public constructor(parameters: {other: Semanticable, street?: string, postalCode?: string, city?: string, country?: string});
 	public constructor(parameters: {semanticId?: string, other?: Semanticable, street?: string, postalCode?: string, city?: string, country?: string}) {
 		super(parameters.semanticId, "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Address", parameters.other);
+		Connector.getInstance().store(this);
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
 		if (parameters.street) this.setStreet(parameters.street);
 		if (parameters.postalCode) this.setPostalCode(parameters.postalCode);
 		if (parameters.city) this.setCity(parameters.city);
 		if (parameters.country) this.setCountry(parameters.country);
+	}
+
+	public getConnector(): Connector {
+		return Connector.getInstance();
 	}
 
 	public getCity(): string
@@ -46,15 +51,9 @@ export default class Address extends SemanticObject implements Localizable {
 	}
 	
 
-	public setCity(city: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCity", city);
-	}
-	
-
-	public setPostalCode(postalCode: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPostalCode", postalCode);
+	public getStreet(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet");
 	}
 	
 
@@ -64,9 +63,9 @@ export default class Address extends SemanticObject implements Localizable {
 	}
 	
 
-	public getCountry(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCountry");
+	public setStreet(street: string): void {
+		
+		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet", street);
 	}
 	
 
@@ -76,15 +75,21 @@ export default class Address extends SemanticObject implements Localizable {
 	}
 	
 
-	public setStreet(street: string): void {
+	public setCity(city: string): void {
 		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet", street);
+		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCity", city);
 	}
 	
 
-	public getStreet(): string
+	public getCountry(): string
 	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet");
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCountry");
+	}
+	
+
+	public setPostalCode(postalCode: string): void {
+		
+		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPostalCode", postalCode);
 	}
 	
 

@@ -32,7 +32,7 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 
 	protected constructor(parameters: {semanticId?: string, semanticType?: string, other?: Semanticable, localizations?: (Localizable & Semanticable)[]}) {
 		super(parameters.semanticId, parameters.semanticType, parameters.other);
-		
+		Connector.getInstance().store(this);
 		if (parameters.localizations) parameters.localizations.forEach(e => this.addLocalization(e));
 	}
 
@@ -51,10 +51,10 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 	 {
 		const results = new Array<(Localizable & Semanticable)>();
 		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress");
-		properties.forEach(async p => {
+		for await (const p of properties) {
 			const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(p);
 			if (semanticObject) results.push(<(Localizable & Semanticable)> semanticObject);
-		});
+		};
 		return results;
 	}
 	
