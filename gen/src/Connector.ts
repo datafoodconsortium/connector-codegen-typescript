@@ -20,8 +20,6 @@ export default class Connector {
 
     private static instance: Connector | undefined = undefined;
 
-    private importer: IConnectorImporter | undefined = undefined;
-    private exporter: IConnectorExporter | undefined = undefined;
     private storeObject: IConnectorStore | undefined = undefined;
 
     private context: jsonld.ContextDefinition;
@@ -33,8 +31,6 @@ export default class Connector {
         };
 
         this.storeObject = new ConnectorStoreMap();
-        this.importer = new ConnectorImporterJsonldStream();
-        this.exporter = new ConnectorExporterJsonldStream();
         this.parser = new SKOSParser;
 
         this.FACETS = [];
@@ -48,25 +44,16 @@ export default class Connector {
         return this.instance;
     }
 
-    public async export(objects: Array<Semanticable>): Promise<string> {
-        if (!this.exporter)
-            throw new Error("Exporter not found");
-
-        return this.exporter.export(objects);
+    public async export(exporter: IConnectorExporter, objects: Array<Semanticable>): Promise<string> {
+        return exporter.export(objects);
     }
 
-    public async import(data: string): Promise<Array<Semanticable>> {
-        if (!this.importer)
-            throw new Error("Importer not found");
-
+    public async import(importer: IConnectorImporter, data: string): Promise<Array<Semanticable>> {
         const results: Array<Semanticable> = new Array<Semanticable>();
-        const datasets: Array<DatasetExt> = await this.importer.import(data);
+        const datasets: Array<DatasetExt> = await importer.import(data);
 
         datasets.forEach(dataset => {
-            const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-            const type = Array.from(dataset.filter((quad) => quad.predicate.value === rdfType))[0].object.value;
-            const semanticObject = ConnectorFactory.createFromType(type);
-            semanticObject.setSemanticPropertyAllFromRdfDataset(dataset);
+            const semanticObject = ConnectorFactory.createFromRdfDataset(dataset);
             results.push(semanticObject);
             this.store(semanticObject);
         });
@@ -95,14 +82,6 @@ export default class Connector {
             throw new Error("Store not found");
 
         return this.storeObject.fetch(semanticObjectId);
-    }
-
-    public setExporter(exporter: IConnectorExporter): void {
-        this.exporter = exporter;
-    }
-
-    public setImporter(importer: IConnectorImporter): void {
-        this.importer = importer;
     }
 
     public setStore(store: IConnectorStore): void {

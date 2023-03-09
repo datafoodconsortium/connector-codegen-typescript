@@ -33,7 +33,7 @@ import Connector from "./Connector.js"
 
 export default class AllergenCharacteristic extends Characteristic implements IAllergenCharacteristic {
 
-	public constructor(parameters: {semanticType: string, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)});
+	public constructor(parameters: {unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)});
 	public constructor(parameters: {other: Semanticable, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)});
 	public constructor(parameters: {semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)}) {
 		super({semanticType: parameters.other? parameters.other.getSemanticType(): parameters.semanticType, unit: parameters.unit, value: parameters.value});

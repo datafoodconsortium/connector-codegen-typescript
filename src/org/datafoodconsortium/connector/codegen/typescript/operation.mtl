@@ -21,7 +21,7 @@
 [/if]
 [/template]
 
-[template public genConstructorSignatureWithSemanticId(aClass: Class, operation: Operation)]public constructor(parameters: {[if (aClass.isSemantic() and not aClass.isBlankNode())]semanticId: string[/if][if (aClass.isSemantic() and aClass.isBlankNode())]semanticType: string[/if][if aClass.isSemantic() and not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/]});[/template]
+[template public genConstructorSignatureWithSemanticId(aClass: Class, operation: Operation)]public constructor(parameters: {[if (aClass.isSemantic() and not aClass.isBlankNode())]semanticId: string[/if][comment if (aClass.isSemantic() and aClass.isBlankNode())semanticType: string[/if /][if aClass.isSemantic() and not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/]});[/template]
 [template public genConstructorSignatureCopy(aClass: Class, operation: Operation)]public constructor(parameters: {[if (aClass.isSemantic())]other: Semanticable[/if][if aClass.isSemantic() and not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/]});[/template]
 [template public genConstructorSignatureImplementation(aClass: Class, operation: Operation)][if (aClass.isAbstract)]protected[else]public[/if] constructor(parameters: {[if (aClass.isSemantic() or aClass.isAbstract)][if (not aClass.isBlankNode())]semanticId?: string, [/if][if (aClass.isAbstract or aClass.isBlankNode())]semanticType?: string, [/if]other?: Semanticable[/if][if (aClass.isSemantic() or aClass.isAbstract) and not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/]}) {
 	[generateConstructorBody(aClass, operation)/]
@@ -29,6 +29,7 @@
 
 [template public generateConstructorBody(class: Class, operation: Operation)]
 [if not (class.generalization->isEmpty()) or class.isSemantic()]super([generateConstructorSuper(operation, class)/]);[/if]
+[if (class.generalization->isEmpty())]Connector.getInstance().store(this);[/if]
 [if not (class.isAbstract)]if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();[/if]
 [for (p: Parameter | operation.ownedParameter->select(p: Parameter | not p.isInitializerParent())) separator('\n')]if (parameters.[p.name/]) [if (p.upper = 1)]this.[getSetter(p).name /](parameters.[p.name /])[else]parameters.[p.name /].forEach(e => this.[getAdder(p).name /](e))[/if];[/for]
 [/template]
@@ -58,10 +59,10 @@ this.addSemanticProperty[if (operation.ownedParameter->select(p: Parameter | (p.
 [let map: OclAny = property.getValue(property.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')]
 [if (property.isPropertyMultiple())]const results = new [type/]();
 const properties = this.getSemanticPropertyAll("[map/]");
-properties.forEach(async p => {
-	const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(p);
+for await (const semanticId of properties) {
+	const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(semanticId);
 	if (semanticObject) results.push(<([returned.type.name/] & Semanticable)> semanticObject);
-});
+}
 return results;[elseif (not returned.type.isPrimitive())]
 let result: [type/] = undefined;
 const property = this.getSemanticProperty("[map/]");

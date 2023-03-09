@@ -30,8 +30,8 @@ import Connector from "./Connector.js"
 
 export default class Price extends SemanticObjectAnonymous implements IPrice {
 
-	public constructor(parameters: {semanticType: string});
-	public constructor(parameters: {other: Semanticable});
+	public constructor(parameters: {semanticType?: string}); // todo remove
+	public constructor(parameters: {other?: Semanticable});
 	public constructor(parameters: {semanticType?: string, other?: Semanticable}) {
 		super(parameters.other? parameters.other.getSemanticType(): parameters.semanticType);
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();

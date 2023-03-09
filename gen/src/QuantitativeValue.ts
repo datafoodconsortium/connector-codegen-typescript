@@ -30,7 +30,7 @@ import Connector from "./Connector.js"
 
 export default class QuantitativeValue extends SemanticObjectAnonymous implements Quantifiable {
 
-	public constructor(parameters: {semanticType: string, unit?: (IUnit & Semanticable), value?: number});
+	public constructor(parameters: {semanticType?: string, unit?: (IUnit & Semanticable), value?: number});
 	public constructor(parameters: {other: Semanticable, unit?: (IUnit & Semanticable), value?: number});
 	public constructor(parameters: {semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number}) {
 		super(parameters.other? parameters.other.getSemanticType(): parameters.semanticType);
