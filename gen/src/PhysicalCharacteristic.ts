@@ -23,20 +23,21 @@
 */
 
 import Characteristic from "./Characteristic.js"
-import IPhysicalDimension from "./IPhysicalDimension.js"
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import IUnit from "./IUnit.js"
+import IPhysicalDimension from "./IPhysicalDimension.js"
+import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import Connector from "./Connector.js"
+import connector from "./Connector.js"
 
 export default class PhysicalCharacteristic extends Characteristic implements IPhysicalCharacteristic {
 
-	public constructor(parameters: {semanticType: string, unit?: (IUnit & Semanticable), value?: number, physicalDimension?: (IPhysicalDimension & Semanticable)});
+	public constructor(parameters: {unit?: (IUnit & Semanticable), value?: number, physicalDimension?: (IPhysicalDimension & Semanticable)});
 	public constructor(parameters: {other: Semanticable, unit?: (IUnit & Semanticable), value?: number, physicalDimension?: (IPhysicalDimension & Semanticable)});
 	public constructor(parameters: {semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, physicalDimension?: (IPhysicalDimension & Semanticable)}) {
 		super({semanticType: parameters.other? parameters.other.getSemanticType(): parameters.semanticType, unit: parameters.unit, value: parameters.value});
+		
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
 		if (parameters.physicalDimension) this.setQuantityDimension(parameters.physicalDimension);
 	}
@@ -46,7 +47,7 @@ export default class PhysicalCharacteristic extends Characteristic implements IP
 		let result: (ICharacteristicDimension & Semanticable) | undefined = undefined;
 		const property = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPhysicalDimension");
 		if (property) {
-			const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(property);
+			const semanticObject: Semanticable | undefined = await connector.fetch(property);
 			if (semanticObject) result = <(ICharacteristicDimension & Semanticable) | undefined> semanticObject;
 		}
 		return result;
@@ -55,7 +56,7 @@ export default class PhysicalCharacteristic extends Characteristic implements IP
 	
 
 	public setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void {
-		Connector.getInstance().store(quantityDimension);
+		connector.store(quantityDimension);
 		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPhysicalDimension", quantityDimension);
 	}
 	

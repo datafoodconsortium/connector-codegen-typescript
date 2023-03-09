@@ -1,18 +1,20 @@
 
-import { Semanticable, SemanticObject } from "@virtual-assembly/semantizer"
+import { Semanticable } from "@virtual-assembly/semantizer"
 import jsonld from 'jsonld';
 import DatasetExt from "rdf-ext/lib/Dataset";
 import ConnectorExporterJsonldStream from "./ConnectorExporterJsonldStream.js";
-import ConnectorFactory from "./ConnectorFactory.js";
+import ConnectorFactoryDefault from "./ConnectorFactoryDefault.js";
 import ConnectorImporterJsonldStream from "./ConnectorImporterJsonldStream.js";
 import ConnectorStoreMap from "./ConnectorStoreMap.js";
 import IConnectorExporter from "./IConnectorExporter";
+import IConnectorFactory from "./IConnectorFactory.js";
 import IConnectorImporter from "./IConnectorImporter";
 import IConnectorStore from "./IConnectorStore";
+import IGetterOptions from "./IGetterOptions.js";
 import ISKOSConcept from "./ISKOSConcept";
 import SKOSParser from "./SKOSParser.js";
 
-export default class Connector {
+export class Connector {
 
     public FACETS: Array<ISKOSConcept>;
     public MEASURES: Array<ISKOSConcept>;
@@ -20,7 +22,11 @@ export default class Connector {
 
     private static instance: Connector | undefined = undefined;
 
-    private storeObject: IConnectorStore | undefined = undefined;
+    private fetchFunction: Function;
+    private factory: IConnectorFactory;
+    private importer: IConnectorImporter;
+    private exporter: IConnectorExporter;
+    private storeObject: IConnectorStore;
 
     private context: jsonld.ContextDefinition;
     private parser: SKOSParser;
@@ -31,6 +37,10 @@ export default class Connector {
         };
 
         this.storeObject = new ConnectorStoreMap();
+        this.fetchFunction = () => null;
+        this.factory = new ConnectorFactoryDefault();
+        this.importer = new ConnectorImporterJsonldStream();
+        this.exporter = new ConnectorExporterJsonldStream();
         this.parser = new SKOSParser;
 
         this.FACETS = [];
@@ -44,16 +54,19 @@ export default class Connector {
         return this.instance;
     }
 
-    public async export(exporter: IConnectorExporter, objects: Array<Semanticable>): Promise<string> {
+    public async export(objects: Array<Semanticable>, options?: { exporter?: IConnectorExporter }): Promise<string> {
+        const exporter = options?.exporter? options.exporter : this.exporter;
         return exporter.export(objects);
     }
 
-    public async import(importer: IConnectorImporter, data: string): Promise<Array<Semanticable>> {
+    public async import(data: string, options?: { importer?: IConnectorImporter, factory?: IConnectorFactory }): Promise<Array<Semanticable>> {
+        const importer = options?.importer? options.importer : this.importer;
+        const factory = options?.factory? options.factory : this.factory;
         const results: Array<Semanticable> = new Array<Semanticable>();
         const datasets: Array<DatasetExt> = await importer.import(data);
 
         datasets.forEach(dataset => {
-            const semanticObject = ConnectorFactory.createFromRdfDataset(dataset);
+            const semanticObject = factory.createFromRdfDataset(dataset);
             results.push(semanticObject);
             this.store(semanticObject);
         });
@@ -77,21 +90,45 @@ export default class Connector {
         this.PRODUCT_TYPES = this.loadThesaurus(data);
     }
 
-    public async fetch(semanticObjectId: string): Promise<Semanticable | undefined> {
-        if (!this.storeObject)
-            throw new Error("Store not found");
+    public async fetch(semanticObjectId: string, options?: IGetterOptions): Promise<Semanticable | undefined> {
+        const store: IConnectorStore = options?.store? options.store : this.storeObject;
 
-        return this.storeObject.fetch(semanticObjectId);
+        if (!store.has(semanticObjectId)) {
+            const fetchFunction = options?.fetch? options.fetch : this.fetchFunction;
+            const importer = options?.importer? { importer: options.importer } : {};
+            const document: string = await fetchFunction(semanticObjectId);
+            const semanticObjects = await this.import(document, importer);
+            store.storeAll(semanticObjects);
+            return semanticObjects.find(semanticObject => semanticObject.getSemanticId() === semanticObjectId);
+        }
+
+        return store.fetch(semanticObjectId);
     }
 
-    public setStore(store: IConnectorStore): void {
+    public setDefaultFactory(factory: IConnectorFactory): void {
+        this.factory = factory;
+    }
+
+    public setDefaultFetchFunction(fetch: (semanticId: string) => Promise<string>): void {
+        this.fetchFunction = fetch;
+    }
+
+    public setDefaultExporter(exporter: IConnectorExporter): void {
+        this.exporter = exporter;
+    }
+
+    public setDefaultImporter(importer: IConnectorImporter): void {
+        this.importer = importer;
+    }
+
+    public setDefaultStore(store: IConnectorStore): void {
         this.storeObject = store;
     }
 
     public store(semanticObject: Semanticable): void {
-        if (!this.storeObject)
-            throw new Error("Store not found");
-        
         this.storeObject.store(semanticObject);
     }
 }
+
+const connector = Connector.getInstance();
+export default connector;

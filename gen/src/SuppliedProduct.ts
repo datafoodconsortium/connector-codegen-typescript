@@ -25,7 +25,7 @@
 import DefinedProduct from "./DefinedProduct.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import Connector from "./Connector.js"
+import connector from "./Connector.js"
 
 export default class SuppliedProduct extends DefinedProduct {
 
@@ -33,6 +33,7 @@ export default class SuppliedProduct extends DefinedProduct {
 	public constructor(parameters: {other: Semanticable, name?: string, description?: string});
 	public constructor(parameters: {semanticId?: string, other?: Semanticable, name?: string, description?: string}) {
 		super({semanticId: parameters.semanticId, semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#SuppliedProduct", other: parameters.other, name: parameters.name, description: parameters.description});
+		
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
 		
 	}

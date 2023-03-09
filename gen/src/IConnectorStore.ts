@@ -5,4 +5,5 @@ export default interface IConnectorStore {
     fetch(semanticObjectId: string): Promise<Semanticable | undefined>;
     has(semanticObjectId: string): boolean;
     store(semanticObject: Semanticable): void;
+    storeAll(semanticObjects: Array<Semanticable>): void;
 }

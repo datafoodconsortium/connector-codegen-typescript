@@ -22,14 +22,14 @@
  * SOFTWARE.
 */
 
-import Characteristic from "./Characteristic.js"
-import IUnit from "./IUnit.js"
-import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import IUnit from "./IUnit.js"
 import IAllergenDimension from "./IAllergenDimension.js"
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import Characteristic from "./Characteristic.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import Connector from "./Connector.js"
+import connector from "./Connector.js"
 
 export default class AllergenCharacteristic extends Characteristic implements IAllergenCharacteristic {
 
@@ -37,6 +37,7 @@ export default class AllergenCharacteristic extends Characteristic implements IA
 	public constructor(parameters: {other: Semanticable, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)});
 	public constructor(parameters: {semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)}) {
 		super({semanticType: parameters.other? parameters.other.getSemanticType(): parameters.semanticType, unit: parameters.unit, value: parameters.value});
+		
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
 		if (parameters.allergenDimension) this.setQuantityDimension(parameters.allergenDimension);
 	}
@@ -46,7 +47,7 @@ export default class AllergenCharacteristic extends Characteristic implements IA
 		let result: (ICharacteristicDimension & Semanticable) | undefined = undefined;
 		const property = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenDimension");
 		if (property) {
-			const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(property);
+			const semanticObject: Semanticable | undefined = await connector.fetch(property);
 			if (semanticObject) result = <(ICharacteristicDimension & Semanticable) | undefined> semanticObject;
 		}
 		return result;
@@ -55,7 +56,7 @@ export default class AllergenCharacteristic extends Characteristic implements IA
 	
 
 	public setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void {
-		Connector.getInstance().store(quantityDimension);
+		connector.store(quantityDimension);
 		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenDimension", quantityDimension);
 	}
 	

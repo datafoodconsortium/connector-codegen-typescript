@@ -10,5 +10,8 @@ export default interface IPrice {
 	;
 	getUnit(): Promise<(IUnit & Semanticable) | undefined>
 	;
+	setValue(value: number): void;
+	setVatRate(vatRate: number): void;
+	setUnit(unit: (IUnit & Semanticable)): void;
 
 }

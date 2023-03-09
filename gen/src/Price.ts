@@ -26,24 +26,33 @@ import IUnit from "./IUnit.js"
 import IPrice from "./IPrice.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import Connector from "./Connector.js"
+import connector from "./Connector.js"
 
 export default class Price extends SemanticObjectAnonymous implements IPrice {
 
-	public constructor(parameters: {semanticType?: string}); // todo remove
-	public constructor(parameters: {other?: Semanticable});
-	public constructor(parameters: {semanticType?: string, other?: Semanticable}) {
+	public constructor(parameters: {value?: number, vatRate?: number, unit?: (IUnit & Semanticable)});
+	public constructor(parameters: {other: Semanticable, value?: number, vatRate?: number, unit?: (IUnit & Semanticable)});
+	public constructor(parameters: {semanticType?: string, other?: Semanticable, value?: number, vatRate?: number, unit?: (IUnit & Semanticable)}) {
 		super(parameters.other? parameters.other.getSemanticType(): parameters.semanticType);
+		connector.store(this);
 		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
-		
+		if (parameters.value) this.setValue(parameters.value);
+		if (parameters.vatRate) this.setVatRate(parameters.vatRate);
+		if (parameters.unit) this.setUnit(parameters.unit);
 	}
+
+	public setUnit(unit: (IUnit & Semanticable)): void {
+		connector.store(unit);
+		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit", unit);
+	}
+	
 
 	public async getUnit(): Promise<(IUnit & Semanticable) | undefined>
 	 {
 		let result: (IUnit & Semanticable) | undefined = undefined;
 		const property = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit");
 		if (property) {
-			const semanticObject: Semanticable | undefined = await Connector.getInstance().fetch(property);
+			const semanticObject: Semanticable | undefined = await connector.fetch(property);
 			if (semanticObject) result = <(IUnit & Semanticable) | undefined> semanticObject;
 		}
 		return result;
@@ -51,15 +60,27 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 	}
 	
 
-	public getVatRate(): number
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate");
+	public setVatRate(vatRate: number): void {
+		
+		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate", vatRate);
+	}
+	
+
+	public setValue(value: number): void {
+		
+		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value", value);
 	}
 	
 
 	public getValue(): number
 	 {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
+	}
+	
+
+	public getVatRate(): number
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate");
 	}
 	
 

@@ -1,5 +1,5 @@
 
-import { Semanticable, SemanticObject } from "@virtual-assembly/semantizer"
+import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnectorStore from "./IConnectorStore";
 
 export default class ConnectorStoreMap implements IConnectorStore {
@@ -11,12 +11,6 @@ export default class ConnectorStoreMap implements IConnectorStore {
     }
 
     public async fetch(semanticObjectId: string): Promise<Semanticable | undefined> {
-        if (!this.storeObject.has(semanticObjectId)) {
-            const document: string = ""; //(await fetch(semanticObjectId)).json;
-            const semanticObject = new SemanticObject(document);
-            this.storeObject.set(semanticObjectId, semanticObject);
-            return semanticObject;
-        }
         return this.storeObject.get(semanticObjectId);
     }
 
@@ -27,4 +21,9 @@ export default class ConnectorStoreMap implements IConnectorStore {
     public store(semanticObject: Semanticable): void {
         this.storeObject.set(semanticObject.getSemanticId(), semanticObject);
     }
+
+    public storeAll(semanticObjects: Array<Semanticable>): void {
+        semanticObjects.forEach(semanticObject => this.store(semanticObject));
+    }
+    
 }

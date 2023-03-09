@@ -1,5 +1,5 @@
-import Localizable from "./Localizable.js"
 import Emailable from "./Emailable.js"
+import Localizable from "./Localizable.js"
 import Dialable from "./Dialable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"

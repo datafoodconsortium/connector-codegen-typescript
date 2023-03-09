@@ -22,18 +22,19 @@
  * SOFTWARE.
 */
 
-import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import QuantitativeValue from "./QuantitativeValue.js"
 import IUnit from "./IUnit.js"
+import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import ICharacteristic from "./ICharacteristic.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import Connector from "./Connector.js"
+import connector from "./Connector.js"
 
 export default abstract class Characteristic extends QuantitativeValue implements ICharacteristic {
 
 	protected constructor(parameters: {semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number}) {
-		super({semanticType: parameters.other? parameters.other.getSemanticType(): parameters.semanticType!, unit: parameters.unit, value: parameters.value});
+		super({semanticType: parameters.other? parameters.other.getSemanticType(): parameters.semanticType, unit: parameters.unit, value: parameters.value});
+		
 		
 		
 	}

@@ -5,6 +5,7 @@ import AllergenCharacteristic from "./AllergenCharacteristic.js";
 import CatalogItem from "./CatalogItem.js";
 import CustomerCategory from "./CustomerCategory.js";
 import Enterprise from "./Enterprise.js";
+import IConnectorFactory from "./IConnectorFactory.js";
 import NutrientCharacteristic from "./NutrientCharacteristic.js";
 import Offer from "./Offer.js";
 import Person from "./Person.js";
@@ -14,9 +15,9 @@ import QuantitativeValue from "./QuantitativeValue.js";
 import SKOSConcept from "./SKOSConcept.js";
 import SuppliedProduct from "./SuppliedProduct.js";
 
-export default class ConnectorFactory {
+export default class ConnectorFactory implements IConnectorFactory {
 
-    public static createFromType(type: string): Semanticable {
+    public createFromType(type: string): Semanticable {
         let result: Semanticable | undefined = undefined;
         const prefix: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#";
         switch (type) {
@@ -82,7 +83,7 @@ export default class ConnectorFactory {
         return result;
     }
 
-    public static createFromRdfDataset(dataset: DatasetExt): Semanticable {
+    public createFromRdfDataset(dataset: DatasetExt): Semanticable {
         const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
         const type = Array.from(dataset.filter((quad) => quad.predicate.value === rdfType))[0].object.value;
         const semanticObject: Semanticable = this.createFromType(type);

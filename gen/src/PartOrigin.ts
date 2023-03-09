@@ -22,11 +22,11 @@
  * SOFTWARE.
 */
 
-import IPartOrigin from "./IPartOrigin.js"
 import SKOSConcept from "./SKOSConcept.js"
+import IPartOrigin from "./IPartOrigin.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import Connector from "./Connector.js"
+import connector from "./Connector.js"
 
 export default class PartOrigin extends SKOSConcept implements IPartOrigin {
 

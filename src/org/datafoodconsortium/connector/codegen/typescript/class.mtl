@@ -32,7 +32,8 @@
 */
 
 [generateImports(aClass)/]
-import Connector from "./Connector.js"
+import connector from "./Connector.js";
+import IGetterOptions from "./IGetterOptions.js"
 
 export default [if (aClass.isAbstract)]abstract [/if]class [aClass.name.toUpperFirst()/] [generateGeneralization(aClass)/][generateInterfaceRealizationHeader(aClass)/]{
 
