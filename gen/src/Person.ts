@@ -22,10 +22,10 @@
  * SOFTWARE.
 */
 
+import Localizable from "./Localizable.js"
 import Onboardable from "./Onboardable.js"
 import Agent from "./Agent.js"
 import IPerson from "./IPerson.js"
-import Localizable from "./Localizable.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import connector from "./Connector.js";
@@ -34,38 +34,36 @@ import IGetterOptions from "./IGetterOptions.js"
 export default class Person extends Agent implements IPerson {
 
 	public constructor(parameters: {semanticId: string, firstName?: string, lastName?: string, localizations?: (Localizable & Semanticable)[]});
-	public constructor(parameters: {other: Semanticable, firstName?: string, lastName?: string, localizations?: (Localizable & Semanticable)[]});
+	public constructor(parameters: {semanticId: string, other: Semanticable});
 	public constructor(parameters: {semanticId?: string, other?: Semanticable, firstName?: string, lastName?: string, localizations?: (Localizable & Semanticable)[]}) {
-		super({semanticId: parameters.semanticId, semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Person", other: parameters.other, localizations: parameters.localizations});
+		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Person";
 		
-		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
+		if (parameters.other) {
+			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			if (!parameters.other.isSemanticTypeOf(type))
+				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
+		}
+		else super({ semanticId: parameters.semanticId!, semanticType: type, localizations: parameters.localizations });
+		
+		connector.store(this);
+		
 		if (parameters.firstName) this.setFirstName(parameters.firstName);
 		if (parameters.lastName) this.setLastName(parameters.lastName);
 	}
 
-	public setLastName(lastName: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#familyName", lastName);
+	public affiliateTo(organization: (Onboardable & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#affiliates";
+		if (organization.isSemanticObjectAnonymous()) {
+			if (organization.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, organization);
+			else this.addSemanticPropertyReference(property, organization);
+		}
+		else {
+			connector.store(organization);
+			this.addSemanticPropertyReference(property, organization);
+		}
 	}
 	
 
-	public getLastName(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#familyName");
-	}
-	
-
-	public setFirstName(firstName: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#firstName", firstName);
-	}
-	
-
-	public getFirstName(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#firstName");
-	}
-	
 	public leaveAffiliatedOrganization(organization: (Onboardable & Semanticable)): void {
 		throw new Error("Not yet implemented.");
 	}
@@ -82,10 +80,27 @@ export default class Person extends Agent implements IPerson {
 		return results;
 	}
 	
+	public setFirstName(firstName: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#firstName";
+		this.setSemanticPropertyLiteral(property, firstName);
+	}
+	
 
-	public affiliateTo(organization: (Onboardable & Semanticable)): void {
-		connector.store(organization);
-		this.addSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#affiliates", organization);
+	public getFirstName(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#firstName");
+	}
+	
+
+	public getLastName(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#familyName");
+	}
+	
+
+	public setLastName(lastName: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#familyName";
+		this.setSemanticPropertyLiteral(property, lastName);
 	}
 	
 

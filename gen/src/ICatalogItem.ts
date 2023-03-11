@@ -1,10 +1,10 @@
-import Catalogable from "./Catalogable.js"
-import Offerable from "./Offerable.js"
 import Stockable from "./Stockable.js"
+import Offerable from "./Offerable.js"
+import Catalogable from "./Catalogable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
-export default interface ICatalogItem extends Stockable, Catalogable, Offerable {
+export default interface ICatalogItem extends Catalogable, Stockable, Offerable {
 
 	getSku(): string
 	;

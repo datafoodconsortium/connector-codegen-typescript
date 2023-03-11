@@ -22,8 +22,8 @@
  * SOFTWARE.
 */
 
-import SKOSConcept from "./SKOSConcept.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import SKOSConcept from "./SKOSConcept.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import connector from "./Connector.js";

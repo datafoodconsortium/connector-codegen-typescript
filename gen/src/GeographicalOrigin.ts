@@ -22,8 +22,8 @@
  * SOFTWARE.
 */
 
-import IGeographicalOrigin from "./IGeographicalOrigin.js"
 import SKOSConcept from "./SKOSConcept.js"
+import IGeographicalOrigin from "./IGeographicalOrigin.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import connector from "./Connector.js";

@@ -80,7 +80,7 @@ let suppliedProduct = new SuppliedProduct({
   semanticId: "https://myplatform.com/tomato",
   name: "Tomato", 
   description: "Awesome tomato",
-  productType: connector.PRODUCT_TYPES.VEGETABLE.TOMATO, 
+  productType: connector.PRODUCT_TYPES.VEGETABLE.TOMATO.ROUND_TOMATO, 
   quantity: new QuantitativeValue(kilogram, 1), 
   alcoholPercentage: 0.0, 
   lifetime: "a week", 
@@ -90,10 +90,10 @@ let suppliedProduct = new SuppliedProduct({
   nutrientCharacteristics: [new NutrientCharacteristic(gram, 10, connector.MEASURES.DIMENSION.NUTRIENTDIMENSION.CALCIUM)],
   physicalCharacteristics: [new PhysicalCharacteristic(gram, 100, connector.MEASURES.DIMENSION.PHYSICALDIMENSION.WEIGHT)],
   geographicalOrigin: connector.FACETS.TERRITORIALORIGIN.EUROPE.FRANCE.CENTREVALLOIRE,
-  catalogItems: new CatalogItem({ semanticId: "https://myplatform.com/catalogItem" }), 
+  catalogItems: [new CatalogItem({ semanticId: "https://myplatform.com/catalogItem" })], 
   certifications: [connector.FACETS.CERTIFICATION.ORGANICLABEL.ORGANIC_AB],
   natureOrigin: [connector.FACETS.NATUREORIGIN.PLANTORIGIN],
-  partOrigin: connector.FACETS.PARTORIGIN.PLANTPARTORIGIN.FRUIT
+  partOrigin: [connector.FACETS.PARTORIGIN.PLANTPARTORIGIN.FRUIT]
 });
 ```
 

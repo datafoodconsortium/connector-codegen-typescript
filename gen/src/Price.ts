@@ -22,8 +22,8 @@
  * SOFTWARE.
 */
 
-import IUnit from "./IUnit.js"
 import IPrice from "./IPrice.js"
+import IUnit from "./IUnit.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import connector from "./Connector.js";
@@ -32,39 +32,22 @@ import IGetterOptions from "./IGetterOptions.js"
 export default class Price extends SemanticObjectAnonymous implements IPrice {
 
 	public constructor(parameters: {semanticId?: string, semanticType?: string, value?: number, vatRate?: number, unit?: (IUnit & Semanticable)});
-	public constructor(parameters: {other: Semanticable, value?: number, vatRate?: number, unit?: (IUnit & Semanticable)});
+	public constructor(parameters: {semanticId: string, other: Semanticable});
 	public constructor(parameters: {semanticId?: string, semanticType?: string, other?: Semanticable, value?: number, vatRate?: number, unit?: (IUnit & Semanticable)}) {
-		super(parameters.semanticId, parameters.other? parameters.other.getSemanticType(): parameters.semanticType, parameters.other);
-		connector.store(this);
-		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
+		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Price";
+		
+		if (parameters.other) {
+			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			if (!parameters.other.isSemanticTypeOf(type))
+				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
+		}
+		else super({ semanticId: parameters.semanticId!, semanticType: type });
+		
+		
 		if (parameters.value) this.setValue(parameters.value);
 		if (parameters.vatRate) this.setVatRate(parameters.vatRate);
 		if (parameters.unit) this.setUnit(parameters.unit);
 	}
-
-	public getValue(): number
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
-	}
-	
-
-	public setValue(value: number): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value", value);
-	}
-	
-
-	public setVatRate(vatRate: number): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate", vatRate);
-	}
-	
-
-	public setUnit(unit: (IUnit & Semanticable)): void {
-		connector.store(unit);
-		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit", unit);
-	}
-	
 
 	public getVatRate(): number
 	 {
@@ -82,6 +65,37 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 		}
 		return result;
 		
+	}
+	
+
+	public setValue(value: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
+		this.setSemanticPropertyLiteral(property, value);
+	}
+	
+
+	public getValue(): number
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
+	}
+	
+
+	public setUnit(unit: (IUnit & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit";
+		if (unit.isSemanticObjectAnonymous()) {
+			if (unit.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, unit);
+			else this.setSemanticPropertyReference(property, unit);
+		}
+		else {
+			connector.store(unit);
+			this.setSemanticPropertyReference(property, unit);
+		}
+	}
+	
+
+	public setVatRate(vatRate: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate";
+		this.setSemanticPropertyLiteral(property, vatRate);
 	}
 	
 

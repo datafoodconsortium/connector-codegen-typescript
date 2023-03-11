@@ -31,23 +31,31 @@ import IGetterOptions from "./IGetterOptions.js"
 export default class CustomerCategory extends SemanticObject implements ICustomerCategory {
 
 	public constructor(parameters: {semanticId: string, description?: string});
-	public constructor(parameters: {other: Semanticable, description?: string});
+	public constructor(parameters: {semanticId: string, other: Semanticable});
 	public constructor(parameters: {semanticId?: string, other?: Semanticable, description?: string}) {
-		super(parameters.semanticId, "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#CustomerCategory", parameters.other);
+		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#CustomerCategory";
+		
+		if (parameters.other) {
+			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			if (!parameters.other.isSemanticTypeOf(type))
+				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
+		}
+		else super({ semanticId: parameters.semanticId!, semanticType: type });
+		
 		connector.store(this);
-		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
+		
 		if (parameters.description) this.setDescription(parameters.description);
 	}
-
-	public setDescription(description: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description", description);
-	}
-	
 
 	public getDescription(): string
 	 {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description");
+	}
+	
+
+	public setDescription(description: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description";
+		this.setSemanticPropertyLiteral(property, description);
 	}
 	
 

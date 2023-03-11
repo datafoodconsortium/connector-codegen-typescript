@@ -1,11 +1,10 @@
 import Person from '../lib/Person.js';
 import Address from '../lib/Address.js';
-import connector from "../lib/Connector.js";
 
-const connector = global.connectors;
-const expected = `{"@id":"http://myplatform.com/person1","@type":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Person","http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#familyName":"Lecoq","http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#firstName":"Maxime","http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress":{"@id":"http://myplatform.com/address/address1"}}`;
+const connector = global.connector;
+const expected = `{"@context":{"@vocab":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"},"@id":"http://myplatform.com/person1","@type":"Person","familyName":"Lecoq","firstName":"Maxime","hasAddress":{"@id":"http://myplatform.com/address/address1"}}`;
 
-test('serialize basic person', async () => {
+test('Person:export', async () => {
     const address = new Address({
         semanticId: "http://myplatform.com/address/address1",
         city: "Briouze"
@@ -18,7 +17,7 @@ test('serialize basic person', async () => {
     });
 
     person.addLocalization(address);
-
+    
     const serialized = await connector.export([person]);
     expect(serialized).toStrictEqual(expected);
 });

@@ -1,4 +1,3 @@
-/*
 import connector from "./lib/Connector.js";
 
 import facets from './test/thesaurus/facets.json' assert { type: 'json' };
@@ -10,7 +9,6 @@ connector.loadMeasures(measures);
 connector.loadProductTypes(productTypes);
 
 global.connector = connector;
-*/
 
 export default {
   transform: {},

@@ -22,11 +22,11 @@
  * SOFTWARE.
 */
 
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import Characteristic from "./Characteristic.js"
+import IAllergenDimension from "./IAllergenDimension.js"
 import IUnit from "./IUnit.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
-import Characteristic from "./Characteristic.js"
-import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
-import IAllergenDimension from "./IAllergenDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import connector from "./Connector.js";
@@ -35,10 +35,18 @@ import IGetterOptions from "./IGetterOptions.js"
 export default class AllergenCharacteristic extends Characteristic implements IAllergenCharacteristic {
 
 	public constructor(parameters: {semanticId?: string, semanticType?: string, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)});
-	public constructor(parameters: {other: Semanticable, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)});
+	public constructor(parameters: {semanticId: string, other: Semanticable});
 	public constructor(parameters: {semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)}) {
-		super({semanticId: parameters.semanticId, semanticType: parameters.other? parameters.other.getSemanticType(): "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#AllergenCharacteristic", other: parameters.other, unit: parameters.unit, value: parameters.value});
-		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
+		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#AllergenCharacteristic";
+		
+		if (parameters.other) {
+			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			if (!parameters.other.isSemanticTypeOf(type))
+				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
+		}
+		else super({ semanticId: parameters.semanticId!, semanticType: type, unit: parameters.unit, value: parameters.value });
+		
+		
 		if (parameters.allergenDimension) this.setQuantityDimension(parameters.allergenDimension);
 	}
 
@@ -56,8 +64,15 @@ export default class AllergenCharacteristic extends Characteristic implements IA
 	
 
 	public setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void {
-		//connector.store(quantityDimension);
-		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenDimension", quantityDimension);
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenDimension";
+		if (quantityDimension.isSemanticObjectAnonymous()) {
+			if (quantityDimension.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, quantityDimension);
+			else this.setSemanticPropertyReference(property, quantityDimension);
+		}
+		else {
+			connector.store(quantityDimension);
+			this.setSemanticPropertyReference(property, quantityDimension);
+		}
 	}
 	
 

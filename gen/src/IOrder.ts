@@ -1,6 +1,6 @@
 import IOrderLine from "./IOrderLine.js"
-import Agent from "./Agent.js"
 import ISaleSession from "./ISaleSession.js"
+import Agent from "./Agent.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 

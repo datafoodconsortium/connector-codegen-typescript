@@ -31,20 +31,34 @@ import IGetterOptions from "./IGetterOptions.js"
 export default class Address extends SemanticObject implements Localizable {
 
 	public constructor(parameters: {semanticId: string, street?: string, postalCode?: string, city?: string, country?: string});
-	public constructor(parameters: {other: Semanticable, street?: string, postalCode?: string, city?: string, country?: string});
+	public constructor(parameters: {semanticId: string, other: Semanticable});
 	public constructor(parameters: {semanticId?: string, other?: Semanticable, street?: string, postalCode?: string, city?: string, country?: string}) {
-		super(parameters.semanticId, "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Address", parameters.other);
+		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Address";
+		
+		if (parameters.other) {
+			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			if (!parameters.other.isSemanticTypeOf(type))
+				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
+		}
+		else super({ semanticId: parameters.semanticId!, semanticType: type });
+		
 		connector.store(this);
-		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
+		
 		if (parameters.street) this.setStreet(parameters.street);
 		if (parameters.postalCode) this.setPostalCode(parameters.postalCode);
 		if (parameters.city) this.setCity(parameters.city);
 		if (parameters.country) this.setCountry(parameters.country);
 	}
 
-	public setPostalCode(postalCode: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPostalCode", postalCode);
+	public setCountry(country: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCountry";
+		this.setSemanticPropertyLiteral(property, country);
+	}
+	
+
+	public getStreet(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet");
 	}
 	
 
@@ -55,14 +69,14 @@ export default class Address extends SemanticObject implements Localizable {
 	
 
 	public setStreet(street: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet", street);
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet";
+		this.setSemanticPropertyLiteral(property, street);
 	}
 	
 
-	public setCountry(country: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCountry", country);
+	public getCity(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCity");
 	}
 	
 
@@ -72,21 +86,15 @@ export default class Address extends SemanticObject implements Localizable {
 	}
 	
 
+	public setPostalCode(postalCode: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPostalCode";
+		this.setSemanticPropertyLiteral(property, postalCode);
+	}
+	
+
 	public setCity(city: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCity", city);
-	}
-	
-
-	public getStreet(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet");
-	}
-	
-
-	public getCity(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCity");
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCity";
+		this.setSemanticPropertyLiteral(property, city);
 	}
 	
 

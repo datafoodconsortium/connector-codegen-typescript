@@ -22,11 +22,11 @@
  * SOFTWARE.
 */
 
+import IUnit from "./IUnit.js"
+import INutrientDimension from "./INutrientDimension.js"
+import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import Characteristic from "./Characteristic.js"
-import INutrientDimension from "./INutrientDimension.js"
-import IUnit from "./IUnit.js"
-import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import connector from "./Connector.js";
@@ -35,11 +35,18 @@ import IGetterOptions from "./IGetterOptions.js"
 export default class NutrientCharacteristic extends Characteristic implements INutrientCharacteristic {
 
 	public constructor(parameters: {semanticId?: string, semanticType?: string, unit?: (IUnit & Semanticable), value?: number, nutrientDimension?: (INutrientDimension & Semanticable)});
-	public constructor(parameters: {other: Semanticable, unit?: (IUnit & Semanticable), value?: number, nutrientDimension?: (INutrientDimension & Semanticable)});
+	public constructor(parameters: {semanticId: string, other: Semanticable});
 	public constructor(parameters: {semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, nutrientDimension?: (INutrientDimension & Semanticable)}) {
-		super({semanticId: parameters.semanticId, semanticType: parameters.other? parameters.other.getSemanticType(): parameters.semanticType, other: parameters.other, unit: parameters.unit, value: parameters.value});
+		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#NutrientCharacteristic";
 		
-		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
+		if (parameters.other) {
+			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			if (!parameters.other.isSemanticTypeOf(type))
+				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
+		}
+		else super({ semanticId: parameters.semanticId!, semanticType: type, unit: parameters.unit, value: parameters.value });
+		
+		
 		if (parameters.nutrientDimension) this.setQuantityDimension(parameters.nutrientDimension);
 	}
 
@@ -57,8 +64,15 @@ export default class NutrientCharacteristic extends Characteristic implements IN
 	
 
 	public setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void {
-		connector.store(quantityDimension);
-		this.setSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNutrientDimension", quantityDimension);
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNutrientDimension";
+		if (quantityDimension.isSemanticObjectAnonymous()) {
+			if (quantityDimension.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, quantityDimension);
+			else this.setSemanticPropertyReference(property, quantityDimension);
+		}
+		else {
+			connector.store(quantityDimension);
+			this.setSemanticPropertyReference(property, quantityDimension);
+		}
 	}
 	
 
