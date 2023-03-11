@@ -25,7 +25,8 @@
 import ICustomerCategory from "./ICustomerCategory.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import connector from "./Connector.js"
+import connector from "./Connector.js";
+import IGetterOptions from "./IGetterOptions.js"
 
 export default class CustomerCategory extends SemanticObject implements ICustomerCategory {
 
@@ -38,15 +39,15 @@ export default class CustomerCategory extends SemanticObject implements ICustome
 		if (parameters.description) this.setDescription(parameters.description);
 	}
 
-	public getDescription(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description");
-	}
-	
-
 	public setDescription(description: string): void {
 		
 		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description", description);
+	}
+	
+
+	public getDescription(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description");
 	}
 	
 

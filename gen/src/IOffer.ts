@@ -4,7 +4,7 @@ import Payable from "./Payable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
-export default interface IOffer extends Marketable, Stockable, Payable {
+export default interface IOffer extends Marketable, Payable, Stockable {
 
 
 }

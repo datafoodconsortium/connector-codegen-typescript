@@ -6,29 +6,60 @@ The [Data Food Consortium](https://datafoodconsortium.org) project (DFC) aims to
 
 # Get started
 
+## Setup
+
+### Install
+
 You can install the connector with the following command: `npm i @datafoodconsortium/connector`.
 
+### Import
 Then in you JS file, import the newly installed connector:
 ```JS
-import { connector } from '@datafoodconsortium/connector'
+import { connector } from '@datafoodconsortium/connector';
 ```
 
-The connector is a singleton. To get it, access the instance member of the class:
+_Remark: the connector is a singleton._
+
+### Configure
+
+In order to be able to import data, you must provide a valid factory like:
 ```JS
-const connector = Connector.getInstance();
+import { ConnectorFactory } from '@datafoodconsortium/connector';
+
+connector.setDefaultFactory(new ConnectorFactory());
 ```
 
-You can then load our different SKOS vocabularies providing the corresponding JSON-LD files:
+You can also adapt different components of the connector to your needs with the following functions:
+
+```JS
+// Set the function that fetch the referenced objects when importing data.
+public setDefaultFetchFunction(fetch: (semanticId: string) => Promise<string>): void;
+
+// Set the object that will export the objects.
+public setDefaultExporter(exporter: IConnectorExporter);
+
+// Set the object that will import the objects.
+public setDefaultImporter(importer: IConnectorImporter);
+
+// Set the object that will store the imported objects.
+public setDefaultStore(store: IConnectorStore): void;
+```
+
+### Load the taxonomies
+
+You can then load our different SKOS taxonomies providing the corresponding JSON-LD files:
 ```JS
 connector.loadMeasures(JSON.parse(File.read("/path/to/measures.json")))
 connector.loadFacets(JSON.parse(File.read("/path/to/facets.json")))
 connector.loadProductTypes(JSON.parse(File.read("/path/to/productTypes.json")))
 ```
 
+## Object creation
+
 Before to create the following example product, be sure to import the required classes:
 ```JS
 import { 
-    Connector, 
+    connector, 
     QuantitativeValue, 
     SuppliedProduct, 
     AllergenCharacteristic,
@@ -45,56 +76,69 @@ const kilogram = connector.MEASURES.UNIT.QUANTITYUNIT.KILOGRAM;
 
 Then you can create product like:
 ```JS
-let suppliedProduct = new SuppliedProduct("Tomato", "Awesome tomato");
+let suppliedProduct = new SuppliedProduct({
+  semanticId: "https://myplatform.com/tomato",
+  name: "Tomato", 
+  description: "Awesome tomato",
+  productType: connector.PRODUCT_TYPES.VEGETABLE.TOMATO, 
+  quantity: new QuantitativeValue(kilogram, 1), 
+  alcoholPercentage: 0.0, 
+  lifetime: "a week", 
+  claims: [connector.FACETS.CLAIM.NUTRITIONALCLAIM.NOADDEDSUGARS], 
+  usageOrStorageConditions: "free text", 
+  allergenCharacteristics: [new AllergenCharacteristic(kilogram, 1, connector.MEASURES.DIMENSION.ALLERGENDIMENSION.PEANUTS)],
+  nutrientCharacteristics: [new NutrientCharacteristic(gram, 10, connector.MEASURES.DIMENSION.NUTRIENTDIMENSION.CALCIUM)],
+  physicalCharacteristics: [new PhysicalCharacteristic(gram, 100, connector.MEASURES.DIMENSION.PHYSICALDIMENSION.WEIGHT)],
+  geographicalOrigin: connector.FACETS.TERRITORIALORIGIN.EUROPE.FRANCE.CENTREVALLOIRE,
+  catalogItems: new CatalogItem({ semanticId: "https://myplatform.com/catalogItem" }), 
+  certifications: [connector.FACETS.CERTIFICATION.ORGANICLABEL.ORGANIC_AB],
+  natureOrigin: [connector.FACETS.NATUREORIGIN.PLANTORIGIN],
+  partOrigin: connector.FACETS.PARTORIGIN.PLANTPARTORIGIN.FRUIT
+});
 ```
 
-Don't forget to set its semantic id (URI) so the object will not being considered as a blank node:
+_Remark: the `semanticId` constructor parameter is mandatory. All the other parameters are optional._
+
+## Object accessors and mutators
+
+### Read object properties
+You can read the properties of an objet using getter methods like:
 ```JS
-tomato.setSemanticId("https://myplatform.com/tomato");
+suppliedProduct.getDescription();
 ```
 
-You can set the different properties of the object, like adding a certification. The connector provide helpers to get the certification from the previously loaded vocabularies:
+The previous method returned a simple string. But an object ofen contains other objects. In the semantic web, every object has its own URI. So we will store only a reference to these contained objects using their URI. They are called "referenced objects".
+
+To access a referenced object using the connector you just have to `await` for it like:
 ```JS
-// Set the quantity
-suppliedProduct.setQuantity(new QuantitativeValue(kilogram, 1));
+const addresses: Localizable[] = await person.getLocalizations();
+```
 
-// Set the product type
-suppliedProduct.setProductType(connector.PRODUCT_TYPES.VEGETABLE.TOMATO.ROUND_TOMATO);
+Running the previous code sample will trigger a call to the `fetch` function of the connector. If the referenced object it is not already in the connector store, it will be downloaded from the network.
 
-// Add certifications
+### Change object properties
+
+If you want to change a property after the creation of the object, you can use the proper setter methods like:
+```JS
+// Set the quantity of the product
+suppliedProduct.setQuantity(new QuantitativeValue(kilogram, 2.6));
+```
+
+You can also add value to array properties:
+```JS
+// Add a new certification to the product
 suppliedProduct.addCertification(connector.FACETS.CERTIFICATION.LOCALLABEL.AOC_FR);
-suppliedProduct.addCertification(connector.FACETS.CERTIFICATION.ORGANICLABEL.ORGANIC_AB);
-
-// Add claims
-suppliedProduct.addClaim(connector.FACETS.CLAIM.NUTRITIONALCLAIM.NOADDEDSUGARS);
-suppliedProduct.addClaim(connector.FACETS.CLAIM.NUTRITIONALCLAIM.LOWSODIUMSALT);
-
-// Add nutrient characteristics
-suppliedProduct.addNutrientCharacteristic(new NutrientCharacteristic(gram, 10, connector.MEASURES.DIMENSION.NUTRIENTDIMENSION.CALCIUM));
-
-// Add allergen characteristics
-suppliedProduct.addAllergenCharacteristic(new AllergenCharacteristic(kilogram, 1, connector.MEASURES.DIMENSION.ALLERGENDIMENSION.PEANUTS));
-suppliedProduct.addAllergenCharacteristic(new AllergenCharacteristic(kilogram, 23, connector.MEASURES.DIMENSION.ALLERGENDIMENSION.MUSTARD));
-
-// Add physical characteristics
-suppliedProduct.addPhysicalCharacteristic(new PhysicalCharacteristic(gram, 100, connector.MEASURES.DIMENSION.PHYSICALDIMENSION.WEIGHT));
-
-// Set the geographical origin
-suppliedProduct.setGeographicalOrigin(connector.FACETS.TERRITORIALORIGIN.EUROPE.FRANCE.CENTREVALLOIRE);
-
-// Add nature origin
-suppliedProduct.addNatureOrigin(connector.FACETS.NATUREORIGIN.PLANTORIGIN);
-
-// Add part origin
-suppliedProduct.addPartOrigin(connector.FACETS.PARTORIGIN.PLANTPARTORIGIN.FRUIT);
 ```
 
+## Export objects to JSON-LD
 To finish you can export the DFC object to JSON-LD with:
 ```JS
-console.log(await connector.export(suppliedProduct, 2));
+console.log(await connector.export([suppliedProduct]));
 ```
 
-This will output DFC compliant valid JSON-LD:
+_Remark: the export function accepts an "options" parameter that can be use to pass a custom exporter: `options?: { exporter?: IConnectorExporter }`._
+
+This will output DFC compliant valid JSON-LD like:
 ```JS
 {
   "@context": {
@@ -150,3 +194,34 @@ This will output DFC compliant valid JSON-LD:
   "dfc-b:referencedBy": []
 }
 ```
+
+## Import objects from JSON-LD
+
+To import objects from JSON-LD, use:
+```JS
+const objects: Semanticable[] = await connector.import(jsonAsAString));
+```
+
+_Remark: the import function accepts an "options" parameter that can be use to pass a custom importer and a custom factory: `options?: { importer?: IConnectorImporter, factory?: IConnectorFactory }`._
+
+## Available classes
+
+You can create the following objets:
+- `Address`
+- `AllergenCharacteristic`
+- `Catalog`
+- `CatalogItem`
+- `CustomerCategory`
+- `Enterprise`
+- `NutrientCharacteristic`
+- `Offer`
+- `Order`
+- `OrderLine`
+- `Person`
+- `PhysicalCharacteristic`
+- `Price`
+- `QuantitativeValue`
+- `SaleSession`
+- `SuppliedProduct`
+
+To get a quick view of what parameter can be passed to the constructor of these objects, you can use the [1.8 JSON example](https://datafoodconsortium.gitbook.io/dfc-standard-documentation/appendixes/practical-examples/version-1.8).

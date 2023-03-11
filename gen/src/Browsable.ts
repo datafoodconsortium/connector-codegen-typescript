@@ -1,12 +1,16 @@
+import IEnterprise from "./IEnterprise.js"
 import Catalogable from "./Catalogable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Browsable {
 
-	getMaintainers(): Promise<Array<(Catalogable & Semanticable)>>
+	getMaintainers(): Promise<Array<(IEnterprise & Semanticable)>>
 	;
-	getListedItems(): Promise<Array<(Catalogable & Semanticable)>>
+	getItems(): Promise<Array<(Catalogable & Semanticable)>>
 	;
+	removeItem(item: (Catalogable & Semanticable)): void;
+	addItem(item: (Catalogable & Semanticable)): void;
+	addMaintainer(maintainer: (IEnterprise & Semanticable)): void;
 
 }

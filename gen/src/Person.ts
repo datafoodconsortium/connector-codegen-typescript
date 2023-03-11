@@ -22,13 +22,14 @@
  * SOFTWARE.
 */
 
-import Agent from "./Agent.js"
 import Onboardable from "./Onboardable.js"
+import Agent from "./Agent.js"
 import IPerson from "./IPerson.js"
 import Localizable from "./Localizable.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import connector from "./Connector.js"
+import connector from "./Connector.js";
+import IGetterOptions from "./IGetterOptions.js"
 
 export default class Person extends Agent implements IPerson {
 
@@ -42,37 +43,21 @@ export default class Person extends Agent implements IPerson {
 		if (parameters.lastName) this.setLastName(parameters.lastName);
 	}
 
-	public async getAffiliatedOrganizations(): Promise<Array<(Onboardable & Semanticable)>>
-	 {
-		const results = new Array<(Onboardable & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#affiliates");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await connector.fetch(semanticId);
-			if (semanticObject) results.push(<(Onboardable & Semanticable)> semanticObject);
-		}
-		return results;
+	public setLastName(lastName: string): void {
+		
+		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#familyName", lastName);
 	}
 	
 
-	public leaveAffiliatedOrganization(organization: (Onboardable & Semanticable)): void {
-		throw new Error("Not yet implemented.");
-	}
-	
-
-	public affiliateTo(organization: (Onboardable & Semanticable)): void {
-		connector.store(organization);
-		this.addSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#affiliates", organization);
-	}
-	
 	public getLastName(): string
 	 {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#familyName");
 	}
 	
 
-	public setLastName(lastName: string): void {
+	public setFirstName(firstName: string): void {
 		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#familyName", lastName);
+		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#firstName", firstName);
 	}
 	
 
@@ -81,10 +66,26 @@ export default class Person extends Agent implements IPerson {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#firstName");
 	}
 	
+	public leaveAffiliatedOrganization(organization: (Onboardable & Semanticable)): void {
+		throw new Error("Not yet implemented.");
+	}
+	
 
-	public setFirstName(firstName: string): void {
-		
-		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#firstName", firstName);
+	public async getAffiliatedOrganizations(options?: IGetterOptions): Promise<Array<(Onboardable & Semanticable)>>
+	 {
+		const results = new Array<(Onboardable & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#affiliates");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<(Onboardable & Semanticable)> semanticObject);
+		}
+		return results;
+	}
+	
+
+	public affiliateTo(organization: (Onboardable & Semanticable)): void {
+		connector.store(organization);
+		this.addSemanticPropertyReference("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#affiliates", organization);
 	}
 	
 

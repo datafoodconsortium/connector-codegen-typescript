@@ -1,6 +1,5 @@
 
 import { Semanticable } from "@virtual-assembly/semantizer"
-import jsonld from 'jsonld';
 import DatasetExt from "rdf-ext/lib/Dataset";
 import ConnectorExporterJsonldStream from "./ConnectorExporterJsonldStream.js";
 import ConnectorFactoryDefault from "./ConnectorFactoryDefault.js";
@@ -28,19 +27,16 @@ export class Connector {
     private exporter: IConnectorExporter;
     private storeObject: IConnectorStore;
 
-    private context: jsonld.ContextDefinition;
     private parser: SKOSParser;
 
     private constructor() {
-        this.context = {
-            "dfc-b": "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"
-        };
+        const context: string = "http://static.datafoodconsortium.org/ontologies/context.json";
 
         this.storeObject = new ConnectorStoreMap();
-        this.fetchFunction = () => null;
+        this.fetchFunction = async (semanticId: string) => (await fetch(semanticId)).json;
         this.factory = new ConnectorFactoryDefault();
-        this.importer = new ConnectorImporterJsonldStream();
-        this.exporter = new ConnectorExporterJsonldStream();
+        this.importer = new ConnectorImporterJsonldStream(context);
+        this.exporter = new ConnectorExporterJsonldStream({ "@vocab": "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#" });
         this.parser = new SKOSParser;
 
         this.FACETS = [];
@@ -130,5 +126,5 @@ export class Connector {
     }
 }
 
-const connector = Connector.getInstance();
+const connector: Connector = Connector.getInstance();
 export default connector;

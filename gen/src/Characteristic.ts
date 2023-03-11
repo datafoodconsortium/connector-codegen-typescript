@@ -22,26 +22,25 @@
  * SOFTWARE.
 */
 
+import ICharacteristic from "./ICharacteristic.js"
+import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import QuantitativeValue from "./QuantitativeValue.js"
 import IUnit from "./IUnit.js"
-import ICharacteristicDimension from "./ICharacteristicDimension.js"
-import ICharacteristic from "./ICharacteristic.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import connector from "./Connector.js"
+import connector from "./Connector.js";
+import IGetterOptions from "./IGetterOptions.js"
 
 export default abstract class Characteristic extends QuantitativeValue implements ICharacteristic {
 
-	protected constructor(parameters: {semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number}) {
-		super({semanticType: parameters.other? parameters.other.getSemanticType(): parameters.semanticType, unit: parameters.unit, value: parameters.value});
+	protected constructor(parameters: {semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number}) {
+		super({semanticId: parameters.semanticId, semanticType: parameters.semanticType, unit: parameters.unit, value: parameters.value});
 		
 		
 		
 	}
-
-	abstract getQuantityDimension(): Promise<(ICharacteristicDimension & Semanticable) | undefined>
 	
-
+	abstract getQuantityDimension(): Promise<(ICharacteristicDimension & Semanticable) | undefined>;
 	abstract setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void
 
 

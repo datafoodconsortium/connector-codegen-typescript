@@ -1,6 +1,10 @@
 import { Semanticable } from "@virtual-assembly/semantizer";
 import DatasetExt from "rdf-ext/lib/Dataset";
 import Address from "./Address.js";
+import Catalog from "./Catalog.js";
+import SaleSession from "./SaleSession.js";
+import Order from "./Order.js";
+import OrderLine from "./OrderLine.js";
 import AllergenCharacteristic from "./AllergenCharacteristic.js";
 import CatalogItem from "./CatalogItem.js";
 import CustomerCategory from "./CustomerCategory.js";
@@ -61,12 +65,28 @@ export default class ConnectorFactory implements IConnectorFactory {
                 result = new Price({});
                 break;
 
+            case prefix + "Catalog":
+                result = new Catalog({semanticId: ""});
+                break;
+
             case prefix + "CatalogItem":
                 result = new CatalogItem({semanticId: ""});
                 break;
             
             case prefix + "Offer":
                 result = new Offer({semanticId: ""});
+                break;
+
+            case prefix + "Order":
+                result = new Order({semanticId: ""});
+                break;
+
+            case prefix + "OrderLine":
+                result = new OrderLine({semanticId: ""});
+                break;
+
+            case prefix + "SaleSession":
+                result = new SaleSession({semanticId: ""});
                 break;
 
             case "http://www.w3.org/2004/02/skos/core#Concept":

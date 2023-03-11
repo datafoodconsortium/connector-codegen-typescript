@@ -7,15 +7,23 @@ import QuadExt from "rdf-ext/lib/Quad";
 
 export default class ConnectorImporterJsonldStream implements IConnectorImporter {
 
+    private context: string | undefined;
+
+    public constructor(context?: string) {
+        this.context = context;
+    }
+
     public async import(json: string): Promise<Array<DatasetExt>> {
-        const parser = new JsonLdParser();
+        const parser = new JsonLdParser({ context: this.context });
         let datasets: Array<DatasetExt> = new Array<DatasetExt>();
 
         const input = new Readable();
         input.push(json);
         input.push(null);
 
-        parser.import(input).on('data', (quad) => {
+        const output = parser.import(input);
+        
+        output.on('data', (quad) => {
             const subject: string = quad.subject.value;
             const dataset: DatasetExt | undefined = datasets.find((dataset) => dataset.some((quad: QuadExt) => quad.subject.value === subject));
 
@@ -28,7 +36,10 @@ export default class ConnectorImporterJsonldStream implements IConnectorImporter
             }
         });
 
-        return new Promise((resolve, reject) => parser.import(input).on('finish', () => resolve(datasets)));
+        return new Promise((resolve, reject) => {
+            output.on('error', (error) => reject(error));
+            output.on('finish', () => resolve(datasets));
+        });
     }
 
 }

@@ -4,7 +4,8 @@ import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Catalogable {
 
-	getRepository(): Promise<(Browsable & Semanticable) | undefined>
+	getCatalogs(): Promise<Array<(Browsable & Semanticable)>>
 	;
+	registerInCatalog(repository: (Browsable & Semanticable)): void;
 
 }

@@ -22,21 +22,24 @@
  * SOFTWARE.
 */
 
+import INutrientCharacteristic from "./INutrientCharacteristic.js"
+import Quantifiable from "./Quantifiable.js"
+import IGeographicalOrigin from "./IGeographicalOrigin.js"
 import DefinedProduct from "./DefinedProduct.js"
+import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
+import IPartOrigin from "./IPartOrigin.js"
+import ICatalogItem from "./ICatalogItem.js"
+import IProductType from "./IProductType.js"
+import INatureOrigin from "./INatureOrigin.js"
+import Claimable from "./Claimable.js"
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import ICertification from "./ICertification.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import connector from "./Connector.js"
+import connector from "./Connector.js";
+import IGetterOptions from "./IGetterOptions.js"
 
 export default class SuppliedProduct extends DefinedProduct {
-
-	public constructor(parameters: {semanticId: string, name?: string, description?: string});
-	public constructor(parameters: {other: Semanticable, name?: string, description?: string});
-	public constructor(parameters: {semanticId?: string, other?: Semanticable, name?: string, description?: string}) {
-		super({semanticId: parameters.semanticId, semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#SuppliedProduct", other: parameters.other, name: parameters.name, description: parameters.description});
-		
-		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
-		
-	}
 
 	public getTotalTheoreticalStock(): number
 	 {
@@ -49,6 +52,15 @@ export default class SuppliedProduct extends DefinedProduct {
 		this.setSemanticPropertyLiteral("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#totalTheoreticalStock", totalTheoreticalStock);
 	}
 	
+
+	public constructor(parameters: {semanticId: string, name?: string, description?: string, productType?: (IProductType & Semanticable), quantity?: (Quantifiable & Semanticable), alcoholPercentage?: number, lifetime?: string, claims?: (Claimable & Semanticable)[], usageOrStorageConditions?: string, allergenCharacteristics?: (IAllergenCharacteristic & Semanticable)[], nutrientCharacteristics?: (INutrientCharacteristic & Semanticable)[], physicalCharacteristics?: (IPhysicalCharacteristic & Semanticable)[], geographicalOrigin?: (IGeographicalOrigin & Semanticable), catalogItems?: (ICatalogItem & Semanticable)[], certifications?: (ICertification & Semanticable)[], natureOrigin?: (INatureOrigin & Semanticable)[], partOrigin?: (IPartOrigin & Semanticable)[]});
+	public constructor(parameters: {other: Semanticable, name?: string, description?: string, productType?: (IProductType & Semanticable), quantity?: (Quantifiable & Semanticable), alcoholPercentage?: number, lifetime?: string, claims?: (Claimable & Semanticable)[], usageOrStorageConditions?: string, allergenCharacteristics?: (IAllergenCharacteristic & Semanticable)[], nutrientCharacteristics?: (INutrientCharacteristic & Semanticable)[], physicalCharacteristics?: (IPhysicalCharacteristic & Semanticable)[], geographicalOrigin?: (IGeographicalOrigin & Semanticable), catalogItems?: (ICatalogItem & Semanticable)[], certifications?: (ICertification & Semanticable)[], natureOrigin?: (INatureOrigin & Semanticable)[], partOrigin?: (IPartOrigin & Semanticable)[]});
+	public constructor(parameters: {semanticId?: string, other?: Semanticable, name?: string, description?: string, productType?: (IProductType & Semanticable), quantity?: (Quantifiable & Semanticable), alcoholPercentage?: number, lifetime?: string, claims?: (Claimable & Semanticable)[], usageOrStorageConditions?: string, allergenCharacteristics?: (IAllergenCharacteristic & Semanticable)[], nutrientCharacteristics?: (INutrientCharacteristic & Semanticable)[], physicalCharacteristics?: (IPhysicalCharacteristic & Semanticable)[], geographicalOrigin?: (IGeographicalOrigin & Semanticable), catalogItems?: (ICatalogItem & Semanticable)[], certifications?: (ICertification & Semanticable)[], natureOrigin?: (INatureOrigin & Semanticable)[], partOrigin?: (IPartOrigin & Semanticable)[]}) {
+		super({semanticId: parameters.semanticId, semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#SuppliedProduct", other: parameters.other, name: parameters.name, description: parameters.description, productType: parameters.productType, quantity: parameters.quantity, alcoholPercentage: parameters.alcoholPercentage, lifetime: parameters.lifetime, claims: parameters.claims, usageOrStorageConditions: parameters.usageOrStorageConditions, allergenCharacteristics: parameters.allergenCharacteristics, nutrientCharacteristics: parameters.nutrientCharacteristics, physicalCharacteristics: parameters.physicalCharacteristics, geographicalOrigin: parameters.geographicalOrigin, catalogItems: parameters.catalogItems, certifications: parameters.certifications, natureOrigin: parameters.natureOrigin, partOrigin: parameters.partOrigin});
+		
+		if (parameters.other && this.isSemanticSameTypeOf(parameters.other)) throw new Error();
+		
+	}
 
 
 }

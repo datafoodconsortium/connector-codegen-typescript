@@ -2,17 +2,19 @@ import { Semanticable } from "@virtual-assembly/semantizer";
 import IConnectorExporter from "./IConnectorExporter";
 import SerializerJsonld from '@rdfjs/serializer-jsonld-ext';
 import { Readable } from 'stream';
+import { ContextDefinition } from "jsonld";
 
 export default class ConnectorExporterJsonldStream implements IConnectorExporter {
 
+    private context: ContextDefinition | undefined;
+
+    public constructor(context?: ContextDefinition) {
+        this.context = context;
+    }
+
     public async export(semanticObjets: Array<Semanticable>): Promise<string> {
-        const context = {
-            '@vocab': 'http://schema.org/',
-            'dfc-b': 'http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#'
-        }
-        
-        const serializer = new SerializerJsonld({ compact: true });
-        
+        const serializer = new SerializerJsonld({ compact: true, context: this.context });
+
         const input = new Readable({
             objectMode: true,
             read: () => {
@@ -21,7 +23,12 @@ export default class ConnectorExporterJsonldStream implements IConnectorExporter
             }
         });
 
-        return new Promise<string>((resolve, reject) => serializer.import(input).once('data', (data) => resolve(JSON.stringify(data))));
+        const output = serializer.import(input);
+
+        return new Promise<string>((resolve, reject) => {
+            output.on('data', (json) => resolve(JSON.stringify(json)));
+            output.on('error', (error) => reject(error));
+        });
     }
 
 }

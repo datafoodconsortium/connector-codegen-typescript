@@ -86,9 +86,10 @@ export default class SKOSParser {
     }
 
     protected createSKOSConcept(element: any): (ISKOSConcept & Semanticable) {
-        let skosConcept = new SKOSConcept({semanticType: element.type});
-        skosConcept.setSemanticId(element.id);
-        //skosConcept.setSemanticType(element.type);
+        let skosConcept = new SKOSConcept({
+            semanticId: element.id,
+            semanticType: element.type
+        });
         return skosConcept;
     }
 

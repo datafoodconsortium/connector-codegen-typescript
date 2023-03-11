@@ -6,5 +6,6 @@ export default interface Payable {
 
 	getPrice(): Promise<(IPrice & Semanticable) | undefined>
 	;
+	setPrice(price: (IPrice & Semanticable)): void;
 
 }
