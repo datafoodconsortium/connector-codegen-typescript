@@ -3,6 +3,6 @@ import DatasetExt from "rdf-ext/lib/Dataset";
 
 export default interface IConnectorImporter {
 
-    import(data: string): Promise<Array<DatasetExt>>;
+    import(data: string, options?: { context?: any, callback?: Function }): Promise<Array<DatasetExt>>;
     
 }

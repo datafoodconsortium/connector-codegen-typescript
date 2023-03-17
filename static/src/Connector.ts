@@ -12,14 +12,14 @@ import IConnectorStore from "./IConnectorStore";
 import IGetterOptions from "./IGetterOptions.js";
 import ISKOSConcept from "./ISKOSConcept";
 import SKOSParser from "./SKOSParser.js";
+import context from "./context.js";
+import Localizable from "./Localizable.js";
 
-export class Connector {
+export default class Connector {
 
     public FACETS: Array<ISKOSConcept>;
     public MEASURES: Array<ISKOSConcept>;
     public PRODUCT_TYPES: Array<ISKOSConcept>;
-
-    private static instance: Connector | undefined = undefined;
 
     private fetchFunction: Function;
     private factory: IConnectorFactory;
@@ -29,25 +29,21 @@ export class Connector {
 
     private parser: SKOSParser;
 
-    private constructor() {
-        const context: string = "http://static.datafoodconsortium.org/ontologies/context.json";
-
+    public constructor() {
         this.storeObject = new ConnectorStoreMap();
         this.fetchFunction = async (semanticId: string) => (await fetch(semanticId)).json;
         this.factory = new ConnectorFactoryDefault();
         this.importer = new ConnectorImporterJsonldStream(context);
         this.exporter = new ConnectorExporterJsonldStream({ "@vocab": "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#" });
-        this.parser = new SKOSParser;
+        this.parser = new SKOSParser(this);
 
         this.FACETS = [];
         this.MEASURES = [];
         this.PRODUCT_TYPES = [];
     }
 
-    public static getInstance(): Connector {
-        if (this.instance === undefined)
-            this.instance = new Connector;
-        return this.instance;
+    public createAddress(): Localizable {
+        return this.factory.createAddress({});
     }
 
     public async export(objects: Array<Semanticable>, options?: { exporter?: IConnectorExporter }): Promise<string> {
@@ -56,18 +52,23 @@ export class Connector {
     }
 
     public async import(data: string, options?: { importer?: IConnectorImporter, factory?: IConnectorFactory }): Promise<Array<Semanticable>> {
-        const importer = options?.importer? options.importer : this.importer;
-        const factory = options?.factory? options.factory : this.factory;
-        const results: Array<Semanticable> = new Array<Semanticable>();
-        const datasets: Array<DatasetExt> = await importer.import(data);
+        return new Promise(async (resolve, reject) => {
+            try { 
+                const importer = options?.importer? options.importer : this.importer;
+                const factory = options?.factory? options.factory : this.factory;
+                const results: Array<Semanticable> = new Array<Semanticable>();
+                const datasets: Array<DatasetExt> = await importer.import(data);
 
-        datasets.forEach(dataset => {
-            const semanticObject = factory.createFromRdfDataset(dataset);
-            results.push(semanticObject);
-            this.store(semanticObject);
+                datasets.forEach(dataset => {
+                    const semanticObject = factory.createFromRdfDataset(dataset);
+                    results.push(semanticObject);
+                    this.store(semanticObject);
+                });
+
+                resolve(results);
+            }
+            catch(error) { reject(error) }
         });
-
-        return new Promise((resolve, reject) => resolve(results));
     }
 
     private loadThesaurus(data: any): any {
@@ -94,11 +95,11 @@ export class Connector {
             const importer = options?.importer? { importer: options.importer } : {};
             const document: string = await fetchFunction(semanticObjectId);
             const semanticObjects = await this.import(document, importer);
-            store.storeAll(semanticObjects);
+            store.setAll(semanticObjects);
             return semanticObjects.find(semanticObject => semanticObject.getSemanticId() === semanticObjectId);
         }
 
-        return store.fetch(semanticObjectId);
+        return store.get(semanticObjectId);
     }
 
     public setDefaultFactory(factory: IConnectorFactory): void {
@@ -122,9 +123,6 @@ export class Connector {
     }
 
     public store(semanticObject: Semanticable): void {
-        this.storeObject.store(semanticObject);
+        this.storeObject.set(semanticObject);
     }
 }
-
-const connector: Connector = Connector.getInstance();
-export default connector;

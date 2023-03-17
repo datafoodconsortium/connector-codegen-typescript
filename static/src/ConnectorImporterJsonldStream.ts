@@ -9,7 +9,7 @@ export default class ConnectorImporterJsonldStream implements IConnectorImporter
 
     private context: string | undefined;
 
-    public constructor(context?: string) {
+    public constructor(context?: any) {
         this.context = context;
     }
 

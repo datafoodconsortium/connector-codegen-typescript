@@ -25,25 +25,28 @@
 import ICustomerCategory from "./ICustomerCategory.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import connector from "./Connector.js";
+import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
 export default class CustomerCategory extends SemanticObject implements ICustomerCategory {
+	
+	protected connector: IConnector;
 
-	public constructor(parameters: {semanticId: string, description?: string});
-	public constructor(parameters: {semanticId: string, other: Semanticable});
-	public constructor(parameters: {semanticId?: string, other?: Semanticable, description?: string}) {
+	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, description?: string}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#CustomerCategory";
 		
 		if (parameters.other) {
-			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			super({ semanticId: parameters.semanticId!, other: parameters.other });
 			if (!parameters.other.isSemanticTypeOf(type))
 				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
 		}
 		else super({ semanticId: parameters.semanticId!, semanticType: type });
 		
-		connector.store(this);
+		this.connector = parameters.connector;
 		
+		
+		if (!parameters.doNotStore)
+			this.connector.store(this);
 		if (parameters.description) this.setDescription(parameters.description);
 	}
 

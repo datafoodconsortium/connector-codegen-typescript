@@ -32,10 +32,11 @@
 */
 
 [generateImports(aClass)/]
-import connector from "./Connector.js";
+import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
 export default [if (aClass.isAbstract)]abstract [/if]class [aClass.name.toUpperFirst()/] [generateGeneralization(aClass)/][generateInterfaceRealizationHeader(aClass)/]{
+	[if (aClass.generalization->isEmpty())]['\n'/]	protected connector: IConnector;[/if]
 
 	[for (operation: Operation | aClass.ownedOperation) separator('\n')]
 	[if (operation.isAbstract)][generateOperationSignature(aClass, operation)/][else][generateOperationImplementation(aClass, operation)/][/if]

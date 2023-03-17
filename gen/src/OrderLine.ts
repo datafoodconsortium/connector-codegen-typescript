@@ -22,44 +22,86 @@
  * SOFTWARE.
 */
 
-import IOrderLine from "./IOrderLine.js"
 import IPrice from "./IPrice.js"
-import IOrder from "./IOrder.js"
+import IOrderLine from "./IOrderLine.js"
 import IOffer from "./IOffer.js"
+import IOrder from "./IOrder.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import connector from "./Connector.js";
+import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
 export default class OrderLine extends SemanticObject implements IOrderLine {
+	
+	protected connector: IConnector;
 
-	public constructor(parameters: {semanticId: string, quantity?: number, price?: (IPrice & Semanticable), offer?: (IOffer & Semanticable), order?: (IOrder & Semanticable)});
-	public constructor(parameters: {semanticId: string, other: Semanticable});
-	public constructor(parameters: {semanticId?: string, other?: Semanticable, quantity?: number, price?: (IPrice & Semanticable), offer?: (IOffer & Semanticable), order?: (IOrder & Semanticable)}) {
+	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, quantity?: number, price?: (IPrice & Semanticable), offer?: (IOffer & Semanticable), order?: (IOrder & Semanticable)}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#OrderLine";
 		
 		if (parameters.other) {
-			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			super({ semanticId: parameters.semanticId!, other: parameters.other });
 			if (!parameters.other.isSemanticTypeOf(type))
 				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
 		}
 		else super({ semanticId: parameters.semanticId!, semanticType: type });
 		
-		connector.store(this);
+		this.connector = parameters.connector;
 		
+		
+		if (!parameters.doNotStore)
+			this.connector.store(this);
 		if (parameters.quantity) this.setQuantity(parameters.quantity);
 		if (parameters.price) this.setPrice(parameters.price);
 		if (parameters.offer) this.setOffer(parameters.offer);
 		if (parameters.order) this.setOrder(parameters.order);
 	}
 
-	public async getPrice(options?: IGetterOptions): Promise<(IPrice & Semanticable) | undefined>
+	public setPrice(price: (IPrice & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPrice";
+		if (price.isSemanticObjectAnonymous()) {
+			if (price.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, price);
+			else this.setSemanticPropertyReference(property, price);
+		}
+		else {
+			this.connector.store(price);
+			this.setSemanticPropertyReference(property, price);
+		}
+	}
+	
+
+	public setOrder(order: (IOrder & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#partOf";
+		if (order.isSemanticObjectAnonymous()) {
+			if (order.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, order);
+			else this.setSemanticPropertyReference(property, order);
+		}
+		else {
+			this.connector.store(order);
+			this.setSemanticPropertyReference(property, order);
+		}
+	}
+	
+
+	public async getOffer(options?: IGetterOptions): Promise<(IOffer & Semanticable) | undefined>
 	 {
-		let result: (IPrice & Semanticable) | undefined = undefined;
-		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPrice");
+		let result: (IOffer & Semanticable) | undefined = undefined;
+		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#concerns");
 		if (semanticId) {
-			const semanticObject: Semanticable | undefined = await connector.fetch(semanticId, options);
-			if (semanticObject) result = <(IPrice & Semanticable) | undefined> semanticObject;
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) result = <(IOffer & Semanticable) | undefined> semanticObject;
+		}
+		return result;
+		
+	}
+	
+
+	public async getOrder(options?: IGetterOptions): Promise<(IOrder & Semanticable) | undefined>
+	 {
+		let result: (IOrder & Semanticable) | undefined = undefined;
+		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#partOf");
+		if (semanticId) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) result = <(IOrder & Semanticable) | undefined> semanticObject;
 		}
 		return result;
 		
@@ -73,28 +115,9 @@ export default class OrderLine extends SemanticObject implements IOrderLine {
 			else this.setSemanticPropertyReference(property, offer);
 		}
 		else {
-			connector.store(offer);
+			this.connector.store(offer);
 			this.setSemanticPropertyReference(property, offer);
 		}
-	}
-	
-
-	public setPrice(price: (IPrice & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPrice";
-		if (price.isSemanticObjectAnonymous()) {
-			if (price.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, price);
-			else this.setSemanticPropertyReference(property, price);
-		}
-		else {
-			connector.store(price);
-			this.setSemanticPropertyReference(property, price);
-		}
-	}
-	
-
-	public getQuantity(): number
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity");
 	}
 	
 
@@ -104,42 +127,22 @@ export default class OrderLine extends SemanticObject implements IOrderLine {
 	}
 	
 
-	public setOrder(order: (IOrder & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#partOf";
-		if (order.isSemanticObjectAnonymous()) {
-			if (order.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, order);
-			else this.setSemanticPropertyReference(property, order);
-		}
-		else {
-			connector.store(order);
-			this.setSemanticPropertyReference(property, order);
-		}
-	}
-	
-
-	public async getOffer(options?: IGetterOptions): Promise<(IOffer & Semanticable) | undefined>
+	public async getPrice(options?: IGetterOptions): Promise<(IPrice & Semanticable) | undefined>
 	 {
-		let result: (IOffer & Semanticable) | undefined = undefined;
-		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#concerns");
+		let result: (IPrice & Semanticable) | undefined = undefined;
+		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPrice");
 		if (semanticId) {
-			const semanticObject: Semanticable | undefined = await connector.fetch(semanticId, options);
-			if (semanticObject) result = <(IOffer & Semanticable) | undefined> semanticObject;
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) result = <(IPrice & Semanticable) | undefined> semanticObject;
 		}
 		return result;
 		
 	}
 	
 
-	public async getOrder(options?: IGetterOptions): Promise<(IOrder & Semanticable) | undefined>
+	public getQuantity(): number
 	 {
-		let result: (IOrder & Semanticable) | undefined = undefined;
-		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#partOf");
-		if (semanticId) {
-			const semanticObject: Semanticable | undefined = await connector.fetch(semanticId, options);
-			if (semanticObject) result = <(IOrder & Semanticable) | undefined> semanticObject;
-		}
-		return result;
-		
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity");
 	}
 	
 

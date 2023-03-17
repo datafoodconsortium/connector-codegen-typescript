@@ -1,17 +1,20 @@
 import { Semanticable } from "@virtual-assembly/semantizer";
+import IConnector from "./IConnector.js";
 import ISKOSConcept from "./ISKOSConcept";
 import SKOSConcept from "./SKOSConcept.js";
 import SKOSParserElement from "./SKOSParserElement.js";
 
 export default class SKOSParser {
 
+    private connector: IConnector;
     private results: any;
     private skosConcepts: Map<string, ISKOSConcept & Semanticable>;
     private rootElements: Array<string>;
     private broaders: Map<string, Array<string>>;
     private skosConceptCallbacks: Array<Function>;
 
-    constructor() {
+    constructor(connector: IConnector) {
+        this.connector = connector;
         this.results = {};
         this.skosConcepts = new Map<string, ISKOSConcept & Semanticable>;
         this.rootElements = new Array<string>;
@@ -87,6 +90,7 @@ export default class SKOSParser {
 
     protected createSKOSConcept(element: any): (ISKOSConcept & Semanticable) {
         let skosConcept = new SKOSConcept({
+            connector: this.connector,
             semanticId: element.id,
             semanticType: element.type
         });

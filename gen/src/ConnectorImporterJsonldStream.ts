@@ -9,12 +9,13 @@ export default class ConnectorImporterJsonldStream implements IConnectorImporter
 
     private context: string | undefined;
 
-    public constructor(context?: string) {
+    public constructor(context?: any) {
         this.context = context;
     }
 
-    public async import(json: string): Promise<Array<DatasetExt>> {
-        const parser = new JsonLdParser({ context: this.context });
+    public async import(json: string, options?: { context?: any, callback?: Function }): Promise<Array<DatasetExt>> {
+        const context = options?.context? options.context : this.context;
+        const parser = new JsonLdParser({ context: context });
         let datasets: Array<DatasetExt> = new Array<DatasetExt>();
 
         const input = new Readable();
@@ -34,6 +35,9 @@ export default class ConnectorImporterJsonldStream implements IConnectorImporter
                 dataset.add(quad);
                 datasets.push(dataset);
             }
+
+            if (options && options.callback)
+                options.callback(quad);
         });
 
         return new Promise((resolve, reject) => {

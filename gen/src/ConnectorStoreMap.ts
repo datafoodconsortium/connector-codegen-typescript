@@ -10,7 +10,7 @@ export default class ConnectorStoreMap implements IConnectorStore {
         this.storeObject = new Map<string, Semanticable>();
     }
 
-    public async fetch(semanticObjectId: string): Promise<Semanticable | undefined> {
+    public async get(semanticObjectId: string): Promise<Semanticable | undefined> {
         return this.storeObject.get(semanticObjectId);
     }
 
@@ -18,12 +18,14 @@ export default class ConnectorStoreMap implements IConnectorStore {
         return this.storeObject.has(semanticObjectId);
     }
 
-    public store(semanticObject: Semanticable): void {
-        this.storeObject.set(semanticObject.getSemanticId(), semanticObject);
+    public set(semanticObject: Semanticable): void {
+        const semanticId: string = semanticObject.getSemanticId();
+        if (semanticId !== "")
+            this.storeObject.set(semanticId, semanticObject);
     }
 
-    public storeAll(semanticObjects: Array<Semanticable>): void {
-        semanticObjects.forEach(semanticObject => this.store(semanticObject));
+    public setAll(semanticObjects: Array<Semanticable>): void {
+        semanticObjects.forEach(semanticObject => this.set(semanticObject));
     }
     
 }

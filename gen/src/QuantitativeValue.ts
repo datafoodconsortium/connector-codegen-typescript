@@ -26,22 +26,24 @@ import Quantifiable from "./Quantifiable.js"
 import IUnit from "./IUnit.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import connector from "./Connector.js";
+import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
 export default class QuantitativeValue extends SemanticObjectAnonymous implements Quantifiable {
+	
+	protected connector: IConnector;
 
-	public constructor(parameters: {semanticId?: string, semanticType?: string, unit?: (IUnit & Semanticable), value?: number});
-	public constructor(parameters: {semanticId: string, other: Semanticable});
-	public constructor(parameters: {semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number}) {
-		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#QuantitativeValue";
+	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number}) {
+		const type: string = parameters.semanticType? parameters.semanticType : "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#QuantitativeValue";
 		
 		if (parameters.other) {
-			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			super({ semanticId: parameters.semanticId!, other: parameters.other });
 			if (!parameters.other.isSemanticTypeOf(type))
 				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
 		}
 		else super({ semanticId: parameters.semanticId!, semanticType: type });
+		
+		this.connector = parameters.connector;
 		
 		
 		if (parameters.unit) this.setQuantityUnit(parameters.unit);
@@ -53,7 +55,7 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 		let result: (IUnit & Semanticable) | undefined = undefined;
 		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit");
 		if (semanticId) {
-			const semanticObject: Semanticable | undefined = await connector.fetch(semanticId, options);
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
 			if (semanticObject) result = <(IUnit & Semanticable) | undefined> semanticObject;
 		}
 		return result;
@@ -74,7 +76,7 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 			else this.setSemanticPropertyReference(property, quantityUnit);
 		}
 		else {
-			connector.store(quantityUnit);
+			this.connector.store(quantityUnit);
 			this.setSemanticPropertyReference(property, quantityUnit);
 		}
 	}

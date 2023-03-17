@@ -2,8 +2,8 @@
 import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface IConnectorStore {
-    fetch(semanticObjectId: string): Promise<Semanticable | undefined>;
+    get(semanticObjectId: string): Promise<Semanticable | undefined>;
     has(semanticObjectId: string): boolean;
-    store(semanticObject: Semanticable): void;
-    storeAll(semanticObjects: Array<Semanticable>): void;
+    set(semanticObject: Semanticable): void;
+    setAll(semanticObjects: Array<Semanticable>): void;
 }

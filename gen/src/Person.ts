@@ -28,25 +28,27 @@ import Agent from "./Agent.js"
 import IPerson from "./IPerson.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import connector from "./Connector.js";
+import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
 export default class Person extends Agent implements IPerson {
+	
 
-	public constructor(parameters: {semanticId: string, firstName?: string, lastName?: string, localizations?: (Localizable & Semanticable)[]});
-	public constructor(parameters: {semanticId: string, other: Semanticable});
-	public constructor(parameters: {semanticId?: string, other?: Semanticable, firstName?: string, lastName?: string, localizations?: (Localizable & Semanticable)[]}) {
+	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, firstName?: string, lastName?: string, localizations?: (Localizable & Semanticable)[]}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Person";
 		
 		if (parameters.other) {
-			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			super({ connector: parameters.connector, semanticId: parameters.semanticId!, other: parameters.other });
 			if (!parameters.other.isSemanticTypeOf(type))
 				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
 		}
-		else super({ semanticId: parameters.semanticId!, semanticType: type, localizations: parameters.localizations });
+		else super({ connector: parameters.connector, semanticId: parameters.semanticId!, semanticType: type, localizations: parameters.localizations });
 		
-		connector.store(this);
 		
+		
+		
+		if (!parameters.doNotStore)
+			this.connector.store(this);
 		if (parameters.firstName) this.setFirstName(parameters.firstName);
 		if (parameters.lastName) this.setLastName(parameters.lastName);
 	}
@@ -58,7 +60,7 @@ export default class Person extends Agent implements IPerson {
 			else this.addSemanticPropertyReference(property, organization);
 		}
 		else {
-			connector.store(organization);
+			this.connector.store(organization);
 			this.addSemanticPropertyReference(property, organization);
 		}
 	}
@@ -74,7 +76,7 @@ export default class Person extends Agent implements IPerson {
 		const results = new Array<(Onboardable & Semanticable)>();
 		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#affiliates");
 		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await connector.fetch(semanticId, options);
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
 			if (semanticObject) results.push(<(Onboardable & Semanticable)> semanticObject);
 		}
 		return results;

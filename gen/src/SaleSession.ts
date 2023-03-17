@@ -26,39 +26,42 @@ import ISaleSession from "./ISaleSession.js"
 import IOffer from "./IOffer.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import connector from "./Connector.js";
+import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
 export default class SaleSession extends SemanticObject implements ISaleSession {
+	
+	protected connector: IConnector;
 
-	public constructor(parameters: {semanticId: string, beginDate?: string, endDate?: string, quantity?: number, offers?: (IOffer & Semanticable)[]});
-	public constructor(parameters: {semanticId: string, other: Semanticable});
-	public constructor(parameters: {semanticId?: string, other?: Semanticable, beginDate?: string, endDate?: string, quantity?: number, offers?: (IOffer & Semanticable)[]}) {
+	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, beginDate?: string, endDate?: string, quantity?: number, offers?: (IOffer & Semanticable)[]}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#SaleSession";
 		
 		if (parameters.other) {
-			super({ semanticId: parameters.semanticId!, other: parameters.other })
+			super({ semanticId: parameters.semanticId!, other: parameters.other });
 			if (!parameters.other.isSemanticTypeOf(type))
 				throw new Error("Can't create the semantic object of type " + type + " from a copy: the copy is of type " + parameters.other.getSemanticType() + ".");
 		}
 		else super({ semanticId: parameters.semanticId!, semanticType: type });
 		
-		connector.store(this);
+		this.connector = parameters.connector;
 		
+		
+		if (!parameters.doNotStore)
+			this.connector.store(this);
 		if (parameters.beginDate) this.setBeginDate(parameters.beginDate);
 		if (parameters.endDate) this.setEndDate(parameters.endDate);
 		if (parameters.quantity) this.setQuantity(parameters.quantity);
 		if (parameters.offers) parameters.offers.forEach(e => this.addOffer(e));
 	}
 
-	public getQuantity(): number
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity");
+	public addOffer(offer: (IOffer & Semanticable)): void {
+		
 	}
 	
 
-	public addOffer(offer: (IOffer & Semanticable)): void {
-		
+	public getQuantity(): number
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity");
 	}
 	
 
@@ -67,7 +70,7 @@ export default class SaleSession extends SemanticObject implements ISaleSession 
 		const results = new Array<(IOffer & Semanticable)>();
 		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists");
 		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await connector.fetch(semanticId, options);
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
 			if (semanticObject) results.push(<(IOffer & Semanticable)> semanticObject);
 		}
 		return results;

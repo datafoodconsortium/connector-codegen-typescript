@@ -26,16 +26,18 @@ import Localizable from "./Localizable.js"
 import Identifiable from "./Identifiable.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
-import connector from "./Connector.js";
+import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
 export default abstract class Agent extends SemanticObject implements Identifiable {
+	
+	protected connector: IConnector;
 
-	protected constructor(parameters: {semanticId: string, semanticType?: string, localizations?: (Localizable & Semanticable)[]});
-	protected constructor(parameters: {semanticId: string, other: Semanticable});
-	protected constructor(parameters: {semanticId?: string, semanticType?: string, other?: Semanticable, localizations?: (Localizable & Semanticable)[]}) {
+	protected constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, localizations?: (Localizable & Semanticable)[]}) {
 		if (parameters.other) super({ semanticId: parameters.semanticId!, other: parameters.other })
 		else super({ semanticId: parameters.semanticId!, semanticType: parameters.semanticType! });
+		
+		this.connector = parameters.connector;
 		
 		
 		if (parameters.localizations) parameters.localizations.forEach(e => this.addLocalization(e));
@@ -46,7 +48,7 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 		const results = new Array<(Localizable & Semanticable)>();
 		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress");
 		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await connector.fetch(semanticId, options);
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
 			if (semanticObject) results.push(<(Localizable & Semanticable)> semanticObject);
 		}
 		return results;
@@ -65,7 +67,7 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 			else this.addSemanticPropertyReference(property, localization);
 		}
 		else {
-			connector.store(localization);
+			this.connector.store(localization);
 			this.addSemanticPropertyReference(property, localization);
 		}
 	}
