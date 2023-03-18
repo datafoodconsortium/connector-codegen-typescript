@@ -1,4 +1,3 @@
-
 import { Semanticable } from "@virtual-assembly/semantizer"
 import DatasetExt from "rdf-ext/lib/Dataset";
 import ConnectorExporterJsonldStream from "./ConnectorExporterJsonldStream.js";
@@ -13,6 +12,8 @@ import IGetterOptions from "./IGetterOptions.js";
 import ISKOSConcept from "./ISKOSConcept";
 import context from "./context.js";
 import Localizable from "./Localizable.js";
+import IConnectorImportOptions from "./IConnectorImportOptions.js";
+import IConnectorExportOptions from "./IConnectorExportOptions.js";
 
 export default class Connector {
 
@@ -38,12 +39,12 @@ export default class Connector {
         return this.factory.createAddress({});
     }
 
-    public async export(objects: Array<Semanticable>, options?: { exporter?: IConnectorExporter }): Promise<string> {
+    public async export(objects: Array<Semanticable>, options?: IConnectorExportOptions): Promise<string> {
         const exporter = options?.exporter? options.exporter : this.exporter;
         return exporter.export(objects);
     }
 
-    public async import(data: string, options?: { importer?: IConnectorImporter, factory?: IConnectorFactory, context?: any, callback?: Function, doNotStore?: boolean }): Promise<Array<Semanticable>> {
+    public async import(data: string, options?: IConnectorImportOptions): Promise<Array<Semanticable>> {
         return new Promise(async (resolve, reject) => {
             try { 
                 const importer = options?.importer? options.importer : this.importer;
@@ -57,8 +58,8 @@ export default class Connector {
                         results.push(semanticObject);
                         if (options?.doNotStore === undefined || options.doNotStore !== false)
                             this.store(semanticObject);
-                        if (options && options.callback)
-                            options.callback(semanticObject);
+                        if (options && options.callbacks)
+                            options.callbacks.forEach((callback: Function) => callback(semanticObject));
                     }
                 });
 
@@ -68,7 +69,7 @@ export default class Connector {
         });
     }
 
-    private async loadThesaurus(data: any): Promise<any> {
+    private async importThesaurus(data: any, options?: IConnectorImportOptions): Promise<any> {
         let conceptScheme: Semanticable | undefined = undefined; 
         const concepts = new Map<string, Semanticable>();
         const context = data["@context"];
@@ -83,7 +84,7 @@ export default class Connector {
             else concepts.set(semanticObject.getSemanticId(), semanticObject);
         }
 
-        await this.import(data, { context: context, callback: callback });
+        await this.import(data, { context: context, callbacks: [callback] });
 
         if (!conceptScheme)
             throw new Error("Can't find the SKOS ConceptScheme in the imported thesaurus.");
@@ -102,7 +103,7 @@ export default class Connector {
             });
         }
 
-        // @ts-ignore
+        // @ts-ignore: if the conceptScheme does not exist, an exception should have be already throwned
         conceptScheme.getSemanticPropertyAll(skosHasTopConcept).forEach((topConcept: any) => {
             const name: string = topConcept.split(dfcM)[1].toUpperCase();
             const concept: Semanticable | undefined = concepts.get(topConcept);
@@ -117,15 +118,15 @@ export default class Connector {
     }
 
     public async loadFacets(facets: any): Promise<void> {
-        this.FACETS = await this.loadThesaurus(facets);
+        this.FACETS = await this.importThesaurus(facets);
     }
 
     public async loadMeasures(measures: any): Promise<void> {
-        this.MEASURES = await this.loadThesaurus(measures);
+        this.MEASURES = await this.importThesaurus(measures);
     }
 
     public async loadProductTypes(productTypes: any): Promise<void> {
-        this.PRODUCT_TYPES = await this.loadThesaurus(productTypes);
+        this.PRODUCT_TYPES = await this.importThesaurus(productTypes);
     }
 
     public async fetch(semanticObjectId: string, options?: IGetterOptions): Promise<Semanticable | undefined> {
