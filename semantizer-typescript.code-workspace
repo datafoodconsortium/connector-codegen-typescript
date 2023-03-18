@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "../semantizer-typescript"
+		},
+		{
+			"path": "../connector-typescript"
+		},
+		{
+			"path": "../connector-ruby"
+		},
+		{
+			"path": "../semantizer-ruby"
+		},
+		{
+			"path": "../../../../eclipse-workspace/connector-codegen-ruby"
+		},
+		{
+			"path": "."
+		}
+	]
+}
