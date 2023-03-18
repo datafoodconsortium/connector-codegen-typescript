@@ -5,10 +5,8 @@ import AllergenCharacteristic from '../lib/AllergenCharacteristic.js';
 import NutrientCharacteristic from '../lib/NutrientCharacteristic.js';
 import PhysicalCharacteristic from '../lib/PhysicalCharacteristic.js';
 import Connector from "../lib/Connector.js";
-import ConnectorFactory from "../lib/ConnectorFactory.js";
 
 const connector = new Connector();
-connector.setDefaultFactory(new ConnectorFactory(connector));
 
 import facets from '../test/thesaurus/facets.json' assert { type: 'json' };
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };

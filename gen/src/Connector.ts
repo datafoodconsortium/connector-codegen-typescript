@@ -1,7 +1,6 @@
 import { Semanticable } from "@virtual-assembly/semantizer"
 import DatasetExt from "rdf-ext/lib/Dataset";
 import ConnectorExporterJsonldStream from "./ConnectorExporterJsonldStream.js";
-import ConnectorFactoryDefault from "./ConnectorFactoryDefault.js";
 import ConnectorImporterJsonldStream from "./ConnectorImporterJsonldStream.js";
 import ConnectorStoreMap from "./ConnectorStoreMap.js";
 import IConnectorExporter from "./IConnectorExporter";
@@ -14,6 +13,7 @@ import context from "./context.js";
 import Localizable from "./Localizable.js";
 import IConnectorImportOptions from "./IConnectorImportOptions.js";
 import IConnectorExportOptions from "./IConnectorExportOptions.js";
+import ConnectorFactory from "./ConnectorFactory.js";
 
 export default class Connector {
 
@@ -30,7 +30,7 @@ export default class Connector {
     public constructor() {
         this.storeObject = new ConnectorStoreMap();
         this.fetchFunction = async (semanticId: string) => (await fetch(semanticId)).json;
-        this.factory = new ConnectorFactoryDefault();
+        this.factory = new ConnectorFactory(this);
         this.importer = new ConnectorImporterJsonldStream(context);
         this.exporter = new ConnectorExporterJsonldStream(context); //{ "@vocab": "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#" });
     }
@@ -69,6 +69,7 @@ export default class Connector {
         });
     }
 
+    // TODO: manage options overriding
     private async importThesaurus(data: any, options?: IConnectorImportOptions): Promise<any> {
         let conceptScheme: Semanticable | undefined = undefined; 
         const concepts = new Map<string, Semanticable>();

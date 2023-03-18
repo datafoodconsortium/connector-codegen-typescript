@@ -1,10 +1,8 @@
 import Connector from "../lib/Connector.js";
-import ConnectorFactory from "../lib/ConnectorFactory.js";
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 
 const connector = new Connector();
 //connector.loadMeasures(measures);
-connector.setDefaultFactory(new ConnectorFactory(connector));
 const expected = ``;
 
 test('Connector:test', async () => {

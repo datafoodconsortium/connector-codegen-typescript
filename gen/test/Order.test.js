@@ -2,10 +2,8 @@ import Order from '../lib/Order.js';
 import Person from '../lib/Person.js';
 import SaleSession from '../lib/SaleSession.js';
 import Connector from "../lib/Connector.js";
-import ConnectorFactory from "../lib/ConnectorFactory.js";
 
 const connector = new Connector();
-connector.setDefaultFactory(new ConnectorFactory(connector));
 const expected = `{"@context":{"@vocab":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"},"@id":"http://myplatform.com/order1","@type":"Order","belongsTo":{"@id":"http://myplatform.com/saleSession1"},"date":"date","orderNumber":"0001","orderedBy":{"@id":"http://myplatform.com/person1"}}`;
 
 test('Order:export', async () => {

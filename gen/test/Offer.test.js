@@ -3,10 +3,8 @@ import Price from '../lib/Price.js';
 import CustomerCategory from '../lib/CustomerCategory.js';
 import SuppliedProduct from '../lib/SuppliedProduct.js';
 import Connector from "../lib/Connector.js";
-import ConnectorFactory from "../lib/ConnectorFactory.js";
 
 const connector = new Connector();
-connector.setDefaultFactory(new ConnectorFactory(connector));
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 
 connector.loadMeasures(measures);

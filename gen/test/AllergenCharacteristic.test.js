@@ -1,6 +1,5 @@
 import AllergenCharacteristic from '../lib/AllergenCharacteristic.js';
 import Connector from "../lib/Connector.js";
-import ConnectorFactory from "../lib/ConnectorFactory.js";
 //import facets from '../test/thesaurus/facets.json' assert { type: 'json' };
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 
@@ -10,7 +9,6 @@ beforeEach(() => {
     connector = new Connector();
     //connector.loadFacets(facets);
     connector.loadMeasures(measures);
-    connector.setDefaultFactory(new ConnectorFactory(connector));
 
 });
 
