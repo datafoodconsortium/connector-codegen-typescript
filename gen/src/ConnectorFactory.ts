@@ -104,6 +104,12 @@ export default class ConnectorFactory implements IConnectorFactory {
             case "http://www.w3.org/2004/02/skos/core#Concept":
                 result = new SKOSConcept({ connector: this.connector });
                 break;
+
+            case "http://www.w3.org/2004/02/skos/core#ConceptScheme":
+                result = new SKOSConcept({ connector: this.connector });
+                // @ts-ignore
+                result._semanticType = "http://www.w3.org/2004/02/skos/core#ConceptScheme";
+                break;
         
             default:
                 console.log(type);

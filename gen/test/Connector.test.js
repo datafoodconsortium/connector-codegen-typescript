@@ -21,7 +21,7 @@ test('Connector:test', async () => {
         //console.log(measures["@graph"]);
         //console.log(connector);
         await connector.loadMeasures(JSON.stringify(measures));
-        console.log(connector.MEASURES)
+        console.log(connector.MEASURES.UNIT.CURRENCYUNIT.AUSTRALIANDOLLAR)
     }
     catch(e) { console.log(e) }
 });

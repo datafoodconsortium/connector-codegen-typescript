@@ -11,15 +11,14 @@ import IConnectorImporter from "./IConnectorImporter";
 import IConnectorStore from "./IConnectorStore";
 import IGetterOptions from "./IGetterOptions.js";
 import ISKOSConcept from "./ISKOSConcept";
-import SKOSParser from "./SKOSParser.js";
 import context from "./context.js";
 import Localizable from "./Localizable.js";
 
 export default class Connector {
 
-    public FACETS: Array<ISKOSConcept>;
-    public MEASURES: Array<ISKOSConcept>;
-    public PRODUCT_TYPES: Array<ISKOSConcept>;
+    public FACETS?: ISKOSConcept;
+    public MEASURES?: ISKOSConcept;
+    public PRODUCT_TYPES?: ISKOSConcept;
 
     private fetchFunction: Function;
     private factory: IConnectorFactory;
@@ -27,19 +26,12 @@ export default class Connector {
     private exporter: IConnectorExporter;
     private storeObject: IConnectorStore;
 
-    private parser: SKOSParser;
-
     public constructor() {
         this.storeObject = new ConnectorStoreMap();
         this.fetchFunction = async (semanticId: string) => (await fetch(semanticId)).json;
         this.factory = new ConnectorFactoryDefault();
         this.importer = new ConnectorImporterJsonldStream(context);
         this.exporter = new ConnectorExporterJsonldStream(context); //{ "@vocab": "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#" });
-        this.parser = new SKOSParser(this);
-
-        this.FACETS = [];
-        this.MEASURES = [];
-        this.PRODUCT_TYPES = [];
     }
 
     public createAddress(): Localizable {
@@ -77,39 +69,63 @@ export default class Connector {
     }
 
     private async loadThesaurus(data: any): Promise<any> {
-        //return this.parser.parse(data[0]["@graph"]);
-        const results: any = {};
+        let conceptScheme: Semanticable | undefined = undefined; 
+        const concepts = new Map<string, Semanticable>();
         const context = data["@context"];
-        const skosBroder: string = "http://www.w3.org/2004/02/skos/core#broader";
+        const skos: string = "http://www.w3.org/2004/02/skos/core#";
+        const skosConceptScheme: string = skos + "ConceptScheme";
+        const skosHasTopConcept: string = skos + "hasTopConcept";
+        const skosNarrower: string = skos + "narrower";
         const dfcM: string = "http://static.datafoodconsortium.org/data/measures.rdf#";
 
         const callback = (semanticObject: Semanticable) => {
-            let broader: string = semanticObject.getSemanticProperty(skosBroder);
-            if (broader) {
-                broader = broader.split(dfcM)[1].toUpperCase();
-                if (!results[broader])
-                    results[broader] = {};
-                const semanticId = semanticObject.getSemanticId().split(dfcM)[1];
-                results[broader][semanticId] = semanticObject;
-            }
+            if (semanticObject.isSemanticTypeOf(skosConceptScheme)) conceptScheme = semanticObject;
+            else concepts.set(semanticObject.getSemanticId(), semanticObject);
         }
 
         await this.import(data, { context: context, callback: callback });
-        
-        //return this.parser.parse(data["@graph"]);
-        return results;
+
+        if (!conceptScheme)
+            throw new Error("Can't find the SKOS ConceptScheme in the imported thesaurus.");
+
+        const setChildren = (parent: Semanticable) => {
+            const narrowers = parent.getSemanticPropertyAll(skosNarrower);
+
+            narrowers.forEach((narrower: string) => {
+                const name: string = narrower.split(dfcM)[1].toUpperCase();
+                const concept: Semanticable | undefined = concepts.get(narrower);
+                if (concept) {
+                    // @ts-ignore
+                    parent[name] = concept;
+                    setChildren(concept);
+                }
+            });
+        }
+
+        // @ts-ignore
+        conceptScheme.getSemanticPropertyAll(skosHasTopConcept).forEach((topConcept: any) => {
+            const name: string = topConcept.split(dfcM)[1].toUpperCase();
+            const concept: Semanticable | undefined = concepts.get(topConcept);
+            if (!concept)
+                throw new Error("The thesaurus top concept " + topConcept + " was not found.");
+            // @ts-ignore
+            conceptScheme[name] = concept;
+            setChildren(concept);
+        });
+
+        return conceptScheme;
     }
 
-    public loadFacets(data: any): void {
-        //this.FACETS = this.loadThesaurus(data);
+    public async loadFacets(facets: any): Promise<void> {
+        this.FACETS = await this.loadThesaurus(facets);
     }
 
     public async loadMeasures(measures: any): Promise<void> {
         this.MEASURES = await this.loadThesaurus(measures);
     }
 
-    public loadProductTypes(data: any): void {
-        //this.PRODUCT_TYPES = this.loadThesaurus(data);
+    public async loadProductTypes(productTypes: any): Promise<void> {
+        this.PRODUCT_TYPES = await this.loadThesaurus(productTypes);
     }
 
     public async fetch(semanticObjectId: string, options?: IGetterOptions): Promise<Semanticable | undefined> {
