@@ -1,6 +1,6 @@
 import { JsonLdParser } from "jsonld-streaming-parser";
 import IConnectorImporter from "./IConnectorImporter";
-import { Readable } from 'stream';
+import { Readable } from 'readable-stream';
 import DatasetExt from "rdf-ext/lib/Dataset";
 import datasetFactory from 'rdf-ext';
 import QuadExt from "rdf-ext/lib/Quad";

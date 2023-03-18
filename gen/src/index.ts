@@ -20,7 +20,7 @@ export { default as Order } from './Order.js';
 export { default as SaleSession } from './SaleSession.js';
 
 
-export { default as connector } from './Connector.js';
+export { default as Connector } from './Connector.js';
 export { default as ConnectorStoreMap } from './ConnectorStoreMap.js';
 export { default as ConnectorFactory } from './ConnectorFactory.js';
 export { default as ConnectorExporterJsonldStream } from './ConnectorExporterJsonldStream.js';
