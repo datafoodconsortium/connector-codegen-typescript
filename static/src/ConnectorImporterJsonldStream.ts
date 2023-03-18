@@ -1,9 +1,10 @@
 import { JsonLdParser } from "jsonld-streaming-parser";
 import IConnectorImporter from "./IConnectorImporter";
-import { Readable } from 'stream';
+import { Readable } from 'readable-stream';
 import DatasetExt from "rdf-ext/lib/Dataset";
 import datasetFactory from 'rdf-ext';
 import QuadExt from "rdf-ext/lib/Quad";
+import IConnectorImporterOptions from "./IConnectorImporterOptions";
 
 export default class ConnectorImporterJsonldStream implements IConnectorImporter {
 
@@ -13,8 +14,9 @@ export default class ConnectorImporterJsonldStream implements IConnectorImporter
         this.context = context;
     }
 
-    public async import(json: string): Promise<Array<DatasetExt>> {
-        const parser = new JsonLdParser({ context: this.context });
+    public async import(json: string, options?: IConnectorImporterOptions): Promise<Array<DatasetExt>> {
+        const context = options?.context? options.context : this.context;
+        const parser = new JsonLdParser({ context: context });
         let datasets: Array<DatasetExt> = new Array<DatasetExt>();
 
         const input = new Readable();
@@ -34,6 +36,9 @@ export default class ConnectorImporterJsonldStream implements IConnectorImporter
                 dataset.add(quad);
                 datasets.push(dataset);
             }
+
+            if (options && options.callbacks)
+                options.callbacks.forEach(callback => callback(quad));
         });
 
         return new Promise((resolve, reject) => {

@@ -1,13 +1,11 @@
 import NutrientCharacteristic from '../lib/NutrientCharacteristic.js';
 import Connector from "../lib/Connector.js";
-import ConnectorFactory from "../lib/ConnectorFactory.js";
 import facets from '../test/thesaurus/facets.json' assert { type: 'json' };
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 
 const connector = new Connector();
 connector.loadFacets(facets);
 connector.loadMeasures(measures);
-connector.setDefaultFactory(new ConnectorFactory(connector));
 
 const kilogram = connector.MEASURES.UNIT.QUANTITYUNIT.KILOGRAM;
 const nutrientDimension = connector.MEASURES.DIMENSION.NUTRIENTDIMENSION.CALCIUM;

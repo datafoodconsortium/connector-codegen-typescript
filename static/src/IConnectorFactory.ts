@@ -4,8 +4,8 @@ import Localizable from "./Localizable";
 
 export default interface IConnectorFactory {
 
-    createFromRdfDataset(dataset: DatasetExt): Semanticable;
-    createFromType(type: string): Semanticable;
+    createFromRdfDataset(dataset: DatasetExt): Semanticable | undefined;
+    createFromType(type: string): Semanticable | undefined;
 
     createAddress(parameters: any): Localizable;
 

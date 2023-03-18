@@ -1,8 +1,6 @@
-
 import { Semanticable } from "@virtual-assembly/semantizer"
 import DatasetExt from "rdf-ext/lib/Dataset";
 import ConnectorExporterJsonldStream from "./ConnectorExporterJsonldStream.js";
-import ConnectorFactoryDefault from "./ConnectorFactoryDefault.js";
 import ConnectorImporterJsonldStream from "./ConnectorImporterJsonldStream.js";
 import ConnectorStoreMap from "./ConnectorStoreMap.js";
 import IConnectorExporter from "./IConnectorExporter";
@@ -11,15 +9,17 @@ import IConnectorImporter from "./IConnectorImporter";
 import IConnectorStore from "./IConnectorStore";
 import IGetterOptions from "./IGetterOptions.js";
 import ISKOSConcept from "./ISKOSConcept";
-import SKOSParser from "./SKOSParser.js";
 import context from "./context.js";
 import Localizable from "./Localizable.js";
+import IConnectorImportOptions from "./IConnectorImportOptions.js";
+import IConnectorExportOptions from "./IConnectorExportOptions.js";
+import ConnectorFactory from "./ConnectorFactory.js";
 
 export default class Connector {
 
-    public FACETS: Array<ISKOSConcept>;
-    public MEASURES: Array<ISKOSConcept>;
-    public PRODUCT_TYPES: Array<ISKOSConcept>;
+    public FACETS?: ISKOSConcept;
+    public MEASURES?: ISKOSConcept;
+    public PRODUCT_TYPES?: ISKOSConcept;
 
     private fetchFunction: Function;
     private factory: IConnectorFactory;
@@ -27,42 +27,40 @@ export default class Connector {
     private exporter: IConnectorExporter;
     private storeObject: IConnectorStore;
 
-    private parser: SKOSParser;
-
     public constructor() {
         this.storeObject = new ConnectorStoreMap();
         this.fetchFunction = async (semanticId: string) => (await fetch(semanticId)).json;
-        this.factory = new ConnectorFactoryDefault();
+        this.factory = new ConnectorFactory(this);
         this.importer = new ConnectorImporterJsonldStream(context);
-        this.exporter = new ConnectorExporterJsonldStream({ "@vocab": "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#" });
-        this.parser = new SKOSParser(this);
-
-        this.FACETS = [];
-        this.MEASURES = [];
-        this.PRODUCT_TYPES = [];
+        this.exporter = new ConnectorExporterJsonldStream(context); //{ "@vocab": "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#" });
     }
 
     public createAddress(): Localizable {
         return this.factory.createAddress({});
     }
 
-    public async export(objects: Array<Semanticable>, options?: { exporter?: IConnectorExporter }): Promise<string> {
+    public async export(objects: Array<Semanticable>, options?: IConnectorExportOptions): Promise<string> {
         const exporter = options?.exporter? options.exporter : this.exporter;
         return exporter.export(objects);
     }
 
-    public async import(data: string, options?: { importer?: IConnectorImporter, factory?: IConnectorFactory }): Promise<Array<Semanticable>> {
+    public async import(data: string, options?: IConnectorImportOptions): Promise<Array<Semanticable>> {
         return new Promise(async (resolve, reject) => {
             try { 
                 const importer = options?.importer? options.importer : this.importer;
                 const factory = options?.factory? options.factory : this.factory;
                 const results: Array<Semanticable> = new Array<Semanticable>();
-                const datasets: Array<DatasetExt> = await importer.import(data);
+                const datasets: Array<DatasetExt> = await importer.import(data, { context: options?.context });
 
                 datasets.forEach(dataset => {
                     const semanticObject = factory.createFromRdfDataset(dataset);
-                    results.push(semanticObject);
-                    this.store(semanticObject);
+                    if (semanticObject) {
+                        results.push(semanticObject);
+                        if (options?.doNotStore === undefined || options.doNotStore !== false)
+                            this.store(semanticObject);
+                        if (options && options.callbacks)
+                            options.callbacks.forEach((callback: Function) => callback(semanticObject));
+                    }
                 });
 
                 resolve(results);
@@ -71,20 +69,65 @@ export default class Connector {
         });
     }
 
-    private loadThesaurus(data: any): any {
-        return this.parser.parse(data[0]["@graph"]);
+    // TODO: manage options overriding
+    private async importThesaurus(data: any, options?: IConnectorImportOptions): Promise<any> {
+        let conceptScheme: Semanticable | undefined = undefined; 
+        const concepts = new Map<string, Semanticable>();
+        const context = data["@context"];
+        const skos: string = "http://www.w3.org/2004/02/skos/core#";
+        const skosConceptScheme: string = skos + "ConceptScheme";
+        const skosHasTopConcept: string = skos + "hasTopConcept";
+        const skosNarrower: string = skos + "narrower";
+        const dfcM: string = "http://static.datafoodconsortium.org/data/measures.rdf#";
+
+        const callback = (semanticObject: Semanticable) => {
+            if (semanticObject.isSemanticTypeOf(skosConceptScheme)) conceptScheme = semanticObject;
+            else concepts.set(semanticObject.getSemanticId(), semanticObject);
+        }
+
+        await this.import(data, { context: context, callbacks: [callback] });
+
+        if (!conceptScheme)
+            throw new Error("Can't find the SKOS ConceptScheme in the imported thesaurus.");
+
+        const setChildren = (parent: Semanticable) => {
+            const narrowers = parent.getSemanticPropertyAll(skosNarrower);
+
+            narrowers.forEach((narrower: string) => {
+                const name: string = narrower.split(dfcM)[1].toUpperCase();
+                const concept: Semanticable | undefined = concepts.get(narrower);
+                if (concept) {
+                    // @ts-ignore
+                    parent[name] = concept;
+                    setChildren(concept);
+                }
+            });
+        }
+
+        // @ts-ignore: if the conceptScheme does not exist, an exception should have be already throwned
+        conceptScheme.getSemanticPropertyAll(skosHasTopConcept).forEach((topConcept: any) => {
+            const name: string = topConcept.split(dfcM)[1].toUpperCase();
+            const concept: Semanticable | undefined = concepts.get(topConcept);
+            if (!concept)
+                throw new Error("The thesaurus top concept " + topConcept + " was not found.");
+            // @ts-ignore
+            conceptScheme[name] = concept;
+            setChildren(concept);
+        });
+
+        return conceptScheme;
     }
 
-    public loadFacets(data: any): void {
-        this.FACETS = this.loadThesaurus(data);
+    public async loadFacets(facets: any): Promise<void> {
+        this.FACETS = await this.importThesaurus(facets);
     }
 
-    public loadMeasures(data: any): void {
-        this.MEASURES = this.loadThesaurus(data);
+    public async loadMeasures(measures: any): Promise<void> {
+        this.MEASURES = await this.importThesaurus(measures);
     }
 
-    public loadProductTypes(data: any): void {
-        this.PRODUCT_TYPES = this.loadThesaurus(data);
+    public async loadProductTypes(productTypes: any): Promise<void> {
+        this.PRODUCT_TYPES = await this.importThesaurus(productTypes);
     }
 
     public async fetch(semanticObjectId: string, options?: IGetterOptions): Promise<Semanticable | undefined> {

@@ -1,9 +1,7 @@
 import Address from '../lib/Address.js';
 import Connector from "../lib/Connector.js";
-import ConnectorFactory from "../lib/ConnectorFactory.js";
 
 const connector = new Connector();
-connector.setDefaultFactory(new ConnectorFactory(connector));
 const data = `{"@context":{"@vocab":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"},"@id":"http://myplatform.com/address/address1","@type":"Address","hasCity":"Brussels","hasCountry":"Belgium","hasPostalCode":"00001","hasStreet":"1, place or Europe"}`;
 
 test('Address:import', async () => {

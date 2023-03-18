@@ -1,8 +1,8 @@
 import { Semanticable } from "@virtual-assembly/semantizer";
 import IConnectorExporter from "./IConnectorExporter";
 import SerializerJsonld from '@rdfjs/serializer-jsonld-ext';
-import { Readable } from 'stream';
 import { ContextDefinition } from "jsonld";
+import { Readable } from 'readable-stream';
 
 export default class ConnectorExporterJsonldStream implements IConnectorExporter {
 

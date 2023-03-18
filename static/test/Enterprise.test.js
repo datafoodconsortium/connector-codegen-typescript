@@ -4,10 +4,8 @@ import CustomerCategory from '../lib/CustomerCategory.js';
 import SuppliedProduct from '../lib/SuppliedProduct.js';
 import CatalogItem from '../lib/CatalogItem.js';
 import Connector from "../lib/Connector.js";
-import ConnectorFactory from "../lib/ConnectorFactory.js";
 
 const connector = new Connector();
-connector.setDefaultFactory(new ConnectorFactory(connector));
 const expected = `{"@context":{"@vocab":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"},"@id":"http://myplatform.com/enterprise1","@type":"Enterprise","VATnumber":"vatNumber","defines":{"@id":"http://myplatform.com/customerCategory1"},"hasAddress":{"@id":"http://myplatform.com/address1"},"hasDescription":"description"}`;
 
 test('Enterprise:export', async () => {

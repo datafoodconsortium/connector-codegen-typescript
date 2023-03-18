@@ -33,7 +33,7 @@ export default class ConnectorFactory implements IConnectorFactory {
         throw new Error("Method not implemented.");
     }
 
-    public createFromType(type: string): Semanticable {
+    public createFromType(type: string): Semanticable | undefined {
         let result: Semanticable | undefined = undefined;
         const prefix: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#";
         switch (type) {
@@ -104,23 +104,31 @@ export default class ConnectorFactory implements IConnectorFactory {
             case "http://www.w3.org/2004/02/skos/core#Concept":
                 result = new SKOSConcept({ connector: this.connector });
                 break;
+
+            case "http://www.w3.org/2004/02/skos/core#ConceptScheme":
+                result = new SKOSConcept({ connector: this.connector });
+                // @ts-ignore
+                result._semanticType = "http://www.w3.org/2004/02/skos/core#ConceptScheme";
+                break;
         
             default:
+                console.log(type);
                 break;
         }
 
-        if (!result)
-            throw new Error;
+        //if (!result)
+          //  throw new Error;
 
         return result;
     }
 
-    public createFromRdfDataset(dataset: DatasetExt): Semanticable {
+    public createFromRdfDataset(dataset: DatasetExt): Semanticable | undefined {
         const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
         const quad = Array.from(dataset.filter((quad: any) => quad.predicate.value === rdfType))[0];
         const type = quad.object.value;
-        const semanticObject: Semanticable = this.createFromType(type);
-        semanticObject.setSemanticPropertyAllFromRdfDataset(dataset);
+        const semanticObject: Semanticable | undefined = this.createFromType(type);
+        if (semanticObject) 
+            semanticObject.setSemanticPropertyAllFromRdfDataset(dataset);
         return semanticObject;
     }
     

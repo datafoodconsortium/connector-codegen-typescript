@@ -1,10 +1,8 @@
 import Person from '../lib/Person.js';
 import Address from '../lib/Address.js';
 import Connector from "../lib/Connector.js";
-import ConnectorFactory from "../lib/ConnectorFactory.js";
 
 const connector = new Connector();
-connector.setDefaultFactory(new ConnectorFactory(connector));
 
 const data = `{"@context":{"@vocab":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"},"@id":"http://myplatform.com/person1","@type":"Person","familyName":"Lecoq","firstName":"Maxime","hasAddress":{"@id":"http://myplatform.com/address/address1"}}`;
 
