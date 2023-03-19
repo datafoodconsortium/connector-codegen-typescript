@@ -7,7 +7,7 @@ import Connector from "../lib/Connector.js";
 const connector = new Connector();
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 
-connector.loadMeasures(measures);
+await connector.loadMeasures(JSON.stringify(measures));
 
 const expected = `{"@context":{"@vocab":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"},"@graph":[{"@id":"_:b1","@type":"Price","VATrate":"19.9","hasUnit":{"@id":"dfc-m:Euro"},"value":"5.42"},{"@id":"http://myplatform.com/orderLine1","@type":"OrderLine","concerns":{"@id":"http://myplatform.com/offer1"},"hasPrice":{"@id":"_:b1"},"partOf":{"@id":"http://myplatform.com/order1"},"quantity":"2"}]}`;
 

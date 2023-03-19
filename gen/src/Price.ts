@@ -78,8 +78,8 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 	public setUnit(unit: (IUnit & Semanticable)): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit";
 		if (unit.isSemanticObjectAnonymous()) {
-			if (unit.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, unit);
-			else this.setSemanticPropertyReference(property, unit);
+			//if (unit.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, unit);
+			/*else*/ this.setSemanticPropertyReference(property, unit);
 		}
 		else {
 			this.connector.store(unit);

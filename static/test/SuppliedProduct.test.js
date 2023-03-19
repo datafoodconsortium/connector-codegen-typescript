@@ -12,9 +12,9 @@ import facets from '../test/thesaurus/facets.json' assert { type: 'json' };
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 import productTypes from '../test/thesaurus/productTypes.json' assert { type: 'json' };
 
-connector.loadFacets(facets);
-connector.loadMeasures(measures);
-connector.loadProductTypes(productTypes);
+await connector.loadFacets(JSON.stringify(facets));
+await connector.loadMeasures(JSON.stringify(measures));
+await connector.loadProductTypes(JSON.stringify(productTypes));
 
 const expected = ``;
 

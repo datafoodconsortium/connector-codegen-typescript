@@ -4,8 +4,8 @@ import facets from '../test/thesaurus/facets.json' assert { type: 'json' };
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 
 const connector = new Connector();
-connector.loadFacets(facets);
-connector.loadMeasures(measures);
+await connector.loadFacets(JSON.stringify(facets));
+await connector.loadMeasures(JSON.stringify(measures));
 
 const kilogram = connector.MEASURES.UNIT.QUANTITYUNIT.KILOGRAM;
 const nutrientDimension = connector.MEASURES.DIMENSION.NUTRIENTDIMENSION.CALCIUM;

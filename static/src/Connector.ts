@@ -14,8 +14,9 @@ import Localizable from "./Localizable.js";
 import IConnectorImportOptions from "./IConnectorImportOptions.js";
 import IConnectorExportOptions from "./IConnectorExportOptions.js";
 import ConnectorFactory from "./ConnectorFactory.js";
+import IConnector from "./IConnector.js";
 
-export default class Connector {
+export default class Connector implements IConnector {
 
     public FACETS?: ISKOSConcept;
     public MEASURES?: ISKOSConcept;
@@ -42,6 +43,10 @@ export default class Connector {
     public async export(objects: Array<Semanticable>, options?: IConnectorExportOptions): Promise<string> {
         const exporter = options?.exporter? options.exporter : this.exporter;
         return exporter.export(objects);
+    }
+
+    public getDefaultFactory(): IConnectorFactory {
+        return this.factory;
     }
 
     public async import(data: string, options?: IConnectorImportOptions): Promise<Array<Semanticable>> {

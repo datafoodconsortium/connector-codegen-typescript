@@ -5,10 +5,10 @@ import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 
 let connector = undefined;
 
-beforeEach(() => {
+beforeEach(async () => {
     connector = new Connector();
-    //connector.loadFacets(facets);
-    connector.loadMeasures(measures);
+    //await connector.loadFacets(JSON.stringify(facets));
+    await connector.loadMeasures(JSON.stringify(measures));
 
 });
 

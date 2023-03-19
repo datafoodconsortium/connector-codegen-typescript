@@ -1,5 +1,4 @@
 import { Semanticable } from "@virtual-assembly/semantizer";
-import DatasetExt from "rdf-ext/lib/Dataset";
 import Address from "./Address.js";
 import Catalog from "./Catalog.js";
 import SaleSession from "./SaleSession.js";
@@ -20,6 +19,7 @@ import SKOSConcept from "./SKOSConcept.js";
 import SuppliedProduct from "./SuppliedProduct.js";
 import Localizable from "./Localizable.js";
 import IConnector from "./IConnector.js";
+import DatasetExt from "rdf-ext/lib/Dataset";
 
 export default class ConnectorFactory implements IConnectorFactory {
 

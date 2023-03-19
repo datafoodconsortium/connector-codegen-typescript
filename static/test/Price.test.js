@@ -3,7 +3,7 @@ import Connector from "../lib/Connector.js";
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 
 const connector = new Connector();
-connector.loadMeasures(measures);
+await connector.loadMeasures(JSON.stringify(measures));
 
 const euro = connector.MEASURES.UNIT.CURRENCYUNIT.EURO;
 
