@@ -22,11 +22,11 @@
  * SOFTWARE.
 */
 
-import INutrientDimension from "./INutrientDimension.js"
 import INutrientCharacteristic from "./INutrientCharacteristic.js"
-import Characteristic from "./Characteristic.js"
-import IUnit from "./IUnit.js"
+import INutrientDimension from "./INutrientDimension.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import IUnit from "./IUnit.js"
+import Characteristic from "./Characteristic.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -66,14 +66,8 @@ export default class NutrientCharacteristic extends Characteristic implements IN
 
 	public setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNutrientDimension";
-		if (quantityDimension.isSemanticObjectAnonymous()) {
-			if (quantityDimension.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, quantityDimension);
-			else this.setSemanticPropertyReference(property, quantityDimension);
-		}
-		else {
-			this.connector.store(quantityDimension);
-			this.setSemanticPropertyReference(property, quantityDimension);
-		}
+		this.setSemanticPropertyReference(property, quantityDimension);
+		this.connector.store(quantityDimension);
 	}
 	
 

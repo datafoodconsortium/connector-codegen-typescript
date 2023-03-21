@@ -1,15 +1,15 @@
-import Describable from "./Describable.js"
 import IProductType from "./IProductType.js"
-import Certifiable from "./Certifiable.js"
-import Proposable from "./Proposable.js"
 import Quantifiable from "./Quantifiable.js"
-import Claimable from "./Claimable.js"
-import Manufacturable from "./Manufacturable.js"
 import Nameable from "./Nameable.js"
+import Certifiable from "./Certifiable.js"
+import Manufacturable from "./Manufacturable.js"
+import Claimable from "./Claimable.js"
+import Proposable from "./Proposable.js"
+import Describable from "./Describable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
-export default interface IDefinedProduct extends Manufacturable, Certifiable, Describable, Proposable, Nameable {
+export default interface IDefinedProduct extends Manufacturable, Nameable, Proposable, Certifiable, Describable {
 
 	addClaim(claim: (Claimable & Semanticable)): void;
 	getQuantity(): Promise<(Quantifiable & Semanticable) | undefined>

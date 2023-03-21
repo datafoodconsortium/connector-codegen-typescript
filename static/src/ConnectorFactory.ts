@@ -19,7 +19,8 @@ import SKOSConcept from "./SKOSConcept.js";
 import SuppliedProduct from "./SuppliedProduct.js";
 import Localizable from "./Localizable.js";
 import IConnector from "./IConnector.js";
-import DatasetExt from "rdf-ext/lib/Dataset";
+import DatasetExt from "rdf-ext/lib/Dataset.js";
+import { DatasetCore } from '@rdfjs/types';
 
 export default class ConnectorFactory implements IConnectorFactory {
 
@@ -27,6 +28,12 @@ export default class ConnectorFactory implements IConnectorFactory {
 
     public constructor(connector: IConnector) {
         this.connector = connector;
+    }
+
+    public createFromRdfDatasetCore(dataset: DatasetCore): Semanticable | undefined {
+        const datasetExt = new DatasetExt();
+        datasetExt.addAll(dataset);
+        return this.createFromRdfDataset(datasetExt);
     }
     
     public createAddress(parameters: any): Localizable {

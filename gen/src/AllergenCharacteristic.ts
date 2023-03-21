@@ -22,10 +22,10 @@
  * SOFTWARE.
 */
 
-import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
-import ICharacteristicDimension from "./ICharacteristicDimension.js"
-import Characteristic from "./Characteristic.js"
 import IUnit from "./IUnit.js"
+import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import Characteristic from "./Characteristic.js"
 import IAllergenDimension from "./IAllergenDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
@@ -66,14 +66,8 @@ export default class AllergenCharacteristic extends Characteristic implements IA
 
 	public setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenDimension";
-		if (quantityDimension.isSemanticObjectAnonymous()) {
-			if (quantityDimension.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, quantityDimension);
-			else this.setSemanticPropertyReference(property, quantityDimension);
-		}
-		else {
-			this.connector.store(quantityDimension);
-			this.setSemanticPropertyReference(property, quantityDimension);
-		}
+		this.setSemanticPropertyReference(property, quantityDimension);
+		this.connector.store(quantityDimension);
 	}
 	
 

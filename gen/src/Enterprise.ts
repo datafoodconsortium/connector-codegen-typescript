@@ -22,20 +22,20 @@
  * SOFTWARE.
 */
 
-import ICustomerCategory from "./ICustomerCategory.js"
 import Onboardable from "./Onboardable.js"
-import Localizable from "./Localizable.js"
-import ICatalogItem from "./ICatalogItem.js"
-import IEnterprise from "./IEnterprise.js"
-import SuppliedProduct from "./SuppliedProduct.js"
-import Supplier from "./Supplier.js"
 import Agent from "./Agent.js"
+import IEnterprise from "./IEnterprise.js"
+import Supplier from "./Supplier.js"
+import SuppliedProduct from "./SuppliedProduct.js"
+import ICatalogItem from "./ICatalogItem.js"
+import Localizable from "./Localizable.js"
+import ICustomerCategory from "./ICustomerCategory.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
-export default class Enterprise extends Agent implements Onboardable, Supplier, IEnterprise {
+export default class Enterprise extends Agent implements Supplier, IEnterprise, Onboardable {
 	
 
 	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, localizations?: (Localizable & Semanticable)[], description?: string, vatNumber?: string, customerCategories?: (ICustomerCategory & Semanticable)[], suppliedProducts?: (SuppliedProduct & Semanticable)[], catalogItems?: (ICatalogItem & Semanticable)[]}) {
@@ -59,10 +59,6 @@ export default class Enterprise extends Agent implements Onboardable, Supplier, 
 		if (parameters.suppliedProducts) parameters.suppliedProducts.forEach(e => this.addSupplyProduct(e));
 		if (parameters.catalogItems) parameters.catalogItems.forEach(e => this.addCatalogItem(e));
 	}
-
-	public addSupplyProduct(suppliedProduct: (SuppliedProduct & Semanticable)): void {
-	}
-	
 
 	public async getSuppliedProducts(options?: IGetterOptions): Promise<Array<(SuppliedProduct & Semanticable)>>
 	 {
@@ -91,6 +87,10 @@ export default class Enterprise extends Agent implements Onboardable, Supplier, 
 		return results;
 	}
 	
+
+	public addSupplyProduct(suppliedProduct: (SuppliedProduct & Semanticable)): void {
+	}
+	
 	public getVatNumber(): string
 	 {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATnumber");
@@ -102,16 +102,18 @@ export default class Enterprise extends Agent implements Onboardable, Supplier, 
 		this.setSemanticPropertyLiteral(property, vatNumber);
 	}
 	
+	public getDescription(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription");
+	}
+	
+
+	public setDescription(description: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription";
+		this.setSemanticPropertyLiteral(property, description);
+	}
+	
 	public addCustomerCategory(customerCategory: (ICustomerCategory & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#defines";
-		if (customerCategory.isSemanticObjectAnonymous()) {
-			if (customerCategory.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, customerCategory);
-			else this.addSemanticPropertyReference(property, customerCategory);
-		}
-		else {
-			this.connector.store(customerCategory);
-			this.addSemanticPropertyReference(property, customerCategory);
-		}
 	}
 	
 
@@ -124,17 +126,6 @@ export default class Enterprise extends Agent implements Onboardable, Supplier, 
 			if (semanticObject) results.push(<(ICustomerCategory & Semanticable)> semanticObject);
 		}
 		return results;
-	}
-	
-	public getDescription(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription");
-	}
-	
-
-	public setDescription(description: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription";
-		this.setSemanticPropertyLiteral(property, description);
 	}
 	
 

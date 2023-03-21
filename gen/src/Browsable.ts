@@ -1,5 +1,5 @@
-import IEnterprise from "./IEnterprise.js"
 import Catalogable from "./Catalogable.js"
+import IEnterprise from "./IEnterprise.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 

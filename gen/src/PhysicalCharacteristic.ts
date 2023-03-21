@@ -22,11 +22,11 @@
  * SOFTWARE.
 */
 
+import Characteristic from "./Characteristic.js"
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
+import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import IPhysicalDimension from "./IPhysicalDimension.js"
 import IUnit from "./IUnit.js"
-import Characteristic from "./Characteristic.js"
-import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -66,14 +66,8 @@ export default class PhysicalCharacteristic extends Characteristic implements IP
 
 	public setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPhysicalDimension";
-		if (quantityDimension.isSemanticObjectAnonymous()) {
-			if (quantityDimension.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, quantityDimension);
-			else this.setSemanticPropertyReference(property, quantityDimension);
-		}
-		else {
-			this.connector.store(quantityDimension);
-			this.setSemanticPropertyReference(property, quantityDimension);
-		}
+		this.setSemanticPropertyReference(property, quantityDimension);
+		this.connector.store(quantityDimension);
 	}
 	
 

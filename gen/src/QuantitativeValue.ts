@@ -34,7 +34,7 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 	protected connector: IConnector;
 
 	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number}) {
-		const type: string = parameters.semanticType? parameters.semanticType : "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#QuantitativeValue";
+		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#QuantitativeValue";
 		
 		if (parameters.other) {
 			super({ semanticId: parameters.semanticId!, other: parameters.other });
@@ -63,28 +63,22 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 	}
 	
 
-	public getQuantityValue(): number
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
+	public setQuantityValue(quantityValue: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
+		this.setSemanticPropertyLiteral(property, quantityValue);
 	}
 	
 
 	public setQuantityUnit(quantityUnit: (IUnit & Semanticable)): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit";
-		if (quantityUnit.isSemanticObjectAnonymous()) {
-			if (quantityUnit.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, quantityUnit);
-			else this.setSemanticPropertyReference(property, quantityUnit);
-		}
-		else {
-			this.connector.store(quantityUnit);
-			this.setSemanticPropertyReference(property, quantityUnit);
-		}
+		this.setSemanticPropertyReference(property, quantityUnit);
+		this.connector.store(quantityUnit);
 	}
 	
 
-	public setQuantityValue(quantityValue: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
-		this.setSemanticPropertyLiteral(property, quantityValue);
+	public getQuantityValue(): number
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
 	}
 	
 

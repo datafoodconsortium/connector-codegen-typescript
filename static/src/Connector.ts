@@ -22,7 +22,7 @@ export default class Connector implements IConnector {
     public MEASURES?: ISKOSConcept;
     public PRODUCT_TYPES?: ISKOSConcept;
 
-    private fetchFunction: Function;
+    private fetchFunction: (semanticId: string) => Promise<Response>;
     private factory: IConnectorFactory;
     private importer: IConnectorImporter;
     private exporter: IConnectorExporter;
@@ -30,7 +30,7 @@ export default class Connector implements IConnector {
 
     public constructor() {
         this.storeObject = new ConnectorStoreMap();
-        this.fetchFunction = async (semanticId: string) => (await fetch(semanticId)).json;
+        this.fetchFunction = async (semanticId: string) => (await fetch(semanticId));
         this.factory = new ConnectorFactory(this);
         this.importer = new ConnectorImporterJsonldStream(context);
         this.exporter = new ConnectorExporterJsonldStream(context); //{ "@vocab": "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#" });
@@ -49,6 +49,7 @@ export default class Connector implements IConnector {
         return this.factory;
     }
 
+    // TODO: handle only and limit optional parameters.
     public async import(data: string, options?: IConnectorImportOptions): Promise<Array<Semanticable>> {
         return new Promise(async (resolve, reject) => {
             try { 
@@ -74,7 +75,7 @@ export default class Connector implements IConnector {
         });
     }
 
-    // TODO: manage options overriding
+    // TODO: manage options overriding.
     private async importThesaurus(data: any, options?: IConnectorImportOptions): Promise<any> {
         let conceptScheme: Semanticable | undefined = undefined; 
         const concepts = new Map<string, Semanticable>();
@@ -141,8 +142,8 @@ export default class Connector implements IConnector {
         if (!store.has(semanticObjectId)) {
             const fetchFunction = options?.fetch? options.fetch : this.fetchFunction;
             const importer = options?.importer? { importer: options.importer } : {};
-            const document: string = await fetchFunction(semanticObjectId);
-            const semanticObjects = await this.import(document, importer);
+            const document: Response = await fetchFunction(semanticObjectId);
+            const semanticObjects = await this.import(await document.text(), importer);
             store.setAll(semanticObjects);
             return semanticObjects.find(semanticObject => semanticObject.getSemanticId() === semanticObjectId);
         }
@@ -154,7 +155,7 @@ export default class Connector implements IConnector {
         this.factory = factory;
     }
 
-    public setDefaultFetchFunction(fetch: (semanticId: string) => Promise<string>): void {
+    public setDefaultFetchFunction(fetch: (semanticId: string) => Promise<Response>): void {
         this.fetchFunction = fetch;
     }
 

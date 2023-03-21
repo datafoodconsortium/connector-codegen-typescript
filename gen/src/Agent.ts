@@ -22,8 +22,8 @@
  * SOFTWARE.
 */
 
-import Localizable from "./Localizable.js"
 import Identifiable from "./Identifiable.js"
+import Localizable from "./Localizable.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -43,6 +43,15 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 		if (parameters.localizations) parameters.localizations.forEach(e => this.addLocalization(e));
 	}
 
+	public removeLocalization(localization: (Localizable & Semanticable)): void {
+		throw new Error("Not yet implemented.");
+	}
+	
+
+	public addLocalization(localization: (Localizable & Semanticable)): void {
+	}
+	
+
 	public async getLocalizations(options?: IGetterOptions): Promise<Array<(Localizable & Semanticable)>>
 	 {
 		const results = new Array<(Localizable & Semanticable)>();
@@ -52,24 +61,6 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 			if (semanticObject) results.push(<(Localizable & Semanticable)> semanticObject);
 		}
 		return results;
-	}
-	
-
-	public removeLocalization(localization: (Localizable & Semanticable)): void {
-		throw new Error("Not yet implemented.");
-	}
-	
-
-	public addLocalization(localization: (Localizable & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress";
-		if (localization.isSemanticObjectAnonymous()) {
-			if (localization.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, localization);
-			else this.addSemanticPropertyReference(property, localization);
-		}
-		else {
-			this.connector.store(localization);
-			this.addSemanticPropertyReference(property, localization);
-		}
 	}
 	
 

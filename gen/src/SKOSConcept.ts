@@ -22,19 +22,19 @@
  * SOFTWARE.
 */
 
-import ISKOSConceptScheme from "./ISKOSConceptScheme.js"
 import ISKOSLabel from "./ISKOSLabel.js"
 import ISKOSConcept from "./ISKOSConcept.js"
-import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
+import ISKOSConceptScheme from "./ISKOSConceptScheme.js"
+import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
-export default class SKOSConcept extends SemanticObjectAnonymous implements ISKOSConcept {
+export default class SKOSConcept extends SemanticObject implements ISKOSConcept {
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable}) {
+	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable}) {
 		const type: string = "http://www.w3.org/2004/02/skos/core#Concept";
 		
 		if (parameters.other) {
@@ -47,30 +47,12 @@ export default class SKOSConcept extends SemanticObjectAnonymous implements ISKO
 		this.connector = parameters.connector;
 		
 		
+		if (!parameters.doNotStore)
+			this.connector.store(this);
 		
 	}
 
-	public async getScheme(options?: IGetterOptions): Promise<Array<(ISKOSConceptScheme & Semanticable)>>
-	 {
-		const results = new Array<(ISKOSConceptScheme & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://www.w3.org/2004/02/skos/core#inScheme");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(ISKOSConceptScheme & Semanticable)> semanticObject);
-		}
-		return results;
-	}
-	
-
-	public async getNarrower(options?: IGetterOptions): Promise<Array<(ISKOSConcept & Semanticable)>>
-	 {
-		const results = new Array<(ISKOSConcept & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://www.w3.org/2004/02/skos/core#narrower");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(ISKOSConcept & Semanticable)> semanticObject);
-		}
-		return results;
+	public addBroader(broader: (ISKOSConcept & Semanticable)): void {
 	}
 	
 
@@ -86,7 +68,19 @@ export default class SKOSConcept extends SemanticObjectAnonymous implements ISKO
 	}
 	
 
-	public removeScheme(scheme: (ISKOSConceptScheme & Semanticable)): void {
+	public async getScheme(options?: IGetterOptions): Promise<Array<(ISKOSConceptScheme & Semanticable)>>
+	 {
+		const results = new Array<(ISKOSConceptScheme & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://www.w3.org/2004/02/skos/core#inScheme");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<(ISKOSConceptScheme & Semanticable)> semanticObject);
+		}
+		return results;
+	}
+	
+
+	public removeBroader(broader: (ISKOSConcept & Semanticable)): void {
 		throw new Error("Not yet implemented.");
 	}
 	
@@ -103,21 +97,17 @@ export default class SKOSConcept extends SemanticObjectAnonymous implements ISKO
 	}
 	
 
-	public removePrefLabel(prefLabel: (ISKOSLabel & Semanticable)): void {
-		throw new Error("Not yet implemented.");
-	}
-	
-
-	public addPrefLabel(prefLabel: (ISKOSLabel & Semanticable)): void {
-	}
-	
-
 	public removeNarrower(narrower: (ISKOSConcept & Semanticable)): void {
 		throw new Error("Not yet implemented.");
 	}
 	
 
-	public removeBroader(broader: (ISKOSConcept & Semanticable)): void {
+	public removePrefLabel(prefLabel: (ISKOSLabel & Semanticable)): void {
+		throw new Error("Not yet implemented.");
+	}
+	
+
+	public removeScheme(scheme: (ISKOSConceptScheme & Semanticable)): void {
 		throw new Error("Not yet implemented.");
 	}
 	
@@ -126,11 +116,23 @@ export default class SKOSConcept extends SemanticObjectAnonymous implements ISKO
 	}
 	
 
-	public addNarrower(narrower: (ISKOSConcept & Semanticable)): void {
+	public async getNarrower(options?: IGetterOptions): Promise<Array<(ISKOSConcept & Semanticable)>>
+	 {
+		const results = new Array<(ISKOSConcept & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://www.w3.org/2004/02/skos/core#narrower");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<(ISKOSConcept & Semanticable)> semanticObject);
+		}
+		return results;
 	}
 	
 
-	public addBroader(broader: (ISKOSConcept & Semanticable)): void {
+	public addPrefLabel(prefLabel: (ISKOSLabel & Semanticable)): void {
+	}
+	
+
+	public addNarrower(narrower: (ISKOSConcept & Semanticable)): void {
 	}
 	
 

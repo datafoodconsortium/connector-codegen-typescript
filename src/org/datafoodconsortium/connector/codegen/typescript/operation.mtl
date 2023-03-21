@@ -83,7 +83,9 @@ for await (const semanticId of properties) {
 	const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
 	if (semanticObject) results.push(<([returned.type.name/] & Semanticable)> semanticObject);
 }
-return results;[elseif (not returned.type.isPrimitive())]
+return results;[elseif (returned.type.isBlankNode())]
+const blankNode: any = this.getSemanticPropertyAnonymous("[map/]");
+return <[returned.type.name /] & Semanticable> this.connector.getDefaultFactory().createFromRdfDataset(blankNode);[elseif (not returned.type.isPrimitive())]
 let result: [type/] = undefined;
 const semanticId = this.getSemanticProperty("[map/]");
 if (semanticId) {
@@ -100,14 +102,7 @@ return this.getSemanticProperty("[map/]");[/if]
 [comment throws getObject is null/]
 [let parameter: Parameter = operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->at(1)][let property: Property = getPropertyOfSetter(aClass, operation)]
 const property: string = "[property.getValue(property.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]";
-[if (parameter.type.isPrimitive())]this.setSemanticPropertyLiteral(property, [parameter.name/]);[else]if ([parameter.name/].isSemanticObjectAnonymous()) {
-	if ([parameter.name/].hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, [parameter.name/]);
-	else this.setSemanticPropertyReference(property, [parameter.name/]);
-}
-else {
-	this.connector.store([parameter.name/]);
-	this.setSemanticPropertyReference(property, [parameter.name/]);
-}[/if][/let][/let]
+[if (parameter.type.isPrimitive())]this.setSemanticPropertyLiteral(property, [parameter.name/]);[else]this.setSemanticProperty[if (parameter.type.isBlankNode())]Anonymous[else]Reference[/if](property, [parameter.name/]);[if (not parameter.type.isBlankNode())]['\n'/]this.connector.store([parameter.name/]);[/if][/if][/let][/let]
 [/template]
 
 [template public generateRemoverBody(aClass: Class, operation: Operation)]
@@ -122,7 +117,7 @@ throw new Error("Not yet implemented.");
 [if (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return))->isEmpty())]
 void[else]
 [let parameter: Parameter = operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return))->at(1)]
-[if (operation.isGetter() and not parameter.type.isPrimitive() and not parameter.type.isBlankNode())]Promise<[operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return)).genOperationParameter()/][if (parameter.upper = 1)] | undefined[/if]>[else][operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return)).genOperationParameter()/][/if]
+[if (operation.isGetter() and not parameter.type.isPrimitive())]Promise<[operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return)).genOperationParameter()/][if (parameter.upper = 1)] | undefined[/if]>[else][operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return)).genOperationParameter()/][/if]
 [/let]
 [/if]
 [/template]

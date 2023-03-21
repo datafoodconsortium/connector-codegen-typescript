@@ -53,27 +53,9 @@ export default class Address extends SemanticObject implements Localizable {
 		if (parameters.country) this.setCountry(parameters.country);
 	}
 
-	public setCountry(country: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCountry";
-		this.setSemanticPropertyLiteral(property, country);
-	}
-	
-
-	public getStreet(): string
+	public getCountry(): string
 	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet");
-	}
-	
-
-	public getPostalCode(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPostalCode");
-	}
-	
-
-	public setStreet(street: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet";
-		this.setSemanticPropertyLiteral(property, street);
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCountry");
 	}
 	
 
@@ -83,9 +65,21 @@ export default class Address extends SemanticObject implements Localizable {
 	}
 	
 
-	public getCountry(): string
+	public setStreet(street: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet";
+		this.setSemanticPropertyLiteral(property, street);
+	}
+	
+
+	public getPostalCode(): string
 	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCountry");
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPostalCode");
+	}
+	
+
+	public getStreet(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasStreet");
 	}
 	
 
@@ -98,6 +92,12 @@ export default class Address extends SemanticObject implements Localizable {
 	public setCity(city: string): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCity";
 		this.setSemanticPropertyLiteral(property, city);
+	}
+	
+
+	public setCountry(country: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCountry";
+		this.setSemanticPropertyLiteral(property, country);
 	}
 	
 

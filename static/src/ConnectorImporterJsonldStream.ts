@@ -17,33 +17,93 @@ export default class ConnectorImporterJsonldStream implements IConnectorImporter
     public async import(json: string, options?: IConnectorImporterOptions): Promise<Array<DatasetExt>> {
         const context = options?.context? options.context : this.context;
         const parser = new JsonLdParser({ context: context });
-        let datasets: Array<DatasetExt> = new Array<DatasetExt>();
 
+        // imported datasets results.
+        const datasets: Array<DatasetExt> = new Array<DatasetExt>();
+
+        // imported blank nodes.
+        const blankNodes: Array<DatasetExt> = new Array<DatasetExt>();
+        
+        // Map<blank node name, index in the blankNodes array>.
+        const blankNodesIndex: Map<string, number> = new Map<string, number>();
+        
+        // Holds the dataset(s) which contain quad(s) pointing to blank node(s).
+        const datasetsWithMissingBlankNodes: Map<string, DatasetExt> = new Map<string, DatasetExt>();
+
+        // Make a stream with the data to import.
         const input = new Readable();
         input.push(json);
         input.push(null);
 
+        // Start the import processing.
         const output = parser.import(input);
         
+        // On each quad imported we fill the appropriate datasets.
+        // If the quad is a blank node we add it to the blankNodes array, 
+        // otherwise we add it to the datasets array.
         output.on('data', (quad) => {
             const subject: string = quad.subject.value;
-            const dataset: DatasetExt | undefined = datasets.find((dataset) => dataset.some((quad: QuadExt) => quad.subject.value === subject));
+            const isBlankNode: boolean = (quad.subject.termType === "BlankNode");
 
-            if (dataset) dataset.add(quad);
+            // Defines the array to add the quad into.
+            const source: Array<DatasetExt> = isBlankNode? blankNodes: datasets;
 
-            else {
-                const dataset = datasetFactory.dataset();
-                dataset.add(quad);
-                datasets.push(dataset);
+            // We try to find the existing dataset on which this quad belongs to.
+            let dataset: DatasetExt | undefined = source.find((dataset) => dataset.some((quad: QuadExt) => quad.subject.value === subject));
+
+            // If this is the first quad of its dataset, we create the dataset.
+            if (!dataset) {
+                dataset = datasetFactory.dataset();
+                const length: number = source.push(dataset);
+                
+                // For a blank node we also keep a track to it associating 
+                // its name to its index in the blankNodes array. This will 
+                // be used to attach the blank nodes at the end of the process.
+                if (isBlankNode)
+                    blankNodesIndex.set(subject, length - 1);
             }
+            
+            // At this point we have a valid dataset to add the quad to.
+            dataset.add(quad);
 
+            // If the quad refers to a blank node, we keep a track of this dataset 
+            // so the blank node could be attached later.
+            if (quad.object.termType === "BlankNode")
+                datasetsWithMissingBlankNodes.set(quad.object.value, dataset);
+
+            // Some other objects could be notified when a quad is imported.
             if (options && options.callbacks)
                 options.callbacks.forEach(callback => callback(quad));
         });
 
         return new Promise((resolve, reject) => {
+            // If an error occured during the import process, we reject the promise.
             output.on('error', (error) => reject(error));
-            output.on('finish', () => resolve(datasets));
+
+            // When the import is done without any error.
+            output.on('finish', () => {
+                // We atatch the blank nodes to the datasets which refer to them.
+                datasetsWithMissingBlankNodes.forEach((dataset, blankNodeName) => {
+                    const blankNodeIndex: number | undefined = blankNodesIndex.get(blankNodeName);
+                    const errorMessage: string = "An imported object refers to a mising blank node " + blankNodeName + ". Check the imported data.";
+
+                    // We should find a blank node index associated to the blank node name.
+                    if (blankNodeIndex !== undefined) {
+                        const blankNodeDataset: DatasetExt | undefined = blankNodes.at(blankNodeIndex);
+
+                        // When we find the blank node we add its quads to the corresponding dataset.
+                        if (blankNodeDataset) dataset.addAll(blankNodeDataset);
+
+                        // Otherwise the blank node was not be added to the blankNodes array.
+                        else throw new Error(errorMessage);
+                    }
+
+                    // Otherwise, the blank node was not been tracked at the dataset creation.
+                    else throw new Error(errorMessage);
+                });
+
+                resolve(datasets);
+            });
         });
     }
 

@@ -22,15 +22,14 @@
  * SOFTWARE.
 */
 
-import ICatalogItem from "./ICatalogItem.js"
-import IPrice from "./IPrice.js"
 import ICustomerCategory from "./ICustomerCategory.js"
+import IPrice from "./IPrice.js"
 import IOffer from "./IOffer.js"
+import ICatalogItem from "./ICatalogItem.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
-import DatasetExt from "rdf-ext/lib/Dataset.js"
 
 export default class Offer extends SemanticObject implements IOffer {
 	
@@ -57,27 +56,46 @@ export default class Offer extends SemanticObject implements IOffer {
 		if (parameters.stockLimitation) this.setStockLimitation(parameters.stockLimitation);
 	}
 
-	public getStockLimitation(): number
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#stockLimitation");
-	}
-	
-
 	public setStockLimitation(stockLimitation: number): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#stockLimitation";
 		this.setSemanticPropertyLiteral(property, stockLimitation);
 	}
 	
+
+	public getStockLimitation(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#stockLimitation"));
+	}
+	
+	public setPrice(price: (IPrice & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#price";
+		this.setSemanticPropertyAnonymous(property, price);
+	}
+	
+
+	public async getPrice(options?: IGetterOptions): Promise<(IPrice & Semanticable) | undefined>
+	 {
+		const blankNode: any = this.getSemanticPropertyAnonymous("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#price");
+		return <IPrice & Semanticable> this.connector.getDefaultFactory().createFromRdfDataset(blankNode);
+	}
+	
+	public async getCustomerCategory(options?: IGetterOptions): Promise<(ICustomerCategory & Semanticable) | undefined>
+	 {
+		let result: (ICustomerCategory & Semanticable) | undefined = undefined;
+		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredTo");
+		if (semanticId) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) result = <(ICustomerCategory & Semanticable) | undefined> semanticObject;
+		}
+		return result;
+		
+	}
+	
+
 	public setOfferedItem(offeredItem: (ICatalogItem & Semanticable)): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredItem";
-		if (offeredItem.isSemanticObjectAnonymous()) {
-			if (offeredItem.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, offeredItem);
-			else this.setSemanticPropertyReference(property, offeredItem);
-		}
-		else {
-			this.connector.store(offeredItem);
-			this.setSemanticPropertyReference(property, offeredItem);
-		}
+		this.setSemanticPropertyReference(property, offeredItem);
+		this.connector.store(offeredItem);
 	}
 	
 
@@ -94,70 +112,10 @@ export default class Offer extends SemanticObject implements IOffer {
 	}
 	
 
-	public async getCustomerCategory(options?: IGetterOptions): Promise<(ICustomerCategory & Semanticable) | undefined>
-	 {
-		let result: (ICustomerCategory & Semanticable) | undefined = undefined;
-		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredTo");
-		if (semanticId) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) result = <(ICustomerCategory & Semanticable) | undefined> semanticObject;
-		}
-		return result;
-		
-	}
-	
-
 	public setCustomerCategory(customerCategory: (ICustomerCategory & Semanticable)): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredTo";
-		if (customerCategory.isSemanticObjectAnonymous()) {
-			if (customerCategory.hasSemanticPropertiesOtherThanType()) this.setSemanticPropertyAnonymous(property, customerCategory);
-			else this.setSemanticPropertyReference(property, customerCategory);
-		}
-		else {
-			this.connector.store(customerCategory);
-			this.setSemanticPropertyReference(property, customerCategory);
-		}
-	}
-	
-	/**
-	 * Est-ce que c'est vraiment performant de recréer le BN à la volée?
-	 * On pourrait garder les objets en propriétés plutot que de les mettre uniquement dans le dataset.
-	 * 
-	 * --> On le recréer uniquement si il n'est pas setté dans les propriétés ?
-	 * Pareil pour toutes les autres propriétés: on va les chercher dans le store uniquement si elles ne 
-	 * sont pas stockées dans l'objet?
-	 * 
-	 * --> sorte de cache pour les BN qui évite de récréer l'objet
-	 */
-	public async getPrice(options?: IGetterOptions): Promise<(IPrice & Semanticable) | undefined>
-	 {
-		const blankNode: DatasetExt = this.getSemanticPropertyAnonymous("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#price");
-		const result: (IPrice & Semanticable) = <(IPrice & Semanticable)> this.connector.getDefaultFactory().createFromRdfDataset(blankNode);
-		//if (semanticId) {
-		//	const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-		//	if (semanticObject) result = <(IPrice & Semanticable) | undefined> semanticObject;
-		//}
-		return result;
-		
-	}
-	
-
-	public setPrice(price: (IPrice & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#price";
-		if (price.isSemanticObjectAnonymous()) {
-			if (price.hasSemanticPropertiesOtherThanType()) {
-				//console.log("Anonym")
-				this.setSemanticPropertyAnonymous(property, price);
-				// @ts-ignore
-				//console.log(this._rdfDataset);
-			} 
-				
-			else this.setSemanticPropertyReference(property, price);
-		}
-		else {
-			this.connector.store(price);
-			this.setSemanticPropertyReference(property, price);
-		}
+		this.setSemanticPropertyReference(property, customerCategory);
+		this.connector.store(customerCategory);
 	}
 	
 

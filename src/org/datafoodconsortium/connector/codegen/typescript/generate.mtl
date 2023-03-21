@@ -15,7 +15,7 @@
 [file ('index.ts', false, 'UTF-8')]
 [for (importedPackage: PackageImport | model.packageImport->select(pi: PackageImport | pi.importedPackage.name <> 'org.datafoodconsortium.semantizer'))][generateIndex(importedPackage.importedPackage.ownedMember)/][/for]
 [generateIndex(model.ownedMember)/]
-export { default as connector } from './Connector.js';
+export { default as Connector } from './Connector.js';
 export { default as ConnectorStoreMap } from './ConnectorStoreMap.js';
 export { default as ConnectorFactory } from './ConnectorFactory.js';
 export { default as ConnectorExporterJsonldStream } from './ConnectorExporterJsonldStream.js';

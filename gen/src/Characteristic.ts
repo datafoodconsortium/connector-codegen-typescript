@@ -22,10 +22,10 @@
  * SOFTWARE.
 */
 
-import QuantitativeValue from "./QuantitativeValue.js"
-import ICharacteristic from "./ICharacteristic.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import ICharacteristic from "./ICharacteristic.js"
 import IUnit from "./IUnit.js"
+import QuantitativeValue from "./QuantitativeValue.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -43,9 +43,8 @@ export default abstract class Characteristic extends QuantitativeValue implement
 		
 		
 	}
-
+	
 	abstract getQuantityDimension(): Promise<(ICharacteristicDimension & Semanticable) | undefined>;
-
 	abstract setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void
 
 
