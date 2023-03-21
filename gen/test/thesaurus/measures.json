@@ -8,7 +8,7 @@
   "@type" : [ "http://www.w3.org/2002/07/owl#Ontology" ],
   "@graph" : [ {
     "@id" : "dfc-m:AllergenDimension",
-    "@type" : [ "skos:Collection" ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-m:Dimension"
     } ],

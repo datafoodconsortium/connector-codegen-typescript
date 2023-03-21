@@ -4,43 +4,57 @@ import Connector from "../lib/Connector.js";
 
 const connector = new Connector();
 
-const data = `{"@context":{"@vocab":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"},"@id":"http://myplatform.com/person1","@type":"Person","familyName":"Lecoq","firstName":"Maxime","hasAddress":{"@id":"http://myplatform.com/address/address1"}}`;
+const address = new Address({
+    connector: connector,
+    semanticId: "http://myplatform.com/address/address1"
+});
+
+const person = new Person({
+    connector: connector,
+    semanticId: "http://myplatform.com/person1",
+    firstName: "John",
+    lastName: "Smith"
+});
+
+const json = ``;
 
 test('Person:import', async () => {
-    const address = new Address({
-        connector: connector,
-        semanticId: "http://myplatform.com/address/address1"
-    });
-
-    const person = new Person({
-        connector: connector,
-        semanticId: "http://myplatform.com/person1",
-        firstName: "Maxime",
-        lastName: "Lecoq"
-    });
-
-    person.addLocalization(address);
-    
-    const imported = (await connector.import(data))[0];
-    expect(imported.equals(person)).toStrictEqual(true);
+    const imported = await connector.import(json);
+    const importedPerson = imported[0];
+    expect(imported.length).toStrictEqual(1);
+    expect(importedPerson.equals(person)).toStrictEqual(true);
 });
 
 test('Person:export', async () => {
-    const address = new Address({
-        connector: connector,
-        semanticId: "http://myplatform.com/address/address1",
-        city: "Briouze"
-    });
-
-    const person = new Person({
-        connector: connector,
-        semanticId: "http://myplatform.com/person1",
-        firstName: "Maxime",
-        lastName: "Lecoq"
-    });
-
-    person.addLocalization(address);
-    
     const serialized = await connector.export([person]);
-    expect(serialized).toStrictEqual(data);
+    console.log(serialized);
+    expect(serialized).toStrictEqual(json);
+});
+
+test('Person:getSemanticId', async () => {
+    expect(person.getSemanticId()).toStrictEqual("http://myplatform.com/person1");
+});
+
+test('Person:getFirstName', async () => {
+    expect(person.getFirstName()).toStrictEqual("John");
+});
+
+test('Person:getLastName', async () => {
+    expect(person.getLastName()).toStrictEqual("Smith");
+});
+
+test('Person:getLocalizations', async () => {
+    const localizations = await person.getLocalizations();
+    expect(localizations.length).toStrictEqual(1);
+    expect(localizations[0].equals(address)).toStrictEqual(true);
+});
+
+test('Person:setFirstName', async () => {
+    person.setFirstName("John2");
+    expect(person.getFirstName()).toStrictEqual("John2");
+});
+
+test('Person:setLastName', async () => {
+    person.setLastName("Smith2");
+    expect(person.getLastName()).toStrictEqual("Smith2");
 });

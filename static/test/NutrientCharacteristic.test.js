@@ -10,28 +10,40 @@ await connector.loadMeasures(JSON.stringify(measures));
 const kilogram = connector.MEASURES.UNIT.QUANTITYUNIT.KILOGRAM;
 const nutrientDimension = connector.MEASURES.DIMENSION.NUTRIENTDIMENSION.CALCIUM;
 
-const data = `{"@context":{"@vocab":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"},"@id":"_:b2","@type":"NutrientCharacteristic","hasNutrientDimension":{"@id":"dfc-m:Calcium"},"hasUnit":{"@id":"dfc-m:Kilogram"},"value":"10"}`;
+const nutrientCharacteristic = new NutrientCharacteristic({ 
+    connector: connector, 
+    value: 10, 
+    unit: kilogram, 
+    nutrientDimension: nutrientDimension
+});
+
+const json = ``;
 
 test('NutrientCharacteristic:import', async () => {
-    const nutrientCharacteristic = new NutrientCharacteristic({ 
-        connector: connector, 
-        value: 10, 
-        unit: kilogram, 
-        nutrientDimension: nutrientDimension
-    });
-    
-    const imported = (await connector.import(data))[0];
-    expect(imported.equals(nutrientCharacteristic)).toStrictEqual(true);
+    const imported = await connector.import(json);
+    const importedNutrientCharacteristic = imported[0];
+    expect(imported.length).toStrictEqual(1);
+    expect(importedNutrientCharacteristic.equals(nutrientCharacteristic)).toStrictEqual(true);
 });
 
 test('NutrientCharacteristic:export', async () => {
-    const nutrientCharacteristic = new NutrientCharacteristic({ 
-        connector: connector, 
-        value: 10, 
-        unit: kilogram, 
-        nutrientDimension: nutrientDimension
-    });
-    
     const serialized = await connector.export([nutrientCharacteristic]);
-    expect(serialized).toStrictEqual(data);
+    console.log(serialized);
+    expect(serialized).toStrictEqual(json);
+});
+
+test('NutrientCharacteristic:getSemanticId', async () => {
+    expect(nutrientCharacteristic.getSemanticId()).toStrictEqual(undefined);
+});
+
+test('NutrientCharacteristic:getQuantityValue', async () => {
+    expect(nutrientCharacteristic.getQuantityValue()).toStrictEqual(10);
+});
+
+test('NutrientCharacteristic:getQuantityUnit', async () => {
+    expect(await nutrientCharacteristic.getQuantityUnit()).toStrictEqual(kilogram);
+});
+
+test('NutrientCharacteristic:getQuantityDimension', async () => {
+    expect(await nutrientCharacteristic.getQuantityDimension()).toStrictEqual(nutrientDimension);
 });

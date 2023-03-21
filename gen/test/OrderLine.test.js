@@ -3,41 +3,108 @@ import Order from '../lib/Order.js';
 import Price from '../lib/Price.js';
 import OrderLine from '../lib/OrderLine.js';
 import Connector from "../lib/Connector.js";
-
-const connector = new Connector();
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 
+const connector = new Connector();
 await connector.loadMeasures(JSON.stringify(measures));
 
-const expected = `{"@context":{"@vocab":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"},"@graph":[{"@id":"_:b1","@type":"Price","VATrate":"19.9","hasUnit":{"@id":"dfc-m:Euro"},"value":"5.42"},{"@id":"http://myplatform.com/orderLine1","@type":"OrderLine","concerns":{"@id":"http://myplatform.com/offer1"},"hasPrice":{"@id":"_:b1"},"partOf":{"@id":"http://myplatform.com/order1"},"quantity":"2"}]}`;
+const offer = new Offer({
+    connector: connector,
+    semanticId: "http://myplatform.com/offer1"
+});
+
+const order = new Order({
+    connector: connector,
+    semanticId: "http://myplatform.com/order1"
+});
+
+const price = new Price({
+    connector: connector,
+    value: 5.42,
+    vatRate: 19.9,
+    unit: connector.MEASURES.UNIT.CURRENCYUNIT.EURO
+});
+
+const orderLine = new OrderLine({
+    connector: connector,
+    semanticId: "http://myplatform.com/orderLine1",
+    order: order,
+    offer: offer,
+    price: price,
+    quantity: 2
+});
+
+const json = ``;
+
+test('OrderLine:import', async () => {
+    const imported = await connector.import(json);
+    const importedOrderLine = imported[0];
+    expect(imported.length).toStrictEqual(1);
+    expect(importedOrderLine.equals(orderLine)).toStrictEqual(true);
+});
 
 test('OrderLine:export', async () => {
-    const offer = new Offer({
-        connector: connector,
-        semanticId: "http://myplatform.com/offer1"
-    });
+    const serialized = await connector.export([orderLine]);
+    console.log(serialized);
+    expect(serialized).toStrictEqual(json);
+});
 
-    const order = new Order({
-        connector: connector,
-        semanticId: "http://myplatform.com/order1"
-    });
+test('OrderLine:getSemanticId', async () => {
+    expect(orderLine.getSemanticId()).toStrictEqual("http://myplatform.com/orderLine1");
+});
 
-    const price = new Price({
+test('OrderLine:getOrder', async () => {
+    const expected = await orderLine.getOrder();
+    expect(expected.equals(order)).toStrictEqual(true);
+});
+
+test('OrderLine:getOffer', async () => {
+    const expected = await orderLine.getOffer();
+    expect(expected.equals(offer)).toStrictEqual(true);
+});
+
+test('OrderLine:getPrice', async () => {
+    const expected = await orderLine.getPrice();
+    expect(expected.equals(price)).toStrictEqual(true);
+});
+
+test('OrderLine:getQuantity', async () => {
+    expect(orderLine.getQuantity()).toStrictEqual(2);
+});
+
+test('OrderLine:setOrder', async () => {
+    const order2 = new Order({
         connector: connector,
-        value: 5.42,
-        vatRate: 19.9,
+        semanticId: "http://myplatform.com/order2"
+    });
+    orderLine.setOrder(order2);
+    const expected = await orderLine.getOrder();
+    expect(expected.equals(order2)).toStrictEqual(true);
+});
+
+test('OrderLine:setOffer', async () => {
+    const offer2 = new Offer({
+        connector: connector,
+        semanticId: "http://myplatform.com/offer2"
+    });
+    orderLine.setOffer(offer2);
+    const expected = await orderLine.getOffer();
+    expect(expected.equals(offer2)).toStrictEqual(true);
+});
+
+test('OrderLine:setPrice', async () => {
+    const price2 = new Price({
+        connector: connector,
+        value: 2.8,
+        vatRate: 7,
         unit: connector.MEASURES.UNIT.CURRENCYUNIT.EURO
     });
+    orderLine.setPrice(price2);
+    const expected = await orderLine.getPrice();
+    expect(expected.equals(price2)).toStrictEqual(true);
+});
 
-    const orderLine = new OrderLine({
-        connector: connector,
-        semanticId: "http://myplatform.com/orderLine1",
-        order: order,
-        offer: offer,
-        price: price,
-        quantity: 2
-    });
-
-    const serialized = await connector.export([orderLine]);
-    expect(serialized).toStrictEqual(expected);
+test('OrderLine:setQuantity', async () => {
+    orderLine.setQuantity(3.3);
+    expect(orderLine.getQuantity()).toStrictEqual(3.3);
 });

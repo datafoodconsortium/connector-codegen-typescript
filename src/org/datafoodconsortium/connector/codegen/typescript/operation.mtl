@@ -28,7 +28,7 @@
 }[/template]
 
 [template public generateConstructorBody(class: Class, operation: Operation)]
-[if (class.isAbstract)]if (parameters.other) super({ [if (not class.generalization->isEmpty())]connector: parameters.connector, [/if]semanticId: parameters.semanticId!, other: parameters.other })['\n'/][else]const type: string = "[class.getValue(class.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]";
+[if (class.isAbstract)]if (parameters.other) super({ [if (not class.generalization->isEmpty())]connector: parameters.connector, [/if]semanticId: parameters.semanticId!, other: parameters.other })['\n'/][else]const type: string = parameters.semanticType? parameters.semanticType: "[class.getValue(class.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]";
 
 if (parameters.other) {
 	super({ [if (not class.generalization->isEmpty())]connector: parameters.connector, [/if]semanticId: parameters.semanticId!, other: parameters.other });

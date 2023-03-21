@@ -10,28 +10,40 @@ await connector.loadMeasures(JSON.stringify(measures));
 const kilogram = connector.MEASURES.UNIT.QUANTITYUNIT.KILOGRAM;
 const physicalDimension = connector.MEASURES.DIMENSION.PHYSICALDIMENSION.WEIGHT;
 
-const data = `{"@context":{"@vocab":"http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#"},"@id":"_:b2","@type":"PhysicalCharacteristic","hasPhysicalDimension":{"@id":"dfc-m:Weight"},"hasUnit":{"@id":"dfc-m:Kilogram"},"value":"100"}`;
+const physicalCharacteristic = new PhysicalCharacteristic({ 
+    connector: connector, 
+    value: 100, 
+    unit: kilogram, 
+    physicalDimension: physicalDimension
+});
+
+const json = ``;
 
 test('PhysicalCharacteristic:import', async () => {
-    const physicalCharacteristic = new PhysicalCharacteristic({ 
-        connector: connector, 
-        value: 100, 
-        unit: kilogram, 
-        physicalDimension: physicalDimension
-    });
-    
-    const imported = (await connector.import(data))[0];
-    expect(imported.equals(physicalCharacteristic)).toStrictEqual(true);
+    const imported = await connector.import(json);
+    const importedPhysicalCharacteristic = imported[0];
+    expect(imported.length).toStrictEqual(1);
+    expect(importedPhysicalCharacteristic.equals(physicalCharacteristic)).toStrictEqual(true);
 });
 
 test('PhysicalCharacteristic:export', async () => {
-    const physicalCharacteristic = new PhysicalCharacteristic({ 
-        connector: connector, 
-        value: 100, 
-        unit: kilogram, 
-        physicalDimension: physicalDimension
-    });
-    
     const serialized = await connector.export([physicalCharacteristic]);
-    expect(serialized).toStrictEqual(data);
+    console.log(serialized);
+    expect(serialized).toStrictEqual(json);
+});
+
+test('PhysicalCharacteristic:getSemanticId', async () => {
+    expect(physicalCharacteristic.getSemanticId()).toStrictEqual(undefined);
+});
+
+test('PhysicalCharacteristic:getQuantityValue', async () => {
+    expect(physicalCharacteristic.getQuantityValue()).toStrictEqual(100);
+});
+
+test('PhysicalCharacteristic:getQuantityUnit', async () => {
+    expect(await physicalCharacteristic.getQuantityUnit()).toStrictEqual(kilogram);
+});
+
+test('PhysicalCharacteristic:getQuantityDimension', async () => {
+    expect(await physicalCharacteristic.getQuantityDimension()).toStrictEqual(physicalDimension);
 });

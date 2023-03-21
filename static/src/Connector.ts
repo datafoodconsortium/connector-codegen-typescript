@@ -33,7 +33,8 @@ export default class Connector implements IConnector {
         this.fetchFunction = async (semanticId: string) => (await fetch(semanticId));
         this.factory = new ConnectorFactory(this);
         this.importer = new ConnectorImporterJsonldStream(context);
-        this.exporter = new ConnectorExporterJsonldStream(context); //{ "@vocab": "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#" });
+        const outputContext = "http://static.datafoodconsortium.org/ontologies/context.json";
+        this.exporter = new ConnectorExporterJsonldStream(context, outputContext);
     }
 
     public createAddress(): Localizable {
@@ -42,7 +43,10 @@ export default class Connector implements IConnector {
 
     public async export(objects: Array<Semanticable>, options?: IConnectorExportOptions): Promise<string> {
         const exporter = options?.exporter? options.exporter : this.exporter;
-        return exporter.export(objects);
+        return exporter.export(objects, {
+            inputContext: options?.inputContext,
+            outputContext: options?.outputContext
+        });
     }
 
     public getDefaultFactory(): IConnectorFactory {
