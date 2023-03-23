@@ -22,9 +22,9 @@
  * SOFTWARE.
 */
 
-import Agent from "./Agent.js"
 import IOrder from "./IOrder.js"
 import ISaleSession from "./ISaleSession.js"
+import Agent from "./Agent.js"
 import IOrderLine from "./IOrderLine.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
@@ -56,46 +56,15 @@ export default class Order extends SemanticObject implements IOrder {
 		if (parameters.client) this.setClient(parameters.client);
 	}
 
-	public async getLines(options?: IGetterOptions): Promise<Array<(IOrderLine & Semanticable)>>
-	 {
-		const results = new Array<(IOrderLine & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPart");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(IOrderLine & Semanticable)> semanticObject);
-		}
-		return results;
-	}
-	
-
-	public getNumber(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#orderNumber");
-	}
-	
-
-	public setNumber(number: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#orderNumber";
-		this.setSemanticPropertyLiteral(property, number);
-	}
-	
-
-	public setSaleSession(saleSession: (ISaleSession & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#belongsTo";
-		this.setSemanticPropertyReference(property, saleSession);
-		this.connector.store(saleSession);
+	public setDate(date: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#date";
+		this.setSemanticPropertyLiteral(property, date);
 	}
 	
 
 	public getDate(): string
 	 {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#date");
-	}
-	
-
-	public setDate(date: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#date";
-		this.setSemanticPropertyLiteral(property, date);
 	}
 	
 
@@ -125,10 +94,9 @@ export default class Order extends SemanticObject implements IOrder {
 	}
 	
 
-	public setClient(client: (Agent & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#orderedBy";
-		this.setSemanticPropertyReference(property, client);
-		this.connector.store(client);
+	public getNumber(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#orderNumber");
 	}
 	
 
@@ -142,6 +110,38 @@ export default class Order extends SemanticObject implements IOrder {
 		}
 		return result;
 		
+	}
+	
+
+	public async getLines(options?: IGetterOptions): Promise<Array<(IOrderLine & Semanticable)>>
+	 {
+		const results = new Array<(IOrderLine & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPart");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<(IOrderLine & Semanticable)> semanticObject);
+		}
+		return results;
+	}
+	
+
+	public setNumber(number: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#orderNumber";
+		this.setSemanticPropertyLiteral(property, number);
+	}
+	
+
+	public setSaleSession(saleSession: (ISaleSession & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#belongsTo";
+		this.setSemanticPropertyReference(property, saleSession);
+		this.connector.store(saleSession);
+	}
+	
+
+	public setClient(client: (Agent & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#orderedBy";
+		this.setSemanticPropertyReference(property, client);
+		this.connector.store(client);
 	}
 	
 

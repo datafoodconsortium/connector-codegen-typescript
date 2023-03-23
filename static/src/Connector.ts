@@ -80,7 +80,7 @@ export default class Connector implements IConnector {
     }
 
     // TODO: manage options overriding.
-    private async importThesaurus(data: any, options?: IConnectorImportOptions): Promise<any> {
+    private async importThesaurus(data: any, prefix: string, options?: IConnectorImportOptions): Promise<any> {
         let conceptScheme: Semanticable | undefined = undefined; 
         const concepts = new Map<string, Semanticable>();
         const context = data["@context"];
@@ -88,7 +88,6 @@ export default class Connector implements IConnector {
         const skosConceptScheme: string = skos + "ConceptScheme";
         const skosHasTopConcept: string = skos + "hasTopConcept";
         const skosNarrower: string = skos + "narrower";
-        const dfcM: string = "http://static.datafoodconsortium.org/data/measures.rdf#";
 
         const callback = (semanticObject: Semanticable) => {
             if (semanticObject.isSemanticTypeOf(skosConceptScheme)) conceptScheme = semanticObject;
@@ -104,7 +103,7 @@ export default class Connector implements IConnector {
             const narrowers = parent.getSemanticPropertyAll(skosNarrower);
 
             narrowers.forEach((narrower: string) => {
-                const name: string = narrower.split(dfcM)[1].toUpperCase();
+                const name: string = narrower.split(prefix)[1].toUpperCase();
                 const concept: Semanticable | undefined = concepts.get(narrower);
                 if (concept) {
                     // @ts-ignore
@@ -116,7 +115,7 @@ export default class Connector implements IConnector {
 
         // @ts-ignore: if the conceptScheme does not exist, an exception should have be already throwned
         conceptScheme.getSemanticPropertyAll(skosHasTopConcept).forEach((topConcept: any) => {
-            const name: string = topConcept.split(dfcM)[1].toUpperCase();
+            const name: string = topConcept.split(prefix)[1].toUpperCase();
             const concept: Semanticable | undefined = concepts.get(topConcept);
             if (!concept)
                 throw new Error("The thesaurus top concept " + topConcept + " was not found.");
@@ -129,15 +128,18 @@ export default class Connector implements IConnector {
     }
 
     public async loadFacets(facets: any): Promise<void> {
-        this.FACETS = await this.importThesaurus(facets);
+        const prefix: string = "http://static.datafoodconsortium.org/data/productGlossary_Facet.rdf#";
+        this.FACETS = await this.importThesaurus(facets, prefix);
     }
 
     public async loadMeasures(measures: any): Promise<void> {
-        this.MEASURES = await this.importThesaurus(measures);
+        const prefix: string = "http://static.datafoodconsortium.org/data/measures.rdf#";
+        this.MEASURES = await this.importThesaurus(measures, prefix);
     }
 
     public async loadProductTypes(productTypes: any): Promise<void> {
-        this.PRODUCT_TYPES = await this.importThesaurus(productTypes);
+        const prefix: string = "http://static.datafoodconsortium.org/data/productTypes.rdf#";
+        this.PRODUCT_TYPES = await this.importThesaurus(productTypes, prefix);
     }
 
     public async fetch(semanticObjectId: string, options?: IGetterOptions): Promise<Semanticable | undefined> {

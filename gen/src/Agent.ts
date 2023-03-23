@@ -43,18 +43,6 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 		if (parameters.localizations) parameters.localizations.forEach(e => this.addLocalization(e));
 	}
 
-	public async getLocalizations(options?: IGetterOptions): Promise<Array<(Localizable & Semanticable)>>
-	 {
-		const results = new Array<(Localizable & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(Localizable & Semanticable)> semanticObject);
-		}
-		return results;
-	}
-	
-
 	public removeLocalization(localization: (Localizable & Semanticable)): void {
 		throw new Error("Not yet implemented.");
 	}
@@ -70,6 +58,18 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 			this.connector.store(localization);
 			this.addSemanticPropertyReference(property, localization);
 		}
+	}
+	
+
+	public async getLocalizations(options?: IGetterOptions): Promise<Array<(Localizable & Semanticable)>>
+	 {
+		const results = new Array<(Localizable & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<(Localizable & Semanticable)> semanticObject);
+		}
+		return results;
 	}
 	
 

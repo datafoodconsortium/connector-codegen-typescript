@@ -22,8 +22,8 @@
  * SOFTWARE.
 */
 
-import IOffer from "./IOffer.js"
 import ISaleSession from "./ISaleSession.js"
+import IOffer from "./IOffer.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -54,6 +54,35 @@ export default class SaleSession extends SemanticObject implements ISaleSession 
 		if (parameters.offers) parameters.offers.forEach(e => this.addOffer(e));
 	}
 
+	public getBeginDate(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#beginDate");
+	}
+	
+
+	public getEndDate(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#endDate");
+	}
+	
+
+	public setBeginDate(beginDate: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#beginDate";
+		this.setSemanticPropertyLiteral(property, beginDate);
+	}
+	
+
+	public setEndDate(endDate: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#endDate";
+		this.setSemanticPropertyLiteral(property, endDate);
+	}
+	
+	public setQuantity(quantity: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity";
+		this.setSemanticPropertyLiteral(property, quantity);
+	}
+	
+
 	public async getOffers(options?: IGetterOptions): Promise<Array<(IOffer & Semanticable)>>
 	 {
 		const results = new Array<(IOffer & Semanticable)>();
@@ -66,9 +95,9 @@ export default class SaleSession extends SemanticObject implements ISaleSession 
 	}
 	
 
-	public setQuantity(quantity: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity";
-		this.setSemanticPropertyLiteral(property, quantity);
+	public getQuantity(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity"));
 	}
 	
 
@@ -82,35 +111,6 @@ export default class SaleSession extends SemanticObject implements ISaleSession 
 			this.connector.store(offer);
 			this.addSemanticPropertyReference(property, offer);
 		}
-	}
-	
-
-	public getQuantity(): number
-	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity"));
-	}
-	
-	public getBeginDate(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#beginDate");
-	}
-	
-
-	public setEndDate(endDate: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#endDate";
-		this.setSemanticPropertyLiteral(property, endDate);
-	}
-	
-
-	public getEndDate(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#endDate");
-	}
-	
-
-	public setBeginDate(beginDate: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#beginDate";
-		this.setSemanticPropertyLiteral(property, beginDate);
 	}
 	
 

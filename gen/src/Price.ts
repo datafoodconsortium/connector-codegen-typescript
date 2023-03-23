@@ -22,8 +22,8 @@
  * SOFTWARE.
 */
 
-import IUnit from "./IUnit.js"
 import IPrice from "./IPrice.js"
+import IUnit from "./IUnit.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -51,18 +51,6 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 		if (parameters.unit) this.setUnit(parameters.unit);
 	}
 
-	public setVatRate(vatRate: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate";
-		this.setSemanticPropertyLiteral(property, vatRate);
-	}
-	
-
-	public getValue(): number
-	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
-	}
-	
-
 	public setValue(value: number): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
 		this.setSemanticPropertyLiteral(property, value);
@@ -76,6 +64,24 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 	}
 	
 
+	public getValue(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
+	}
+	
+
+	public getVatRate(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate"));
+	}
+	
+
+	public setVatRate(vatRate: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate";
+		this.setSemanticPropertyLiteral(property, vatRate);
+	}
+	
+
 	public async getUnit(options?: IGetterOptions): Promise<(IUnit & Semanticable) | undefined>
 	 {
 		let result: (IUnit & Semanticable) | undefined = undefined;
@@ -86,12 +92,6 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 		}
 		return result;
 		
-	}
-	
-
-	public getVatRate(): number
-	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate"));
 	}
 	
 

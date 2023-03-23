@@ -1,7 +1,7 @@
-import IPrice from "./IPrice.js"
 import IOffer from "./IOffer.js"
-import IOrder from "./IOrder.js"
 import Describable from "./Describable.js"
+import IPrice from "./IPrice.js"
+import IOrder from "./IOrder.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 

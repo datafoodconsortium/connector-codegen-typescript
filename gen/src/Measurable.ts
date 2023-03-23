@@ -1,5 +1,5 @@
-import Quantifiable from "./Quantifiable.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import Quantifiable from "./Quantifiable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 

@@ -1,9 +1,9 @@
-import IGeographicalOrigin from "./IGeographicalOrigin.js"
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
+import IGeographicalOrigin from "./IGeographicalOrigin.js"
+import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
 import INatureOrigin from "./INatureOrigin.js"
 import IPartOrigin from "./IPartOrigin.js"
-import INutrientCharacteristic from "./INutrientCharacteristic.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 

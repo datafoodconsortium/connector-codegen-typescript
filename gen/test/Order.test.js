@@ -10,9 +10,19 @@ const customer = new Person({
     semanticId: "http://myplatform.com/person1",
 });
 
+const customer2 = new Person({
+    connector: connector,
+    semanticId: "http://myplatform.com/person12",
+});
+
 const saleSession = new SaleSession({
     connector: connector,
     semanticId: "http://myplatform.com/saleSession1"
+});
+
+const saleSession2 = new SaleSession({
+    connector: connector,
+    semanticId: "http://myplatform.com/saleSession2"
 });
 
 const order = new Order({
@@ -72,19 +82,13 @@ test('Order:setDate', async () => {
 });
 
 test('Order:setSaleSession', async () => {
-    const saleSession2 = new SaleSession({
-        connector: connector,
-        semanticId: "http://myplatform.com/saleSession2"
-    });
+    order.setSaleSession(saleSession2);
     const expected = await order.getSaleSession();
     expect(expected.equals(saleSession2)).toStrictEqual(true);
 });
 
 test('Order:setClient', async () => {
-    const customer2 = new Person({
-        connector: connector,
-        semanticId: "http://myplatform.com/person12",
-    });
+    order.setClient(customer2);
     const expected = await order.getClient();
     expect(expected.equals(customer2)).toStrictEqual(true);
 });

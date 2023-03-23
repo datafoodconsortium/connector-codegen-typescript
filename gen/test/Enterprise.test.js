@@ -2,6 +2,7 @@ import Enterprise from '../lib/Enterprise.js';
 import Address from '../lib/Address.js';
 import CustomerCategory from '../lib/CustomerCategory.js';
 import SuppliedProduct from '../lib/SuppliedProduct.js';
+import Catalog from '../lib/Catalog.js';
 import CatalogItem from '../lib/CatalogItem.js';
 import Connector from "../lib/Connector.js";
 
@@ -13,9 +14,19 @@ const address = new Address({
     city: "Briouze"
 });
 
+const address2 = new Address({
+    connector: connector,
+    semanticId: "http://myplatform.com/address2",
+});
+
 const customerCategory = new CustomerCategory({
     connector: connector,
     semanticId: "http://myplatform.com/customerCategory1"
+});
+
+const customerCategory2 = new CustomerCategory({
+    connector: connector,
+    semanticId: "http://myplatform.com/customerCategory2"
 });
 
 const suppliedProduct = new SuppliedProduct({
@@ -23,9 +34,29 @@ const suppliedProduct = new SuppliedProduct({
     semanticId: "http://myplatform.com/suppliedProduct1"
 });
 
+const suppliedProduct2 = new SuppliedProduct({
+    connector: connector,
+    semanticId: "http://myplatform.com/suppliedProduct2"
+});
+
+const catalog = new Catalog({
+    connector: connector,
+    semanticId: "http://myplatform.com/catalog1"
+});
+
+const catalog2 = new Catalog({
+    connector: connector,
+    semanticId: "http://myplatform.com/catalog2"
+});
+
 const catalogItem = new CatalogItem({
     connector: connector,
     semanticId: "http://myplatform.com/catalogItem1"
+});
+
+const catalogItem2 = new CatalogItem({
+    connector: connector,
+    semanticId: "http://myplatform.com/catalogItem2"
 });
 
 const enterprise = new Enterprise({
@@ -37,6 +68,7 @@ const enterprise = new Enterprise({
     customerCategories: [customerCategory],
     suppliedProducts: [suppliedProduct],
     //technicalProducts: [],
+    catalogs: [catalog],
     catalogItems: [catalogItem]
 });
 
@@ -85,8 +117,14 @@ test('Enterprise:getSuppliedProducts', async () => {
     expect(suppliedProducts[0].equals(suppliedProduct)).toStrictEqual(true);
 });
 
-test('Enterprise:getCatalogItems', async () => {
-    const catalogItems = await enterprise.getCatalogItems();
+test('Enterprise:getMaintainedCatalogs', async () => {
+    const catalogs = await enterprise.getMaintainedCatalogs();
+    expect(catalogs.length).toStrictEqual(1);
+    expect(catalogs[0].equals(catalog)).toStrictEqual(true);
+});
+
+test('Enterprise:getManagedCatalogItems', async () => {
+    const catalogItems = await enterprise.getManagedCatalogItems();
     expect(catalogItems.length).toStrictEqual(1);
     expect(catalogItems[0].equals(catalogItem)).toStrictEqual(true);
 });
@@ -97,10 +135,6 @@ test('Enterprise:setDescription', async () => {
 });
 
 test('Enterprise:addLocalization', async () => {
-    const address2 = new Address({
-        connector: connector,
-        semanticId: "http://myplatform.com/address2",
-    });
     enterprise.addLocalization(address2);
     const localizations = await enterprise.getLocalizations();
     expect(localizations.length).toStrictEqual(2);
@@ -112,34 +146,52 @@ test('Enterprise:setVatNumber', async () => {
 });
 
 test('Enterprise:addCustomerCategory', async () => {
-    const customerCategory2 = new CustomerCategory({
-        connector: connector,
-        semanticId: "http://myplatform.com/customerCategory2"
-    });
     enterprise.addCustomerCategory(customerCategory2);
     const customerCategories = await enterprise.getCustomerCategories();
     expect(customerCategories.length).toStrictEqual(2);
     expect(customerCategories[1].equals(customerCategory2)).toStrictEqual(true);
 });
 
-test('Enterprise:addSuppliedProduct', async () => {
-    const suppliedProduct2 = new SuppliedProduct({
-        connector: connector,
-        semanticId: "http://myplatform.com/suppliedProduct2"
-    });
-    enterprise.addSupplyProduct(suppliedProduct2);
+test('Enterprise:supplyProduct', async () => {
+    enterprise.supplyProduct(suppliedProduct2);
     const suppliedProducts = await enterprise.getSuppliedProducts();
     expect(suppliedProducts.length).toStrictEqual(2);
+    expect(suppliedProducts[0].equals(suppliedProduct)).toStrictEqual(true);
     expect(suppliedProducts[1].equals(suppliedProduct2)).toStrictEqual(true);
 });
 
-test('Enterprise:addCatalogItem', async () => {
-    const catalogItem2 = new CatalogItem({
-        connector: connector,
-        semanticId: "http://myplatform.com/catalogItem2"
-    });
-    enterprise.addCatalogItem(catalogItem2);
-    const catalogItems = await enterprise.getCatalogItems();
+test('Enterprise:unsupplyProduct', async () => {
+    enterprise.unsupplyProduct(suppliedProduct);
+    const suppliedProducts = await enterprise.getSuppliedProducts();
+    expect(suppliedProducts.length).toStrictEqual(1);
+    expect(suppliedProducts[0].equals(suppliedProduct2)).toStrictEqual(true);
+});
+
+test('Enterprise:maintainCatalog', async () => {
+    enterprise.maintainCatalog(catalog2);
+    const catalogs = await enterprise.getMaintainedCatalogs();
+    expect(catalogs.length).toStrictEqual(2);
+    expect(catalogs[0].equals(catalog)).toStrictEqual(true);
+    expect(catalogs[1].equals(catalog2)).toStrictEqual(true);
+});
+
+test('Enterprise:unmaintainCatalog', async () => {
+    enterprise.unmaintainCatalog(catalog);
+    const catalogs = await enterprise.getMaintainedCatalogs();
+    expect(catalogs.length).toStrictEqual();
+    expect(catalogs[0].equals(catalog2)).toStrictEqual(true);
+});
+
+test('Enterprise:manageCatalogItem', async () => {
+    enterprise.manageCatalogItem(catalogItem2);
+    const catalogItems = await enterprise.getManagedCatalogItems();
     expect(catalogItems.length).toStrictEqual(2);
     expect(catalogItems[1].equals(catalogItem2)).toStrictEqual(true);
+});
+
+test('Enterprise:unmanageCatalogItem', async () => {
+    enterprise.unmanageCatalogItem(catalogItem);
+    const catalogItems = await enterprise.getManagedCatalogItems();
+    expect(catalogItems.length).toStrictEqual(1);
+    expect(catalogItems[0].equals(catalogItem2)).toStrictEqual(true);
 });
