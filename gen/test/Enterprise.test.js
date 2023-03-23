@@ -36,6 +36,7 @@ const enterprise = new Enterprise({
     vatNumber: "vatNumber",
     customerCategories: [customerCategory],
     suppliedProducts: [suppliedProduct],
+    //technicalProducts: [],
     catalogItems: [catalogItem]
 });
 

@@ -22,10 +22,10 @@
  * SOFTWARE.
 */
 
+import ICatalog from "./ICatalog.js"
 import IEnterprise from "./IEnterprise.js"
 import Catalogable from "./Catalogable.js"
 import ICatalogItem from "./ICatalogItem.js"
-import ICatalog from "./ICatalog.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -53,6 +53,19 @@ export default class Catalog extends SemanticObject implements ICatalog {
 		if (parameters.items) parameters.items.forEach(e => this.addItem(e));
 	}
 
+	public addMaintainer(maintainer: (IEnterprise & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintainedBy";
+		if (maintainer.isSemanticObjectAnonymous()) {
+			if (maintainer.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, maintainer);
+			else this.addSemanticPropertyReference(property, maintainer);
+		}
+		else {
+			this.connector.store(maintainer);
+			this.addSemanticPropertyReference(property, maintainer);
+		}
+	}
+	
+
 	public async getMaintainers(options?: IGetterOptions): Promise<Array<(IEnterprise & Semanticable)>>
 	 {
 		const results = new Array<(IEnterprise & Semanticable)>();
@@ -65,8 +78,16 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	}
 	
 
-	public removeItem(item: (Catalogable & Semanticable)): void {
-		throw new Error("Not yet implemented.");
+	public addItem(item: (Catalogable & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists";
+		if (item.isSemanticObjectAnonymous()) {
+			if (item.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, item);
+			else this.addSemanticPropertyReference(property, item);
+		}
+		else {
+			this.connector.store(item);
+			this.addSemanticPropertyReference(property, item);
+		}
 	}
 	
 
@@ -82,11 +103,8 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	}
 	
 
-	public addItem(item: (Catalogable & Semanticable)): void {
-	}
-	
-
-	public addMaintainer(maintainer: (IEnterprise & Semanticable)): void {
+	public removeItem(item: (Catalogable & Semanticable)): void {
+		throw new Error("Not yet implemented.");
 	}
 	
 

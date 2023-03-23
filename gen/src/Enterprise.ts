@@ -22,20 +22,20 @@
  * SOFTWARE.
 */
 
-import Onboardable from "./Onboardable.js"
-import Agent from "./Agent.js"
-import IEnterprise from "./IEnterprise.js"
-import Supplier from "./Supplier.js"
-import SuppliedProduct from "./SuppliedProduct.js"
-import ICatalogItem from "./ICatalogItem.js"
-import Localizable from "./Localizable.js"
 import ICustomerCategory from "./ICustomerCategory.js"
+import Onboardable from "./Onboardable.js"
+import Localizable from "./Localizable.js"
+import ICatalogItem from "./ICatalogItem.js"
+import IEnterprise from "./IEnterprise.js"
+import SuppliedProduct from "./SuppliedProduct.js"
+import Supplier from "./Supplier.js"
+import Agent from "./Agent.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
-export default class Enterprise extends Agent implements Supplier, IEnterprise, Onboardable {
+export default class Enterprise extends Agent implements Onboardable, Supplier, IEnterprise {
 	
 
 	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, localizations?: (Localizable & Semanticable)[], description?: string, vatNumber?: string, customerCategories?: (ICustomerCategory & Semanticable)[], suppliedProducts?: (SuppliedProduct & Semanticable)[], catalogItems?: (ICatalogItem & Semanticable)[]}) {
@@ -60,19 +60,40 @@ export default class Enterprise extends Agent implements Supplier, IEnterprise, 
 		if (parameters.catalogItems) parameters.catalogItems.forEach(e => this.addCatalogItem(e));
 	}
 
-	public async getSuppliedProducts(options?: IGetterOptions): Promise<Array<(SuppliedProduct & Semanticable)>>
+	public setDescription(description: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription";
+		this.setSemanticPropertyLiteral(property, description);
+	}
+	
+
+	public getDescription(): string
 	 {
-		const results = new Array<(SuppliedProduct & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(SuppliedProduct & Semanticable)> semanticObject);
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription");
+	}
+	
+	public addSupplyProduct(suppliedProduct: (SuppliedProduct & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies";
+		if (suppliedProduct.isSemanticObjectAnonymous()) {
+			if (suppliedProduct.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, suppliedProduct);
+			else this.addSemanticPropertyReference(property, suppliedProduct);
 		}
-		return results;
+		else {
+			this.connector.store(suppliedProduct);
+			this.addSemanticPropertyReference(property, suppliedProduct);
+		}
 	}
 	
 
 	public addCatalogItem(catalogItem: (ICatalogItem & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#manages";
+		if (catalogItem.isSemanticObjectAnonymous()) {
+			if (catalogItem.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, catalogItem);
+			else this.addSemanticPropertyReference(property, catalogItem);
+		}
+		else {
+			this.connector.store(catalogItem);
+			this.addSemanticPropertyReference(property, catalogItem);
+		}
 	}
 	
 
@@ -88,7 +109,15 @@ export default class Enterprise extends Agent implements Supplier, IEnterprise, 
 	}
 	
 
-	public addSupplyProduct(suppliedProduct: (SuppliedProduct & Semanticable)): void {
+	public async getSuppliedProducts(options?: IGetterOptions): Promise<Array<(SuppliedProduct & Semanticable)>>
+	 {
+		const results = new Array<(SuppliedProduct & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<(SuppliedProduct & Semanticable)> semanticObject);
+		}
+		return results;
 	}
 	
 	public getVatNumber(): string
@@ -102,18 +131,16 @@ export default class Enterprise extends Agent implements Supplier, IEnterprise, 
 		this.setSemanticPropertyLiteral(property, vatNumber);
 	}
 	
-	public getDescription(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription");
-	}
-	
-
-	public setDescription(description: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription";
-		this.setSemanticPropertyLiteral(property, description);
-	}
-	
 	public addCustomerCategory(customerCategory: (ICustomerCategory & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#defines";
+		if (customerCategory.isSemanticObjectAnonymous()) {
+			if (customerCategory.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, customerCategory);
+			else this.addSemanticPropertyReference(property, customerCategory);
+		}
+		else {
+			this.connector.store(customerCategory);
+			this.addSemanticPropertyReference(property, customerCategory);
+		}
 	}
 	
 

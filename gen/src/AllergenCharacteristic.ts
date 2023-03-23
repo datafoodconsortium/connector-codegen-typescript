@@ -22,11 +22,11 @@
  * SOFTWARE.
 */
 
-import IUnit from "./IUnit.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import IAllergenDimension from "./IAllergenDimension.js"
+import IUnit from "./IUnit.js"
 import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
 import Characteristic from "./Characteristic.js"
-import IAllergenDimension from "./IAllergenDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -36,7 +36,7 @@ export default class AllergenCharacteristic extends Characteristic implements IA
 	
 
 	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, allergenDimension?: (IAllergenDimension & Semanticable)}) {
-		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#AllergenCharacteristic";
+		const type: string = parameters.semanticType? parameters.semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#AllergenCharacteristic";
 		
 		if (parameters.other) {
 			super({ connector: parameters.connector, semanticId: parameters.semanticId!, other: parameters.other });

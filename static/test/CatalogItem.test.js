@@ -6,11 +6,16 @@ import Connector from "../lib/Connector.js";
 
 const connector = new Connector();
 
-const json = ``;
+const json = `{"@context":"http://static.datafoodconsortium.org/ontologies/context.json","@id":"http://myplatform.com/catalogItem1","@type":"dfc-b:CatalogItem","dfc-b:listedIn":{"@id":"http://myplatform.com/catalog1"},"dfc-b:offeredThrough":"http://myplatform.com/offer1","dfc-b:references":"http://myplatform.com/suppliedProduct1","dfc-b:sku":"sku","dfc-b:stockLimitation":"6.32"}`;
 
 const suppliedProduct = new SuppliedProduct({
     connector: connector,
     semanticId: "http://myplatform.com/suppliedProduct1"
+});
+
+const suppliedProduct2 = new SuppliedProduct({
+    connector: connector,
+    semanticId: "http://myplatform.com/suppliedProduct2"
 });
 
 const offer1 = new Offer({
@@ -18,9 +23,19 @@ const offer1 = new Offer({
     semanticId: "http://myplatform.com/offer1"
 });
 
+const offer2 = new Offer({
+    connector: connector,
+    semanticId: "http://myplatform.com/offer2"
+});
+
 const catalog = new Catalog({
     connector: connector,
     semanticId: "http://myplatform.com/catalog1"
+});
+
+const catalog2 = new Catalog({
+    connector: connector,
+    semanticId: "http://myplatform.com/catalog2"
 });
 
 const catalogItem = new CatalogItem({
@@ -42,7 +57,6 @@ test('CatalogItem:import', async () => {
 
 test('CatalogItem:export', async () => {
     const serialized = await connector.export([catalogItem]);
-    console.log(serialized);
     expect(serialized).toStrictEqual(json);
 });
 
@@ -63,7 +77,7 @@ test('CatalogItem:getOfferers', async () => {
 });
 
 test('CatalogItem:getOfferedProduct', async () => {
-    const offeredProduct = await catalog.getOfferedProduct();
+    const offeredProduct = await catalogItem.getOfferedProduct();
     expect(offeredProduct.equals(suppliedProduct)).toStrictEqual(true);
 });
 
@@ -76,7 +90,11 @@ test('CatalogItem:getStockLimitation', async () => {
 });
 
 test('CatalogItem:registerInCatalog', async () => {
-    expect(true).toStrictEqual(false);
+    catalogItem.registerInCatalog(catalog2);
+    const catalogs = await catalogItem.getCatalogs();
+    expect(catalogs.length).toStrictEqual(2);
+    expect(catalogs[0].equals(catalog)).toStrictEqual(true);
+    expect(catalogs[1].equals(catalog2)).toStrictEqual(true);
 });
 
 test('CatalogItem:setSku', async () => {
@@ -90,14 +108,15 @@ test('CatalogItem:setStockLimitation', async () => {
 });
 
 test('CatalogItem:setOfferedProduct', async () => {
-    const suppliedProduct2 = new SuppliedProduct({
-        connector: connector,
-        semanticId: "http://myplatform.com/suppliedProduct2"
-    });
-    const offeredProduct = await catalog.getOfferedProduct();
+    catalogItem.setOfferedProduct(suppliedProduct2);
+    const offeredProduct = await catalogItem.getOfferedProduct();
     expect(offeredProduct.equals(suppliedProduct2)).toStrictEqual(true);
 });
 
 test('CatalogItem:addOffer', async () => {
-    expect(true).toStrictEqual(false);
+    catalogItem.addOffer(offer2);
+    const offers = await catalogItem.getOfferers();
+    expect(offers.length).toStrictEqual(2);
+    expect(offers[0].equals(offer1)).toStrictEqual(true);
+    expect(offers[1].equals(offer2)).toStrictEqual(true);
 });

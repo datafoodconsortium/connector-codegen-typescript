@@ -63,12 +63,6 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 	}
 	
 
-	public setQuantityValue(quantityValue: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
-		this.setSemanticPropertyLiteral(property, quantityValue);
-	}
-	
-
 	public setQuantityUnit(quantityUnit: (IUnit & Semanticable)): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit";
 		this.setSemanticPropertyReference(property, quantityUnit);
@@ -78,7 +72,13 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 
 	public getQuantityValue(): number
 	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value");
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
+	}
+	
+
+	public setQuantityValue(quantityValue: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
+		this.setSemanticPropertyLiteral(property, quantityValue);
 	}
 	
 

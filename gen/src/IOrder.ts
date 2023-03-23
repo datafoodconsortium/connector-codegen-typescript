@@ -1,11 +1,10 @@
-import ISaleSession from "./ISaleSession.js"
-import Agent from "./Agent.js"
 import IOrderLine from "./IOrderLine.js"
+import Agent from "./Agent.js"
+import ISaleSession from "./ISaleSession.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
-import IGetterOptions from "./IGetterOptions.js";
 
-export default interface IOrder extends Semanticable {
+export default interface IOrder {
 
 	getNumber(): string
 	;
@@ -15,7 +14,7 @@ export default interface IOrder extends Semanticable {
 	;
 	getClient(): Promise<(Agent & Semanticable) | undefined>
 	;
-	getLines(options?: IGetterOptions): Promise<Array<(IOrderLine & Semanticable)>>
+	getLines(): Promise<Array<(IOrderLine & Semanticable)>>
 	;
 	setNumber(number: string): void;
 	setDate(date: string): void;

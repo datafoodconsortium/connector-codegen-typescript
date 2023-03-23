@@ -5,7 +5,7 @@ import Describable from "./Describable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
-export default interface IOrderLine extends Semanticable, Describable {
+export default interface IOrderLine extends Describable {
 
 	getQuantity(): number
 	;

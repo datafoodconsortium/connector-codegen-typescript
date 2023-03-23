@@ -12,9 +12,19 @@ const enterprise = new Enterprise({
     semanticId: "http://myplatform.com/enterprise1"
 });
 
+const enterprise2 = new Enterprise({
+    connector: connector,
+    semanticId: "http://myplatform.com/enterprise2"
+});
+
 const catalogItem = new CatalogItem({
     connector: connector,
     semanticId: "http://myplatform.com/catalogItem1"
+});
+
+const catalogItem2 = new CatalogItem({
+    connector: connector,
+    semanticId: "http://myplatform.com/catalogItem2"
 });
 
 const catalog = new Catalog({
@@ -53,17 +63,31 @@ test('Catalog:getItems', async () => {
 });
 
 test('Catalog:addMaintainer', async () => {
-    expect(true).toStrictEqual(false);
+    catalog.addMaintainer(enterprise2);
+    const maintainers = await catalog.getMaintainers();
+    expect(maintainers.length).toStrictEqual(2);
+    expect(maintainers[0].equals(enterprise)).toStrictEqual(true);
+    expect(maintainers[1].equals(enterprise2)).toStrictEqual(true);
 });
 
 test('Catalog:addItem', async () => {
-    expect(true).toStrictEqual(false);
+    catalog.addItem(catalogItem2);
+    const items = await catalog.getItems();
+    expect(items.length).toStrictEqual(2);
+    expect(items[0].equals(catalogItem)).toStrictEqual(true);
+    expect(items[1].equals(catalogItem2)).toStrictEqual(true);
 });
 
 test('Catalog:removeMaintainer', async () => {
-    expect(true).toStrictEqual(false);
+    catalog.removeMaintainer(enterprise);
+    const maintainers = await catalog.getMaintainers();
+    expect(maintainers.length).toStrictEqual(1);
+    expect(maintainers[0].equals(enterprise2)).toStrictEqual(true);
 });
 
 test('Catalog:removeItem', async () => {
-    expect(true).toStrictEqual(false);
+    catalog.removeItem(catalogItem);
+    const items = await catalog.getItems();
+    expect(items.length).toStrictEqual(1);
+    expect(items[0].equals(catalogItem2)).toStrictEqual(true);
 });

@@ -22,11 +22,11 @@
  * SOFTWARE.
 */
 
-import Characteristic from "./Characteristic.js"
-import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
-import IPhysicalDimension from "./IPhysicalDimension.js"
 import IUnit from "./IUnit.js"
+import Characteristic from "./Characteristic.js"
+import IPhysicalDimension from "./IPhysicalDimension.js"
+import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -36,7 +36,7 @@ export default class PhysicalCharacteristic extends Characteristic implements IP
 	
 
 	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, physicalDimension?: (IPhysicalDimension & Semanticable)}) {
-		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#PhysicalCharacteristic";
+		const type: string = parameters.semanticType? parameters.semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#PhysicalCharacteristic";
 		
 		if (parameters.other) {
 			super({ connector: parameters.connector, semanticId: parameters.semanticId!, other: parameters.other });

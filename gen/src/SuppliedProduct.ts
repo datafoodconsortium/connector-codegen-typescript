@@ -22,18 +22,18 @@
  * SOFTWARE.
 */
 
-import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import IProductType from "./IProductType.js"
-import Quantifiable from "./Quantifiable.js"
 import ICatalogItem from "./ICatalogItem.js"
-import Claimable from "./Claimable.js"
 import INatureOrigin from "./INatureOrigin.js"
 import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
-import INutrientCharacteristic from "./INutrientCharacteristic.js"
-import IPartOrigin from "./IPartOrigin.js"
-import ICertification from "./ICertification.js"
-import DefinedProduct from "./DefinedProduct.js"
 import IGeographicalOrigin from "./IGeographicalOrigin.js"
+import DefinedProduct from "./DefinedProduct.js"
+import INutrientCharacteristic from "./INutrientCharacteristic.js"
+import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
+import ICertification from "./ICertification.js"
+import Claimable from "./Claimable.js"
+import Quantifiable from "./Quantifiable.js"
+import IProductType from "./IProductType.js"
+import IPartOrigin from "./IPartOrigin.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -44,7 +44,7 @@ export default class SuppliedProduct extends DefinedProduct {
 
 	public getTotalTheoreticalStock(): number
 	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#totalTheoreticalStock");
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#totalTheoreticalStock"));
 	}
 	
 

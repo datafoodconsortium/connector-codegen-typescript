@@ -28,7 +28,7 @@
 }[/template]
 
 [template public generateConstructorBody(class: Class, operation: Operation)]
-[if (class.isAbstract)]if (parameters.other) super({ [if (not class.generalization->isEmpty())]connector: parameters.connector, [/if]semanticId: parameters.semanticId!, other: parameters.other })['\n'/][else]const type: string = parameters.semanticType? parameters.semanticType: "[class.getValue(class.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]";
+[if (class.isAbstract)]if (parameters.other) super({ [if (not class.generalization->isEmpty())]connector: parameters.connector, [/if]semanticId: parameters.semanticId!, other: parameters.other })['\n'/][else]const type: string = [if (class.isAbstract or class.isBlankNode())]parameters.semanticType? parameters.semanticType: [/if]"[class.getValue(class.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]";
 
 if (parameters.other) {
 	super({ [if (not class.generalization->isEmpty())]connector: parameters.connector, [/if]semanticId: parameters.semanticId!, other: parameters.other });
@@ -94,7 +94,7 @@ if (semanticId) {
 }
 return result;
 [else]
-return this.getSemanticProperty("[map/]");[/if]
+return [if (returned.type.name = 'Real' or returned.type.name = 'Integer')]Number([/if]this.getSemanticProperty("[map/]")[if (returned.type.name = 'Real' or returned.type.name = 'Integer')])[/if];[/if]
 [/let][/let][/let][/let]
 [/template]
 
@@ -109,9 +109,7 @@ const property: string = "[property.getValue(property.getAppliedStereotype('data
 throw new Error("Not yet implemented.");
 [/template]
 
-[template public generateOperationSignature(aClass: Class, operation: Operation)]
-[let isAsyncGetter: Boolean = (operation.isGetter() and (getPropertyOfGetter(aClass, operation).isPropertyMultiple() or not operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return))->at(1).type.isPrimitive()))][if (operation.isConstructor())]constructor[else][if (operation.isAbstract)]abstract [/if][if (isAsyncGetter)]async [/if][operation.name/][/if]([if (isAsyncGetter)]options?: IGetterOptions[else][genOperationParameters(operation)/][/if])[if not (operation.isConstructor())]: [generateOperationReturn(operation)/][/if][/let]
-[/template]
+[template public generateOperationSignature(aClass: Class, operation: Operation)][let isAsyncGetter: Boolean = (operation.isGetter() and (getPropertyOfGetter(aClass, operation).isPropertyMultiple() or not operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return))->at(1).type.isPrimitive()))][if (operation.isConstructor())]constructor[else][if (operation.isAbstract)]abstract [/if][if (isAsyncGetter)]async [/if][operation.name/][/if]([if (isAsyncGetter)]options?: IGetterOptions[else][genOperationParameters(operation)/][/if])[if not (operation.isConstructor())]: [generateOperationReturn(operation)/][/if][/let][/template]
 
 [template public generateOperationReturn(operation: Operation)]
 [if (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::return))->isEmpty())]
