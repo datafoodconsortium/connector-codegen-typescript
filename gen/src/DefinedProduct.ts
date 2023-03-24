@@ -54,7 +54,7 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 		if (parameters.description) this.setDescription(parameters.description);
 		if (parameters.productType) this.setProductType(parameters.productType);
 		if (parameters.quantity) this.setQuantity(parameters.quantity);
-		if (parameters.alcoholPercentage) this.setAlcoholPercentage(parameters.alcoholPercentage);
+		if (parameters.alcoholPercentage || parameters.alcoholPercentage === 0) this.setAlcoholPercentage(parameters.alcoholPercentage);
 		if (parameters.lifetime) this.setLifetime(parameters.lifetime);
 		if (parameters.claims) parameters.claims.forEach(e => this.addClaim(e));
 		if (parameters.usageOrStorageConditions) this.setUsageOrStorageConditions(parameters.usageOrStorageConditions);
@@ -240,6 +240,7 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 
 	public getAlcoholPercentage(): number
 	 {
+		console.log(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#alcoholPercentage"))
 		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#alcoholPercentage"));
 	}
 	
@@ -377,18 +378,20 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 
 	public setAlcoholPercentage(alcoholPercentage: number): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#alcoholPercentage";
-		this.setSemanticPropertyLiteral(property, alcoholPercentage);
+		console.log(alcoholPercentage);
+		this.setSemanticPropertyLiteral(property, alcoholPercentage.toString());
 	}
 	
 
+	// TODO: add in Eclipse
 	public async getAllergenCharacteristics(options?: IGetterOptions): Promise<Array<(IAllergenCharacteristic & Semanticable)>>
 	 {
 		const results = new Array<(IAllergenCharacteristic & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenCharacteristic");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(IAllergenCharacteristic & Semanticable)> semanticObject);
-		}
+		const blankNodes = this.getSemanticPropertyAnonymousAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenCharacteristic");
+		blankNodes.forEach(blankNode => {
+			const allergenCharacteristic = <IAllergenCharacteristic & Semanticable> this.connector.getDefaultFactory().createFromRdfDataset(blankNode);
+			results.push(allergenCharacteristic);
+		});
 		return results;
 	}
 	

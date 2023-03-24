@@ -83,7 +83,7 @@ let suppliedProduct = new SuppliedProduct({
     //productType: connector.PRODUCT_TYPES.VEGETABLE.TOMATO.ROUND_TOMATO, 
     quantity: quantity,
     totalTheoreticalStock: 2.23,
-    alcoholPercentage: 0.0, 
+    alcoholPercentage: 0, 
     lifetime: "a week", 
     claims: [connector.FACETS.CLAIM.NUTRITIONALCLAIM.NOADDEDSUGARS], 
     usageOrStorageConditions: "free text", 
@@ -135,7 +135,7 @@ test('SuppliedProduct:getTotalTheoreticalStock', async () => {
 });
 
 test('SuppliedProduct:getAlcoholPercentage', async () => {
-    expect(suppliedProduct.getAlcoholPercentage()).toStrictEqual(0.0);
+    expect(suppliedProduct.getAlcoholPercentage()).toStrictEqual(0);
 });
 
 test('SuppliedProduct:getLifetime', async () => {

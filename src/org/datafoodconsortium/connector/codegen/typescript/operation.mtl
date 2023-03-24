@@ -42,7 +42,7 @@ if (parameters.other) {
 [if (not (class.isBlankNode() or class.isAbstract))]['\n'/]if (!parameters.doNotStore)
 	this.connector.store(this);[/if]
 
-[for (p: Parameter | operation.ownedParameter->select(p: Parameter | not p.isInitializerParent())) separator('\n')]if (parameters.[p.name/]) [if (p.upper = 1)]this.[getSetter(p).name /](parameters.[p.name /])[else]parameters.[p.name /].forEach(e => this.[getAdder(p).name /](e))[/if];[/for]
+[for (p: Parameter | operation.ownedParameter->select(p: Parameter | not p.isInitializerParent())) separator('\n')]if (parameters.[p.name/][if (p.type.name = 'Integer' or p.type.name = 'Real')] || parameters.[p.name/] === 0[/if]) [if (p.upper = 1)]this.[getSetter(p).name /](parameters.[p.name /])[else]parameters.[p.name /].forEach(e => this.[getAdder(p).name /](e))[/if];[/for]
 [/template]
 
 [comment handle initializer / initializer parent /]
@@ -78,12 +78,17 @@ else {
 [let type: String = generateTypeWithDefaultUndefined(returned)]
 [let map: OclAny = property.getValue(property.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')]
 [if (property.isPropertyMultiple())]const results = new [type/]();
+[if (returned.type.isBlankNode())]const blankNodesId = this.getSemanticPropertyAnonymousAll("[map/]");
+blankNodesId.forEach(blankNodeId => {
+	const blankNode = <([returned.type.name/] & Semanticable)> this.connector.getDefaultFactory().createFromRdfDataset(blankNodeId);
+	results.push(blankNode);
+});[else]
 const properties = this.getSemanticPropertyAll("[map/]");
 for await (const semanticId of properties) {
 	const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
 	if (semanticObject) results.push(<([returned.type.name/] & Semanticable)> semanticObject);
 }
-return results;[elseif (returned.type.isBlankNode())]
+[/if]return results;[elseif (returned.type.isBlankNode())]
 const blankNode: any = this.getSemanticPropertyAnonymous("[map/]");
 return <[returned.type.name /] & Semanticable> this.connector.getDefaultFactory().createFromRdfDataset(blankNode);[elseif (not returned.type.isPrimitive())]
 let result: [type/] = undefined;
