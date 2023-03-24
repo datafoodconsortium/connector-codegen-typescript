@@ -13,7 +13,7 @@ const connector = new Connector();
 
 await connector.loadFacets(JSON.stringify(facets));
 await connector.loadMeasures(JSON.stringify(measures));
-//await connector.loadProductTypes(JSON.stringify(productTypes));
+await connector.loadProductTypes(JSON.stringify(productTypes));
 
 const gram = connector.MEASURES.UNIT.QUANTITYUNIT.GRAM;
 const kilogram = connector.MEASURES.UNIT.QUANTITYUNIT.KILOGRAM;
@@ -80,7 +80,7 @@ let suppliedProduct = new SuppliedProduct({
     connector: connector,
     semanticId: "http://myplatform.com/tomato",
     description: "Awesome tomato",
-    //productType: connector.PRODUCT_TYPES.VEGETABLE.TOMATO.ROUND_TOMATO, 
+    productType: connector.PRODUCT_TYPES.VEGETABLE.TOMATO.ROUND_TOMATO, 
     quantity: quantity,
     totalTheoreticalStock: 2.23,
     alcoholPercentage: 0, 
@@ -97,7 +97,7 @@ let suppliedProduct = new SuppliedProduct({
     partOrigin: [connector.FACETS.PARTORIGIN.PLANTPARTORIGIN.FRUIT]
 });
 
-const json = ``;
+const json = `{"@context":"http://static.datafoodconsortium.org/ontologies/context.json","@graph":[{"@id":"_:b1","@type":"dfc-b:QuantitativeValue","dfc-b:hasUnit":"dfc-m:Kilogram","dfc-b:value":"1.2"},{"@id":"_:b2","@type":"dfc-b:AllergenCharacteristic","dfc-b:hasAllergenDimension":"dfc-m:Peanuts","dfc-b:hasUnit":"dfc-m:Kilogram","dfc-b:value":"1"},{"@id":"_:b4","@type":"dfc-b:NutrientCharacteristic","dfc-b:hasNutrientDimension":{"@id":"dfc-m:Calcium"},"dfc-b:hasUnit":"dfc-m:Gram","dfc-b:value":"10"},{"@id":"_:b6","@type":"dfc-b:PhysicalCharacteristic","dfc-b:hasPhysicalDimension":"dfc-m:Weight","dfc-b:hasUnit":"dfc-m:Gram","dfc-b:value":"100"},{"@id":"http://myplatform.com/tomato","@type":"dfc-b:SuppliedProduct","dfc-b:alcoholPercentage":"0","dfc-b:description":"Awesome tomato","dfc-b:hasAllergenCharacteristic":{"@id":"_:b2"},"dfc-b:hasCertification":[{"@id":"dfc-f:Organic-AB"},{"@id":"dfc-f:Organic-EU"}],"dfc-b:hasClaim":"dfc-f:NoAddedSugars","dfc-b:hasGeographicalOrigin":"dfc-f:CentreValLoire","dfc-b:hasNatureOrigin":{"@id":"dfc-f:PlantOrigin"},"dfc-b:hasNutrientCharacteristic":{"@id":"_:b4"},"dfc-b:hasPartOrigin":{"@id":"dfc-f:Fruit"},"dfc-b:hasPhysicalCharacteristic":{"@id":"_:b6"},"dfc-b:hasQuantity":"_:b1","dfc-b:hasType":"dfc-pt:round-tomato","dfc-b:lifetime":"a week","dfc-b:referencedBy":"http://myplatform.com/catalogItem","dfc-b:totalTheoreticalStock":"2.23","dfc-b:usageOrStorageCondition":"free text"}]}`;
 
 test('SuppliedProduct:import', async () => {
     const importedAll = await connector.import(json);
@@ -108,7 +108,6 @@ test('SuppliedProduct:import', async () => {
 
 test('SuppliedProduct:export', async () => {
     const serialized = await connector.export([suppliedProduct]);
-    console.log(serialized);
     expect(serialized).toStrictEqual(json);
 });
 
@@ -324,7 +323,7 @@ test('SuppliedProduct:removeCatalogItem', async () => {
 });
 
 test('SuppliedProduct:addCertification', async () => {
-    suppliedProduct.addCertification(connector.FACETS.CERTIFICATION.NATUREETPROGRES);
+    suppliedProduct.addCertification(connector.FACETS.CERTIFICATION.ORGANICLABEL.NATUREETPROGRES);
     const certifications = await suppliedProduct.getCertifications();
     expect(certifications.length).toStrictEqual(3);
     expect(certifications[0].equals(connector.FACETS.CERTIFICATION.ORGANICLABEL.ORGANIC_AB)).toStrictEqual(true);

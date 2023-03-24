@@ -34,7 +34,7 @@ const person = new Person({
     organizations: [enterprise]
 });
 
-const json = ``;
+const json = `{"@context":"http://static.datafoodconsortium.org/ontologies/context.json","@id":"http://myplatform.com/person1","@type":"dfc-b:Person","dfc-b:affiliates":"http://myplatform.com/address/enterprise1","dfc-b:familyName":"Smith","dfc-b:firstName":"John","dfc-b:hasAddress":{"@id":"http://myplatform.com/address/address1"}}`;
 
 test('Person:import', async () => {
     const imported = await connector.import(json);
@@ -45,7 +45,6 @@ test('Person:import', async () => {
 
 test('Person:export', async () => {
     const serialized = await connector.export([person]);
-    console.log(serialized);
     expect(serialized).toStrictEqual(json);
 });
 

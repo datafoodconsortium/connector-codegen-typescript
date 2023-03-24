@@ -8,6 +8,7 @@
   "@type" : [ "http://www.w3.org/2002/07/owl#Ontology" ],
   "@graph" : [ {
     "@id" : "dfc-pt:ProductTypes",
+    "@type" : [ "skos:ConceptScheme" ],
     "http://purl.org/dc/terms/description" : [ {
       "@language" : "fr",
       "@value" : "Les différentes catégories de produit, classifiées en arborescence"
@@ -21,9 +22,6 @@
     }, {
       "@language" : "fr",
       "@value" : "Types de produits"
-    } ],
-    "@type" : [ {
-      "@id" : "skos:ConceptScheme"
     } ],
     "skos:hasTopConcept" : [ {
       "@id" : "dfc-pt:bakery"
@@ -46,9 +44,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:alcoholic-beverage",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:drink"
     } ],
@@ -75,9 +71,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:almond",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:nut"
     } ],
@@ -93,9 +87,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:aperitif",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:alcoholic-beverage"
     } ],
@@ -111,9 +103,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:apples",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -129,9 +119,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:apricot",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -147,9 +135,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:artichoke",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -165,9 +151,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:asparagus",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -183,9 +167,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:bakery",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:inScheme" : [ {
       "@id" : "dfc-pt:ProductTypes"
     } ],
@@ -206,9 +188,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:basil",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -224,9 +204,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:bean",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -242,9 +220,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:beans",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:dried-vegetable"
     } ],
@@ -260,9 +236,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:beef",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:meat-product"
     } ],
@@ -283,9 +257,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:beer",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:alcoholic-beverage"
     } ],
@@ -301,9 +273,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:beetroot",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -319,9 +289,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:berry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -350,9 +318,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:biscuit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sweet-groceries"
     } ],
@@ -368,9 +334,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:blackberry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:berry"
     } ],
@@ -386,9 +350,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:blackcurrant",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:berry"
     } ],
@@ -404,9 +366,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:blueberry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:berry"
     } ],
@@ -422,9 +382,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:bluefoot-mushroom",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -440,9 +398,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:bottled-fruit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:processed-fruit"
     } ],
@@ -458,9 +414,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:bottled-vegetable",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:processed-vegetable"
     } ],
@@ -476,9 +430,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:bread",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:bakery"
     } ],
@@ -494,9 +446,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:broccoli-cabbage",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -512,9 +462,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:brussels-sprouts",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -530,9 +478,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:butter",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -548,9 +494,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:butternut",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:squash"
     } ],
@@ -566,9 +510,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cabbage",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -607,9 +549,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:canned-fruit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:processed-fruit"
     } ],
@@ -625,9 +565,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:canned-vegetable",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:processed-vegetable"
     } ],
@@ -643,9 +581,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:carrot",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -661,9 +597,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cauliflower",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -679,9 +613,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:celeriac",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -697,9 +629,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:celery-branch",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -715,9 +645,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cereal",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:savory-groceries"
     } ],
@@ -733,9 +661,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:chanterelle-mushroom",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -751,9 +677,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:chard",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -769,9 +693,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cherry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -787,9 +709,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cherry-tomato",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:tomato"
     } ],
@@ -805,9 +725,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:chervil",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -823,9 +741,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:chestnut",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:nut"
     } ],
@@ -841,9 +757,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:chicken",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:poultry"
     } ],
@@ -859,9 +773,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:chicory",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:salad"
     } ],
@@ -877,9 +789,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:chilli-pepper",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -895,9 +805,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:chinese-cabbage",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -913,9 +821,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:chive",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -931,9 +837,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cider",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:alcoholic-beverage"
     } ],
@@ -949,9 +853,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:clementine",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -967,9 +869,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cluster-tomato",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:tomato"
     } ],
@@ -985,9 +885,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:confectionery",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sweet-groceries"
     } ],
@@ -1003,9 +901,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cooked-meat",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:pork"
     } ],
@@ -1021,9 +917,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:coriander",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -1039,9 +933,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:corn-salad",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:salad"
     } ],
@@ -1057,9 +949,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cosmetic",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:inedible"
     } ],
@@ -1075,9 +965,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:coulemelle-mushroom",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -1093,9 +981,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:courgette",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -1111,9 +997,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cow-dairy-product",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:dairy-product"
     } ],
@@ -1154,9 +1038,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cream-cheese",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -1172,9 +1054,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:crepe-and-galette",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:savory-groceries"
     } ],
@@ -1190,9 +1070,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cress",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:salad"
     } ],
@@ -1208,9 +1086,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:cucumber",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -1226,9 +1102,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:currant",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:berry"
     } ],
@@ -1244,9 +1118,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:dairy-dessert",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -1262,9 +1134,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:dairy-product",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:inScheme" : [ {
       "@id" : "dfc-pt:ProductTypes"
     } ],
@@ -1289,9 +1159,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:dandelion",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:salad"
     } ],
@@ -1307,9 +1175,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:deaths-trumpet",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -1325,9 +1191,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:delicatessen",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:pork"
     } ],
@@ -1343,9 +1207,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:digestive",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:alcoholic-beverage"
     } ],
@@ -1361,9 +1223,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:dill",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -1379,9 +1239,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:dried-fruit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:processed-fruit"
     } ],
@@ -1397,9 +1255,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:dried-vegetable",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -1424,9 +1280,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:drink",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:inScheme" : [ {
       "@id" : "dfc-pt:ProductTypes"
     } ],
@@ -1447,9 +1301,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:duck",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:poultry"
     } ],
@@ -1465,9 +1317,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:egg",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:meat-product"
     } ],
@@ -1483,9 +1333,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:eggplant",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -1501,9 +1349,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:endive",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:salad"
     } ],
@@ -1519,9 +1365,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fennel",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -1537,9 +1381,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:festive-poultry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:poultry"
     } ],
@@ -1555,9 +1397,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fifth-range-vegetable",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -1573,9 +1413,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fig",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -1591,9 +1429,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fish",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fishery-product"
     } ],
@@ -1609,9 +1445,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fishery-product",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:meat-product"
     } ],
@@ -1634,9 +1468,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:flavored-yogurt",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -1652,9 +1484,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:flour",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:savory-groceries"
     } ],
@@ -1670,9 +1500,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:flower",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:inedible"
     } ],
@@ -1688,9 +1516,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fourth-range-vegetable",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -1706,9 +1532,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fresh-cheese",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -1724,9 +1548,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fresh-cream",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -1742,9 +1564,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fresh-meat",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:pork"
     } ],
@@ -1760,9 +1580,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:frozen",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:inScheme" : [ {
       "@id" : "dfc-pt:ProductTypes"
     } ],
@@ -1787,9 +1605,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:frozen-fruit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:frozen"
     } ],
@@ -1805,9 +1621,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:frozen-meal",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:frozen"
     } ],
@@ -1823,9 +1637,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:frozen-meat",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:frozen"
     } ],
@@ -1841,9 +1653,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:frozen-vegetable",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:frozen"
     } ],
@@ -1859,9 +1669,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fruit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:inScheme" : [ {
       "@id" : "dfc-pt:ProductTypes"
     } ],
@@ -1918,9 +1726,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fruit-in-compote",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:processed-fruit"
     } ],
@@ -1936,9 +1742,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:fruit-juice",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:soft-drink"
     } ],
@@ -1954,9 +1758,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:garlic",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -1972,9 +1774,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:girolle-mushroom",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -1990,9 +1790,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goat-dairy-dessert",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:goat-dairy-product"
     } ],
@@ -2008,9 +1806,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goat-dairy-product",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:dairy-product"
     } ],
@@ -2045,9 +1841,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goat-flavored-yogurt",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:goat-dairy-product"
     } ],
@@ -2063,9 +1857,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goat-fresh-cheese",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:goat-dairy-product"
     } ],
@@ -2081,9 +1873,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goat-mature-cheese",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:goat-dairy-product"
     } ],
@@ -2099,9 +1889,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goat-milk",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:goat-dairy-product"
     } ],
@@ -2117,9 +1905,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goat-natural-yogurt",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:goat-dairy-product"
     } ],
@@ -2135,9 +1921,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goat-sweet-yogurt",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:goat-dairy-product"
     } ],
@@ -2153,9 +1937,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goat-yogurt-on-a-bed-of-fruit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:goat-dairy-product"
     } ],
@@ -2171,9 +1953,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goat-yogurt-with-fruits",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:goat-dairy-product"
     } ],
@@ -2189,9 +1969,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:goose",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:poultry"
     } ],
@@ -2207,9 +1985,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:gooseberry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:berry"
     } ],
@@ -2225,9 +2001,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:grape",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -2243,9 +2017,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:green-garlic",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -2261,9 +2033,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:grilling-meat",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:beef"
     } ],
@@ -2279,9 +2049,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:guinea-fowl",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:poultry"
     } ],
@@ -2297,9 +2065,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:hazelnut",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:nut"
     } ],
@@ -2315,9 +2081,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:herb",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -2360,9 +2124,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:hierloom-squash",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:squash"
     } ],
@@ -2378,9 +2140,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:hierloom-tomato",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:tomato"
     } ],
@@ -2396,9 +2156,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:honey",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sweet-groceries"
     } ],
@@ -2414,9 +2172,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:inedible",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:inScheme" : [ {
       "@id" : "dfc-pt:ProductTypes"
     } ],
@@ -2439,9 +2195,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:jam",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sweet-groceries"
     } ],
@@ -2457,9 +2211,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:jerusalem-artichoke",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -2475,9 +2227,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:kale",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -2493,9 +2243,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:kale-cabbage",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -2511,9 +2259,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:kiwi",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -2529,9 +2275,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:kohlrabi",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -2547,9 +2291,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:lamb",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:meat-product"
     } ],
@@ -2565,9 +2307,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:laurel",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -2583,9 +2323,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:leek",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -2601,9 +2339,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:lemon",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -2619,9 +2355,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:lemonade",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:soft-drink"
     } ],
@@ -2637,9 +2371,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:lentils",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:dried-vegetable"
     } ],
@@ -2655,9 +2387,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:lettuce",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:salad"
     } ],
@@ -2673,9 +2403,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:local-grocery-store",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:inScheme" : [ {
       "@id" : "dfc-pt:ProductTypes"
     } ],
@@ -2702,9 +2430,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:mandarin",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -2720,9 +2446,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:mature-cheese",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -2738,9 +2462,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:meat-product",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:inScheme" : [ {
       "@id" : "dfc-pt:ProductTypes"
     } ],
@@ -2775,9 +2497,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:medlar",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -2793,9 +2513,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:melon",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -2811,9 +2529,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:mesclun",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:salad"
     } ],
@@ -2829,9 +2545,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:milk",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -2847,9 +2561,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:milky-mushroom",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -2865,9 +2577,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:mint",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -2883,9 +2593,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:morel",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -2901,9 +2609,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:mousseron",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -2919,9 +2625,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:mushroom",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -2964,9 +2668,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:natural-yogurt",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -2982,9 +2684,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:nectarine",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -3000,9 +2700,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:non-local-fruit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -3018,9 +2716,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:non-local-vegetable",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -3036,9 +2732,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:nut",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -3065,9 +2759,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:oil",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:savory-groceries"
     } ],
@@ -3083,9 +2775,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:onion",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -3101,9 +2791,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:orange",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -3119,9 +2807,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:other-cheese",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:other-dairy-product"
     } ],
@@ -3137,9 +2823,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:other-dairy-product",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:dairy-product"
     } ],
@@ -3160,9 +2844,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:other-milk",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:other-dairy-product"
     } ],
@@ -3178,9 +2860,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:oyster-mushroom",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -3196,9 +2876,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:paris-mushroom",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -3214,9 +2892,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:parsley",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -3232,9 +2908,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:parsnip",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -3250,9 +2924,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:pasta",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:savory-groceries"
     } ],
@@ -3268,9 +2940,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:pastry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sweet-groceries"
     } ],
@@ -3286,9 +2956,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:pattypan-squash",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:squash"
     } ],
@@ -3304,9 +2972,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:peach",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -3322,9 +2988,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:pear",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -3340,9 +3004,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:peas",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:dried-vegetable"
     } ],
@@ -3358,9 +3020,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:pepper",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -3376,9 +3036,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:pie-pastry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:savory-groceries"
     } ],
@@ -3394,9 +3052,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:pigeon",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:poultry"
     } ],
@@ -3412,9 +3068,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:plant",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:inedible"
     } ],
@@ -3430,9 +3084,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:plum",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -3448,9 +3100,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:porcini",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -3466,9 +3116,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:pork",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:meat-product"
     } ],
@@ -3493,9 +3141,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:potato",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -3511,9 +3157,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:poultry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:meat-product"
     } ],
@@ -3546,9 +3190,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:processed-fruit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:local-grocery-store"
     } ],
@@ -3573,9 +3215,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:processed-vegetable",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:local-grocery-store"
     } ],
@@ -3598,9 +3238,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:prune",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -3616,9 +3254,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:pumpkin",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:squash"
     } ],
@@ -3634,9 +3270,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:quail",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:poultry"
     } ],
@@ -3652,9 +3286,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:quince",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -3670,9 +3302,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:quinoa",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:dried-vegetable"
     } ],
@@ -3688,9 +3318,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:rabbit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:meat-product"
     } ],
@@ -3706,9 +3334,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:radish",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -3724,9 +3350,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:raspberry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:berry"
     } ],
@@ -3742,9 +3366,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:ready-meal",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:local-grocery-store"
     } ],
@@ -3760,9 +3382,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:red-cabbage",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -3778,9 +3398,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:rhubarb",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -3796,9 +3414,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:rice",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:savory-groceries"
     } ],
@@ -3814,9 +3430,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:rocket",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:salad"
     } ],
@@ -3832,9 +3446,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:romanesco",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -3850,9 +3462,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:rosemary",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -3868,9 +3478,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:round-tomato",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:tomato"
     } ],
@@ -3886,9 +3494,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:rutabaga",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -3904,9 +3510,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sage",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -3922,9 +3526,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:salad",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -3961,9 +3563,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:salad-mix",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:salad"
     } ],
@@ -3979,9 +3579,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:salsify",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -3997,9 +3595,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:salt",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:savory-groceries"
     } ],
@@ -4015,9 +3611,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:salting",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:pork"
     } ],
@@ -4033,9 +3627,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:savory-groceries",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:local-grocery-store"
     } ],
@@ -4070,9 +3662,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:savoy-cabbage",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -4088,9 +3678,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:seashell",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fishery-product"
     } ],
@@ -4106,9 +3694,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:semolina",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:savory-groceries"
     } ],
@@ -4124,9 +3710,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:shallot",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -4142,9 +3726,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheep-dairy-dessert",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sheep-dairy-product"
     } ],
@@ -4160,9 +3742,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheep-dairy-product",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:dairy-product"
     } ],
@@ -4197,9 +3777,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheep-flavored-yogurt",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sheep-dairy-product"
     } ],
@@ -4215,9 +3793,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheep-fresh-cheese",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sheep-dairy-product"
     } ],
@@ -4233,9 +3809,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheep-mature-cheese",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sheep-dairy-product"
     } ],
@@ -4251,9 +3825,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheep-milk",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sheep-dairy-product"
     } ],
@@ -4269,9 +3841,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheep-natural-yogurt",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sheep-dairy-product"
     } ],
@@ -4287,9 +3857,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheep-sweet-yogurt",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sheep-dairy-product"
     } ],
@@ -4305,9 +3873,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheep-yogurt-on-a-bed-of-fruit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sheep-dairy-product"
     } ],
@@ -4323,9 +3889,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheep-yogurt-with-fruits",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:sheep-dairy-product"
     } ],
@@ -4341,9 +3905,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sheepfoot-mushroom",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -4359,9 +3921,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:shellfish",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fishery-product"
     } ],
@@ -4377,9 +3937,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:simmering-meat",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:beef"
     } ],
@@ -4395,9 +3953,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:smooth-cabbage",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cabbage"
     } ],
@@ -4413,9 +3969,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:smoothie",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:soft-drink"
     } ],
@@ -4431,9 +3985,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:snails",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:meat-product"
     } ],
@@ -4449,9 +4001,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:soft-drink",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:drink"
     } ],
@@ -4474,9 +4024,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:soup",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:processed-vegetable"
     } ],
@@ -4492,9 +4040,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:spinach",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:salad"
     } ],
@@ -4510,9 +4056,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:squash",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -4539,9 +4083,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:strawberry",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:fruit"
     } ],
@@ -4557,9 +4099,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sweet-groceries",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:local-grocery-store"
     } ],
@@ -4586,9 +4126,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:sweet-yogurt",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -4604,9 +4142,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:tarragon",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -4622,9 +4158,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:thyme",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:aromatic"
     } ],
@@ -4640,9 +4174,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:tomato",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -4667,9 +4199,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:truffle",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:mushroom"
     } ],
@@ -4685,9 +4215,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:turkey",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:poultry"
     } ],
@@ -4703,9 +4231,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:turnip",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -4721,9 +4247,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:uchiki-kuri-squash",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:squash"
     } ],
@@ -4739,9 +4263,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:veal",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:meat-product"
     } ],
@@ -4757,9 +4279,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:vegetable",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:inScheme" : [ {
       "@id" : "dfc-pt:ProductTypes"
     } ],
@@ -4852,9 +4372,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:viennoiserie-",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:bakery"
     } ],
@@ -4870,9 +4388,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:walnut",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:nut"
     } ],
@@ -4888,9 +4404,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:wine",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:alcoholic-beverage"
     } ],
@@ -4906,9 +4420,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:yam",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:vegetable"
     } ],
@@ -4924,9 +4436,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:yogurt-on-a-bed-of-fruit",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],
@@ -4942,9 +4452,7 @@
     } ]
   }, {
     "@id" : "dfc-pt:yogurt-with-fruits",
-    "@type" : [ {
-      "@id" : "skos:Concept"
-    } ],
+    "@type" : [ "skos:Concept" ],
     "skos:broader" : [ {
       "@id" : "dfc-pt:cow-dairy-product"
     } ],

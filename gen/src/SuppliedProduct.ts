@@ -22,18 +22,18 @@
  * SOFTWARE.
 */
 
-import ICatalogItem from "./ICatalogItem.js"
-import DefinedProduct from "./DefinedProduct.js"
-import Claimable from "./Claimable.js"
-import IPartOrigin from "./IPartOrigin.js"
+import ICertification from "./ICertification.js"
 import INutrientCharacteristic from "./INutrientCharacteristic.js"
-import INatureOrigin from "./INatureOrigin.js"
+import IPartOrigin from "./IPartOrigin.js"
+import Quantifiable from "./Quantifiable.js"
+import DefinedProduct from "./DefinedProduct.js"
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import IProductType from "./IProductType.js"
 import IGeographicalOrigin from "./IGeographicalOrigin.js"
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import ICertification from "./ICertification.js"
-import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
-import Quantifiable from "./Quantifiable.js"
-import IProductType from "./IProductType.js"
+import Claimable from "./Claimable.js"
+import INatureOrigin from "./INatureOrigin.js"
+import ICatalogItem from "./ICatalogItem.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -69,7 +69,7 @@ export default class SuppliedProduct extends DefinedProduct {
 		
 		if (!parameters.doNotStore)
 			this.connector.store(this);
-		if (parameters.totalTheoreticalStock) this.setTotalTheoreticalStock(parameters.totalTheoreticalStock);
+		if (parameters.totalTheoreticalStock || parameters.totalTheoreticalStock === 0) this.setTotalTheoreticalStock(parameters.totalTheoreticalStock);
 	}
 
 

@@ -46,14 +46,20 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 		this.connector = parameters.connector;
 		
 		
-		if (parameters.value) this.setValue(parameters.value);
-		if (parameters.vatRate) this.setVatRate(parameters.vatRate);
+		if (parameters.value || parameters.value === 0) this.setValue(parameters.value);
+		if (parameters.vatRate || parameters.vatRate === 0) this.setVatRate(parameters.vatRate);
 		if (parameters.unit) this.setUnit(parameters.unit);
 	}
 
-	public getValue(): number
-	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
+	public setVatRate(vatRate: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate";
+		this.setSemanticPropertyLiteral(property, vatRate);
+	}
+	
+
+	public setValue(value: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
+		this.setSemanticPropertyLiteral(property, value);
 	}
 	
 
@@ -61,6 +67,12 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit";
 		this.setSemanticPropertyReference(property, unit);
 		this.connector.store(unit);
+	}
+	
+
+	public getVatRate(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate"));
 	}
 	
 
@@ -77,21 +89,9 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 	}
 	
 
-	public getVatRate(): number
+	public getValue(): number
 	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate"));
-	}
-	
-
-	public setValue(value: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
-		this.setSemanticPropertyLiteral(property, value);
-	}
-	
-
-	public setVatRate(vatRate: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate";
-		this.setSemanticPropertyLiteral(property, vatRate);
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
 	}
 	
 

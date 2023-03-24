@@ -1,6 +1,6 @@
 {
   "@context": {
-    "dfc-f": "http://static.datafoodconsortium.org/data/productGlossary_Facet.rdf#",
+    "dfc-f": "http://static.datafoodconsortium.org/data/facets.rdf#",
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "rdf": "http://www.w3.org/2000/01/rdf-schema#"
   },

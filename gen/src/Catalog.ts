@@ -22,10 +22,10 @@
  * SOFTWARE.
 */
 
-import ICatalog from "./ICatalog.js"
-import IEnterprise from "./IEnterprise.js"
 import Catalogable from "./Catalogable.js"
 import ICatalogItem from "./ICatalogItem.js"
+import ICatalog from "./ICatalog.js"
+import IEnterprise from "./IEnterprise.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -54,33 +54,16 @@ export default class Catalog extends SemanticObject implements ICatalog {
 		if (parameters.items) parameters.items.forEach(e => this.addItem(e));
 	}
 
-	public addMaintainer(maintainer: (IEnterprise & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintainedBy";
-		if (maintainer.isSemanticObjectAnonymous()) {
-			if (maintainer.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, maintainer);
-			else this.addSemanticPropertyReference(property, maintainer);
+	public addItem(item: (Catalogable & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists";
+		if (item.isSemanticObjectAnonymous()) {
+			if (item.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, item);
+			else this.addSemanticPropertyReference(property, item);
 		}
 		else {
-			this.connector.store(maintainer);
-			this.addSemanticPropertyReference(property, maintainer);
+			this.connector.store(item);
+			this.addSemanticPropertyReference(property, item);
 		}
-	}
-	
-
-	public async getItems(options?: IGetterOptions): Promise<Array<(Catalogable & Semanticable)>>
-	 {
-		const results = new Array<(Catalogable & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(Catalogable & Semanticable)> semanticObject);
-		}
-		return results;
-	}
-	
-
-	public removeItem(item: (Catalogable & Semanticable)): void {
-		throw new Error("Not yet implemented.");
 	}
 	
 
@@ -96,16 +79,33 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	}
 	
 
-	public addItem(item: (Catalogable & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists";
-		if (item.isSemanticObjectAnonymous()) {
-			if (item.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, item);
-			else this.addSemanticPropertyReference(property, item);
+	public addMaintainer(maintainer: (IEnterprise & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintainedBy";
+		if (maintainer.isSemanticObjectAnonymous()) {
+			if (maintainer.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, maintainer);
+			else this.addSemanticPropertyReference(property, maintainer);
 		}
 		else {
-			this.connector.store(item);
-			this.addSemanticPropertyReference(property, item);
+			this.connector.store(maintainer);
+			this.addSemanticPropertyReference(property, maintainer);
 		}
+	}
+	
+
+	public removeItem(item: (Catalogable & Semanticable)): void {
+		throw new Error("Not yet implemented.");
+	}
+	
+
+	public async getItems(options?: IGetterOptions): Promise<Array<(Catalogable & Semanticable)>>
+	 {
+		const results = new Array<(Catalogable & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<(Catalogable & Semanticable)> semanticObject);
+		}
+		return results;
 	}
 	
 

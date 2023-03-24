@@ -1,6 +1,6 @@
 import Offerable from "./Offerable.js"
-import Stockable from "./Stockable.js"
 import Catalogable from "./Catalogable.js"
+import Stockable from "./Stockable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 

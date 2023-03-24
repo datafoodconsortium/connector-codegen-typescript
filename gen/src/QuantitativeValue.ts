@@ -22,8 +22,8 @@
  * SOFTWARE.
 */
 
-import Quantifiable from "./Quantifiable.js"
 import IUnit from "./IUnit.js"
+import Quantifiable from "./Quantifiable.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -47,7 +47,7 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 		
 		
 		if (parameters.unit) this.setQuantityUnit(parameters.unit);
-		if (parameters.value) this.setQuantityValue(parameters.value);
+		if (parameters.value || parameters.value === 0) this.setQuantityValue(parameters.value);
 	}
 
 	public async getQuantityUnit(options?: IGetterOptions): Promise<(IUnit & Semanticable) | undefined>
@@ -63,12 +63,6 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 	}
 	
 
-	public getQuantityValue(): number
-	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
-	}
-	
-
 	public setQuantityUnit(quantityUnit: (IUnit & Semanticable)): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit";
 		this.setSemanticPropertyReference(property, quantityUnit);
@@ -79,6 +73,12 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 	public setQuantityValue(quantityValue: number): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
 		this.setSemanticPropertyLiteral(property, quantityValue);
+	}
+	
+
+	public getQuantityValue(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
 	}
 	
 

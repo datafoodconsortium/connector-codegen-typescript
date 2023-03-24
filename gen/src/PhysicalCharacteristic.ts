@@ -23,9 +23,9 @@
 */
 
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import IUnit from "./IUnit.js"
 import Characteristic from "./Characteristic.js"
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import IUnit from "./IUnit.js"
 import IPhysicalDimension from "./IPhysicalDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"

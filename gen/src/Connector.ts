@@ -128,7 +128,7 @@ export default class Connector implements IConnector {
     }
 
     public async loadFacets(facets: any): Promise<void> {
-        const prefix: string = "http://static.datafoodconsortium.org/data/productGlossary_Facet.rdf#";
+        const prefix: string = "http://static.datafoodconsortium.org/data/facets.rdf#";
         this.FACETS = await this.importThesaurus(facets, prefix);
     }
 

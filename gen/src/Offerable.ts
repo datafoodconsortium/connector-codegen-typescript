@@ -1,5 +1,5 @@
-import IOffer from "./IOffer.js"
 import IDefinedProduct from "./IDefinedProduct.js"
+import IOffer from "./IOffer.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
