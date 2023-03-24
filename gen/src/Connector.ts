@@ -32,7 +32,7 @@ export default class Connector implements IConnector {
         this.storeObject = new ConnectorStoreMap();
         this.fetchFunction = async (semanticId: string) => (await fetch(semanticId));
         this.factory = new ConnectorFactory(this);
-        this.importer = new ConnectorImporterJsonldStream(context);
+        this.importer = new ConnectorImporterJsonldStream({ context: context });
         const outputContext = "http://static.datafoodconsortium.org/ontologies/context.json";
         this.exporter = new ConnectorExporterJsonldStream(context, outputContext);
     }

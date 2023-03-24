@@ -9,14 +9,17 @@ import IConnectorImporterOptions from "./IConnectorImporterOptions";
 export default class ConnectorImporterJsonldStream implements IConnectorImporter {
 
     private context: string | undefined;
+    private documentLoader: any;
 
-    public constructor(context?: any) {
-        this.context = context;
+    // TODO: add the optional parameters of the JsonLdParser class.
+    public constructor(parameters?: { context?: any, documentLoader?: any }) {
+        this.context = parameters?.context;
+        this.documentLoader = parameters?.documentLoader;
     }
 
     public async import(json: string, options?: IConnectorImporterOptions): Promise<Array<DatasetExt>> {
         const context = options?.context? options.context : this.context;
-        const parser = new JsonLdParser({ context: context });
+        const parser = new JsonLdParser({ context: context, documentLoader: this.documentLoader });
 
         // imported datasets results.
         const datasets: Array<DatasetExt> = new Array<DatasetExt>();

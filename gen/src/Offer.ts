@@ -108,13 +108,13 @@ export default class Offer extends SemanticObject implements IOffer {
 	
 	public async getPrice(options?: IGetterOptions): Promise<(IPrice & Semanticable) | undefined>
 	 {
-		const blankNode: any = this.getSemanticPropertyAnonymous("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#price");
+		const blankNode: any = this.getSemanticPropertyAnonymous("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPrice");
 		return <IPrice & Semanticable> this.connector.getDefaultFactory().createFromRdfDataset(blankNode);
 	}
 	
 
 	public setPrice(price: (IPrice & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#price";
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPrice";
 		this.setSemanticPropertyAnonymous(property, price);
 	}
 	
