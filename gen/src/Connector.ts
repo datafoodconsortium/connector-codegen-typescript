@@ -103,7 +103,7 @@ export default class Connector implements IConnector {
             const narrowers = parent.getSemanticPropertyAll(skosNarrower);
 
             narrowers.forEach((narrower: string) => {
-                const name: string = narrower.split(prefix)[1].toUpperCase();
+                const name: string = narrower.split(prefix)[1].replace('-', '_').toUpperCase();
                 const concept: Semanticable | undefined = concepts.get(narrower);
                 if (concept) {
                     // @ts-ignore
@@ -115,7 +115,7 @@ export default class Connector implements IConnector {
 
         // @ts-ignore: if the conceptScheme does not exist, an exception should have be already throwned
         conceptScheme.getSemanticPropertyAll(skosHasTopConcept).forEach((topConcept: any) => {
-            const name: string = topConcept.split(prefix)[1].toUpperCase();
+            const name: string = topConcept.split(prefix)[1].replace('-', '_').toUpperCase();
             const concept: Semanticable | undefined = concepts.get(topConcept);
             if (!concept)
                 throw new Error("The thesaurus top concept " + topConcept + " was not found.");

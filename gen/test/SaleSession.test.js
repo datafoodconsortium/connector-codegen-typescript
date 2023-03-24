@@ -9,6 +9,11 @@ const offer = new Offer({
     semanticId: "http://myplatform.com/offer1"
 });
 
+const offer2 = new Offer({
+    connector: connector,
+    semanticId: "http://myplatform.com/offer2"
+});
+
 const saleSession = new SaleSession({
     connector: connector,
     semanticId: "http://myplatform.com/saleSession1",
@@ -18,7 +23,7 @@ const saleSession = new SaleSession({
     offers: [offer]
 });
 
-const json = ``;
+const json = `{"@context":"http://static.datafoodconsortium.org/ontologies/context.json","@id":"http://myplatform.com/saleSession1","@type":"dfc-b:SaleSession","dfc-b:beginDate":"beginDate","dfc-b:endDate":"endDate","dfc-b:lists":{"@id":"http://myplatform.com/offer1"},"dfc-b:quantity":"5"}`;
 
 test('SaleSession:import', async () => {
     const importedAll = await connector.import(json);
@@ -29,7 +34,6 @@ test('SaleSession:import', async () => {
 
 test('SaleSession:export', async () => {
     const serialized = await connector.export([saleSession]);
-    console.log(serialized);
     expect(serialized).toStrictEqual(json);
 });
 
@@ -71,16 +75,16 @@ test('SaleSession:setQuantity', async () => {
 });
 
 test('SaleSession:addOffer', async () => {
-    const offer2 = new Offer({
-        connector: connector,
-        semanticId: "http://myplatform.com/offer2"
-    });
     saleSession.addOffer(offer2);
     const offers = await saleSession.getOffers();
     expect(offers.length).toStrictEqual(2);
+    expect(offers[0].equals(offer)).toStrictEqual(true);
     expect(offers[1].equals(offer2)).toStrictEqual(true);
 });
 
 test('SaleSession:removeOffer', async () => {
-    expect(true).toStrictEqual(false);
+    saleSession.removeOffer(offer);
+    const offers = await saleSession.getOffers();
+    expect(offers.length).toStrictEqual(1);
+    expect(offers[0].equals(offer2)).toStrictEqual(true);
 });

@@ -22,18 +22,18 @@
  * SOFTWARE.
 */
 
-import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import ICertification from "./ICertification.js"
+import INatureOrigin from "./INatureOrigin.js"
+import IProductType from "./IProductType.js"
 import INutrientCharacteristic from "./INutrientCharacteristic.js"
-import IDefinedProduct from "./IDefinedProduct.js"
+import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
 import Quantifiable from "./Quantifiable.js"
+import IPartOrigin from "./IPartOrigin.js"
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import IDefinedProduct from "./IDefinedProduct.js"
+import ICatalogItem from "./ICatalogItem.js"
 import Claimable from "./Claimable.js"
 import IGeographicalOrigin from "./IGeographicalOrigin.js"
-import IProductType from "./IProductType.js"
-import IPartOrigin from "./IPartOrigin.js"
-import INatureOrigin from "./INatureOrigin.js"
-import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import ICatalogItem from "./ICatalogItem.js"
-import ICertification from "./ICertification.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -68,6 +68,30 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 		if (parameters.partOrigin) parameters.partOrigin.forEach(e => this.addPartOrigin(e));
 	}
 
+	public addCatalogItem(catalogItem: (ICatalogItem & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#referencedBy";
+		if (catalogItem.isSemanticObjectAnonymous()) {
+			if (catalogItem.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, catalogItem);
+			else this.addSemanticPropertyReference(property, catalogItem);
+		}
+		else {
+			this.connector.store(catalogItem);
+			this.addSemanticPropertyReference(property, catalogItem);
+		}
+	}
+	
+
+	public async getCatalogItems(options?: IGetterOptions): Promise<Array<(ICatalogItem & Semanticable)>>
+	 {
+		const results = new Array<(ICatalogItem & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#referencedBy");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<(ICatalogItem & Semanticable)> semanticObject);
+		}
+		return results;
+	}
+	
 	public addCertification(certification: (ICertification & Semanticable)): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCertification";
 		if (certification.isSemanticObjectAnonymous()) {
@@ -97,6 +121,25 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 		throw new Error("Not yet implemented.");
 	}
 	
+	public async getClaims(options?: IGetterOptions): Promise<Array<(Claimable & Semanticable)>>
+	 {
+		const results = new Array<(Claimable & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasClaim");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<(Claimable & Semanticable)> semanticObject);
+		}
+		return results;
+	}
+	
+
+	public setQuantity(quantity: (Quantifiable & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasQuantity";
+		this.setSemanticPropertyReference(property, quantity);
+		this.connector.store(quantity);
+	}
+	
+
 	public async getQuantity(options?: IGetterOptions): Promise<(Quantifiable & Semanticable) | undefined>
 	 {
 		let result: (Quantifiable & Semanticable) | undefined = undefined;
@@ -123,15 +166,10 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	}
 	
 
-	public async getClaims(options?: IGetterOptions): Promise<Array<(Claimable & Semanticable)>>
-	 {
-		const results = new Array<(Claimable & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasClaim");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(Claimable & Semanticable)> semanticObject);
-		}
-		return results;
+	public setProductType(productType: (IProductType & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasType";
+		this.setSemanticPropertyReference(property, productType);
+		this.connector.store(productType);
 	}
 	
 
@@ -152,35 +190,62 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 		}
 	}
 	
-
-	public setQuantity(quantity: (Quantifiable & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasQuantity";
-		this.setSemanticPropertyReference(property, quantity);
-		this.connector.store(quantity);
+	public setDescription(description: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description";
+		this.setSemanticPropertyLiteral(property, description);
 	}
 	
 
-	public setProductType(productType: (IProductType & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasType";
-		this.setSemanticPropertyReference(property, productType);
-		this.connector.store(productType);
+	public getDescription(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description");
 	}
 	
-	public removeAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void {
-		throw new Error("Not yet implemented.");
+	public setName(name: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#name";
+		this.setSemanticPropertyLiteral(property, name);
 	}
 	
 
-	public addNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNatureOrigin";
-		if (natureOrigin.isSemanticObjectAnonymous()) {
-			if (natureOrigin.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, natureOrigin);
-			else this.addSemanticPropertyReference(property, natureOrigin);
+	public getName(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#name");
+	}
+	
+	public addNutrientCharacteristic(nutrientCharacteristic: (INutrientCharacteristic & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNutrientCharacteristic";
+		if (nutrientCharacteristic.isSemanticObjectAnonymous()) {
+			if (nutrientCharacteristic.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, nutrientCharacteristic);
+			else this.addSemanticPropertyReference(property, nutrientCharacteristic);
 		}
 		else {
-			this.connector.store(natureOrigin);
-			this.addSemanticPropertyReference(property, natureOrigin);
+			this.connector.store(nutrientCharacteristic);
+			this.addSemanticPropertyReference(property, nutrientCharacteristic);
 		}
+	}
+	
+
+	public setUsageOrStorageConditions(usageOrStorageConditions: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#usageOrStorageCondition";
+		this.setSemanticPropertyLiteral(property, usageOrStorageConditions);
+	}
+	
+
+	public setGeographicalOrigin(geographicalOrigin: (IGeographicalOrigin & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasGeographicalOrigin";
+		this.setSemanticPropertyReference(property, geographicalOrigin);
+		this.connector.store(geographicalOrigin);
+	}
+	
+
+	public getAlcoholPercentage(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#alcoholPercentage"));
+	}
+	
+
+	public removePhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void {
+		throw new Error("Not yet implemented.");
 	}
 	
 
@@ -197,59 +262,16 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	}
 	
 
-	public addNutrientCharacteristic(nutrientCharacteristic: (INutrientCharacteristic & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNutrientCharacteristic";
-		if (nutrientCharacteristic.isSemanticObjectAnonymous()) {
-			if (nutrientCharacteristic.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, nutrientCharacteristic);
-			else this.addSemanticPropertyReference(property, nutrientCharacteristic);
+	public addNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNatureOrigin";
+		if (natureOrigin.isSemanticObjectAnonymous()) {
+			if (natureOrigin.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, natureOrigin);
+			else this.addSemanticPropertyReference(property, natureOrigin);
 		}
 		else {
-			this.connector.store(nutrientCharacteristic);
-			this.addSemanticPropertyReference(property, nutrientCharacteristic);
+			this.connector.store(natureOrigin);
+			this.addSemanticPropertyReference(property, natureOrigin);
 		}
-	}
-	
-
-	public removeNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void {
-		throw new Error("Not yet implemented.");
-	}
-	
-
-	public setGeographicalOrigin(geographicalOrigin: (IGeographicalOrigin & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasGeographicalOrigin";
-		this.setSemanticPropertyReference(property, geographicalOrigin);
-		this.connector.store(geographicalOrigin);
-	}
-	
-
-	public setUsageOrStorageConditions(usageOrStorageConditions: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#usageOrStorageCondition";
-		this.setSemanticPropertyLiteral(property, usageOrStorageConditions);
-	}
-	
-
-	public addAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenCharacteristic";
-		if (allergenCharacteristic.isSemanticObjectAnonymous()) {
-			if (allergenCharacteristic.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, allergenCharacteristic);
-			else this.addSemanticPropertyReference(property, allergenCharacteristic);
-		}
-		else {
-			this.connector.store(allergenCharacteristic);
-			this.addSemanticPropertyReference(property, allergenCharacteristic);
-		}
-	}
-	
-
-	public async getNatureOrigin(options?: IGetterOptions): Promise<Array<(INatureOrigin & Semanticable)>>
-	 {
-		const results = new Array<(INatureOrigin & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNatureOrigin");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(INatureOrigin & Semanticable)> semanticObject);
-		}
-		return results;
 	}
 	
 
@@ -270,15 +292,50 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	}
 	
 
-	public async getAllergenCharacteristics(options?: IGetterOptions): Promise<Array<(IAllergenCharacteristic & Semanticable)>>
+	public addAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenCharacteristic";
+		if (allergenCharacteristic.isSemanticObjectAnonymous()) {
+			if (allergenCharacteristic.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, allergenCharacteristic);
+			else this.addSemanticPropertyReference(property, allergenCharacteristic);
+		}
+		else {
+			this.connector.store(allergenCharacteristic);
+			this.addSemanticPropertyReference(property, allergenCharacteristic);
+		}
+	}
+	
+
+	public removeAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void {
+		throw new Error("Not yet implemented.");
+	}
+	
+
+	public async getNatureOrigin(options?: IGetterOptions): Promise<Array<(INatureOrigin & Semanticable)>>
 	 {
-		const results = new Array<(IAllergenCharacteristic & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenCharacteristic");
+		const results = new Array<(INatureOrigin & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNatureOrigin");
 		for await (const semanticId of properties) {
 			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(IAllergenCharacteristic & Semanticable)> semanticObject);
+			if (semanticObject) results.push(<(INatureOrigin & Semanticable)> semanticObject);
 		}
 		return results;
+	}
+	
+
+	public getUsageOrStorageConditions(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#usageOrStorageCondition");
+	}
+	
+
+	public setLifetime(lifetime: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lifetime";
+		this.setSemanticPropertyLiteral(property, lifetime);
+	}
+	
+
+	public removeNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void {
+		throw new Error("Not yet implemented.");
 	}
 	
 
@@ -294,68 +351,9 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	}
 	
 
-	public setAlcoholPercentage(alcoholPercentage: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#alcoholPercentage";
-		this.setSemanticPropertyLiteral(property, alcoholPercentage);
-	}
-	
-
-	public setLifetime(lifetime: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lifetime";
-		this.setSemanticPropertyLiteral(property, lifetime);
-	}
-	
-
-	public addPhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPhysicalCharacteristic";
-		if (physicalCharacteristic.isSemanticObjectAnonymous()) {
-			if (physicalCharacteristic.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, physicalCharacteristic);
-			else this.addSemanticPropertyReference(property, physicalCharacteristic);
-		}
-		else {
-			this.connector.store(physicalCharacteristic);
-			this.addSemanticPropertyReference(property, physicalCharacteristic);
-		}
-	}
-	
-
 	public getLifetime(): string
 	 {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lifetime");
-	}
-	
-
-	public getUsageOrStorageConditions(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#usageOrStorageCondition");
-	}
-	
-
-	public getAlcoholPercentage(): number
-	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#alcoholPercentage"));
-	}
-	
-
-	public async getPartOrigin(options?: IGetterOptions): Promise<Array<(IPartOrigin & Semanticable)>>
-	 {
-		const results = new Array<(IPartOrigin & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPartOrigin");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(IPartOrigin & Semanticable)> semanticObject);
-		}
-		return results;
-	}
-	
-
-	public removePhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void {
-		throw new Error("Not yet implemented.");
-	}
-	
-
-	public removePartOrigin(partOrigin: (IPartOrigin & Semanticable)): void {
-		throw new Error("Not yet implemented.");
 	}
 	
 
@@ -371,50 +369,52 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 		}
 	}
 	
-	public setName(name: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#name";
-		this.setSemanticPropertyLiteral(property, name);
+
+	public removePartOrigin(partOrigin: (IPartOrigin & Semanticable)): void {
+		throw new Error("Not yet implemented.");
 	}
 	
 
-	public getName(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#name");
-	}
-	
-	public getDescription(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description");
+	public setAlcoholPercentage(alcoholPercentage: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#alcoholPercentage";
+		this.setSemanticPropertyLiteral(property, alcoholPercentage);
 	}
 	
 
-	public setDescription(description: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description";
-		this.setSemanticPropertyLiteral(property, description);
-	}
-	
-	public addCatalogItem(catalogItem: (ICatalogItem & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#referencedBy";
-		if (catalogItem.isSemanticObjectAnonymous()) {
-			if (catalogItem.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, catalogItem);
-			else this.addSemanticPropertyReference(property, catalogItem);
-		}
-		else {
-			this.connector.store(catalogItem);
-			this.addSemanticPropertyReference(property, catalogItem);
-		}
-	}
-	
-
-	public async getCatalogItems(options?: IGetterOptions): Promise<Array<(ICatalogItem & Semanticable)>>
+	public async getAllergenCharacteristics(options?: IGetterOptions): Promise<Array<(IAllergenCharacteristic & Semanticable)>>
 	 {
-		const results = new Array<(ICatalogItem & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#referencedBy");
+		const results = new Array<(IAllergenCharacteristic & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenCharacteristic");
 		for await (const semanticId of properties) {
 			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(ICatalogItem & Semanticable)> semanticObject);
+			if (semanticObject) results.push(<(IAllergenCharacteristic & Semanticable)> semanticObject);
 		}
 		return results;
+	}
+	
+
+	public async getPartOrigin(options?: IGetterOptions): Promise<Array<(IPartOrigin & Semanticable)>>
+	 {
+		const results = new Array<(IPartOrigin & Semanticable)>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPartOrigin");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<(IPartOrigin & Semanticable)> semanticObject);
+		}
+		return results;
+	}
+	
+
+	public addPhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPhysicalCharacteristic";
+		if (physicalCharacteristic.isSemanticObjectAnonymous()) {
+			if (physicalCharacteristic.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, physicalCharacteristic);
+			else this.addSemanticPropertyReference(property, physicalCharacteristic);
+		}
+		else {
+			this.connector.store(physicalCharacteristic);
+			this.addSemanticPropertyReference(property, physicalCharacteristic);
+		}
 	}
 	
 

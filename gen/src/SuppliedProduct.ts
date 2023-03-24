@@ -22,18 +22,18 @@
  * SOFTWARE.
 */
 
-import DefinedProduct from "./DefinedProduct.js"
-import IGeographicalOrigin from "./IGeographicalOrigin.js"
-import IPartOrigin from "./IPartOrigin.js"
-import ICertification from "./ICertification.js"
-import Claimable from "./Claimable.js"
-import IProductType from "./IProductType.js"
-import INutrientCharacteristic from "./INutrientCharacteristic.js"
-import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
-import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
 import ICatalogItem from "./ICatalogItem.js"
-import Quantifiable from "./Quantifiable.js"
+import DefinedProduct from "./DefinedProduct.js"
+import Claimable from "./Claimable.js"
+import IPartOrigin from "./IPartOrigin.js"
+import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import INatureOrigin from "./INatureOrigin.js"
+import IGeographicalOrigin from "./IGeographicalOrigin.js"
+import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
+import ICertification from "./ICertification.js"
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import Quantifiable from "./Quantifiable.js"
+import IProductType from "./IProductType.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";

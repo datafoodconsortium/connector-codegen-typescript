@@ -34,7 +34,7 @@ const orderLine = new OrderLine({
     quantity: 2
 });
 
-const json = ``;
+const json = `{"@context":"http://static.datafoodconsortium.org/ontologies/context.json","@graph":[{"@id":"_:b1","@type":"dfc-b:Price","dfc-b:VATrate":"19.9","dfc-b:hasUnit":"dfc-m:Euro","dfc-b:value":"5.42"},{"@id":"http://myplatform.com/orderLine1","@type":"dfc-b:OrderLine","dfc-b:concerns":{"@id":"http://myplatform.com/offer1"},"dfc-b:hasPrice":{"@id":"_:b1"},"dfc-b:partOf":{"@id":"http://myplatform.com/order1"},"dfc-b:quantity":"2"}]}`;
 
 test('OrderLine:import', async () => {
     const imported = await connector.import(json);
@@ -45,7 +45,6 @@ test('OrderLine:import', async () => {
 
 test('OrderLine:export', async () => {
     const serialized = await connector.export([orderLine]);
-    console.log(serialized);
     expect(serialized).toStrictEqual(json);
 });
 

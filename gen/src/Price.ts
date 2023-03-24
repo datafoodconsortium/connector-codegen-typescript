@@ -51,9 +51,9 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 		if (parameters.unit) this.setUnit(parameters.unit);
 	}
 
-	public setValue(value: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
-		this.setSemanticPropertyLiteral(property, value);
+	public getValue(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
 	}
 	
 
@@ -61,24 +61,6 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit";
 		this.setSemanticPropertyReference(property, unit);
 		this.connector.store(unit);
-	}
-	
-
-	public getValue(): number
-	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
-	}
-	
-
-	public getVatRate(): number
-	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate"));
-	}
-	
-
-	public setVatRate(vatRate: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate";
-		this.setSemanticPropertyLiteral(property, vatRate);
 	}
 	
 
@@ -92,6 +74,24 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 		}
 		return result;
 		
+	}
+	
+
+	public getVatRate(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate"));
+	}
+	
+
+	public setValue(value: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
+		this.setSemanticPropertyLiteral(property, value);
+	}
+	
+
+	public setVatRate(vatRate: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate";
+		this.setSemanticPropertyLiteral(property, vatRate);
 	}
 	
 

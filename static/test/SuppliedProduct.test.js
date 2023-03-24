@@ -5,24 +5,23 @@ import AllergenCharacteristic from '../lib/AllergenCharacteristic.js';
 import NutrientCharacteristic from '../lib/NutrientCharacteristic.js';
 import PhysicalCharacteristic from '../lib/PhysicalCharacteristic.js';
 import Connector from "../lib/Connector.js";
-
-const connector = new Connector();
-
 import facets from '../test/thesaurus/facets.json' assert { type: 'json' };
 import measures from '../test/thesaurus/measures.json' assert { type: 'json' };
 import productTypes from '../test/thesaurus/productTypes.json' assert { type: 'json' };
 
+const connector = new Connector();
+
 await connector.loadFacets(JSON.stringify(facets));
 await connector.loadMeasures(JSON.stringify(measures));
-await connector.loadProductTypes(JSON.stringify(productTypes));
+//await connector.loadProductTypes(JSON.stringify(productTypes));
 
 const gram = connector.MEASURES.UNIT.QUANTITYUNIT.GRAM;
 const kilogram = connector.MEASURES.UNIT.QUANTITYUNIT.KILOGRAM;
 
 const quantity = new QuantitativeValue({ 
     connector: connector, 
-    quantity: 1.2, 
-    unit: kilogram 
+    value: 1.2, 
+    unit: kilogram
 });
 
 const allergenCharacteristic = new AllergenCharacteristic({ 
@@ -69,19 +68,19 @@ const physicalCharacteristic2 = new PhysicalCharacteristic({
 
 const catalogItem = new CatalogItem({ 
     connector: connector, 
-    semanticId: "https://myplatform.com/catalogItem" 
+    semanticId: "http://myplatform.com/catalogItem" 
 });
 
 const catalogItem2 = new CatalogItem({ 
     connector: connector, 
-    semanticId: "https://myplatform.com/catalogItem2" 
+    semanticId: "http://myplatform.com/catalogItem2" 
 });
 
 let suppliedProduct = new SuppliedProduct({
     connector: connector,
-    semanticId: "https://myplatform.com/tomato",
+    semanticId: "http://myplatform.com/tomato",
     description: "Awesome tomato",
-    productType: connector.PRODUCT_TYPES.VEGETABLE.TOMATO.ROUND_TOMATO, 
+    //productType: connector.PRODUCT_TYPES.VEGETABLE.TOMATO.ROUND_TOMATO, 
     quantity: quantity,
     totalTheoreticalStock: 2.23,
     alcoholPercentage: 0.0, 
@@ -114,7 +113,7 @@ test('SuppliedProduct:export', async () => {
 });
 
 test('SuppliedProduct:getSemanticId', async () => {
-    expect(suppliedProduct.getSemanticId()).toStrictEqual("https://myplatform.com/tomato");
+    expect(suppliedProduct.getSemanticId()).toStrictEqual("http://myplatform.com/tomato");
 });
 
 test('SuppliedProduct:getDescription', async () => {

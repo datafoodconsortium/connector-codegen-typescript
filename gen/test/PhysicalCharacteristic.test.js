@@ -8,7 +8,9 @@ await connector.loadFacets(JSON.stringify(facets));
 await connector.loadMeasures(JSON.stringify(measures));
 
 const kilogram = connector.MEASURES.UNIT.QUANTITYUNIT.KILOGRAM;
+const gram = connector.MEASURES.UNIT.QUANTITYUNIT.GRAM;
 const physicalDimension = connector.MEASURES.DIMENSION.PHYSICALDIMENSION.WEIGHT;
+const physicalDimension2 = connector.MEASURES.DIMENSION.PHYSICALDIMENSION.HEIGHT;
 
 const physicalCharacteristic = new PhysicalCharacteristic({ 
     connector: connector, 
@@ -17,7 +19,7 @@ const physicalCharacteristic = new PhysicalCharacteristic({
     physicalDimension: physicalDimension
 });
 
-const json = ``;
+const json = `{"@context":"http://static.datafoodconsortium.org/ontologies/context.json","@id":"_:b1","@type":"dfc-b:PhysicalCharacteristic","dfc-b:hasPhysicalDimension":"dfc-m:Weight","dfc-b:hasUnit":"dfc-m:Kilogram","dfc-b:value":"100"}`;
 
 test('PhysicalCharacteristic:import', async () => {
     const imported = await connector.import(json);
@@ -28,7 +30,6 @@ test('PhysicalCharacteristic:import', async () => {
 
 test('PhysicalCharacteristic:export', async () => {
     const serialized = await connector.export([physicalCharacteristic]);
-    console.log(serialized);
     expect(serialized).toStrictEqual(json);
 });
 
@@ -46,4 +47,19 @@ test('PhysicalCharacteristic:getQuantityUnit', async () => {
 
 test('PhysicalCharacteristic:getQuantityDimension', async () => {
     expect(await physicalCharacteristic.getQuantityDimension()).toStrictEqual(physicalDimension);
+});
+
+test('PhysicalCharacteristic:setQuantityValue', async () => {
+    physicalCharacteristic.setQuantityValue(6.35);
+    expect(physicalCharacteristic.getQuantityValue()).toStrictEqual(6.35);
+});
+
+test('PhysicalCharacteristic:setQuantityUnit', async () => {
+    physicalCharacteristic.setQuantityUnit(gram);
+    expect(await physicalCharacteristic.getQuantityUnit()).toStrictEqual(gram);
+});
+
+test('PhysicalCharacteristic:setQuantityDimension', async () => {
+    physicalCharacteristic.setQuantityDimension(physicalDimension2);
+    expect(await physicalCharacteristic.getQuantityDimension()).toStrictEqual(physicalDimension2);
 });

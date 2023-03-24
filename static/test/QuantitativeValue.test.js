@@ -9,11 +9,11 @@ const kilogram = connector.MEASURES.UNIT.QUANTITYUNIT.KILOGRAM;
 
 const quantitativeValue = new QuantitativeValue({ 
     connector: connector, 
-    quantity: 1, 
+    value: 1, 
     unit: kilogram 
 });
 
-const json = ``;
+const json = `{"@context":"http://static.datafoodconsortium.org/ontologies/context.json","@id":"_:b1","@type":"dfc-b:QuantitativeValue","dfc-b:hasUnit":"dfc-m:Kilogram","dfc-b:value":"1"}`;
 
 test('QuantitativeValue:import', async () => {
     const importedAll = await connector.import(json);
@@ -24,7 +24,6 @@ test('QuantitativeValue:import', async () => {
 
 test('QuantitativeValue:export', async () => {
     const serialized = await connector.export([quantitativeValue]);
-    console.log(serialized);
     expect(serialized).toStrictEqual(json);
 });
 
