@@ -4,11 +4,11 @@ import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Quantifiable {
 
-	getQuantityUnit(): Promise<(IUnit & Semanticable) | undefined>
+	getQuantityUnit(): Promise<IUnit | undefined>
 	;
 	getQuantityValue(): number
 	;
-	setQuantityUnit(quantityUnit: (IUnit & Semanticable)): void;
+	setQuantityUnit(quantityUnit: IUnit): void;
 	setQuantityValue(quantityValue: number): void;
 
 }

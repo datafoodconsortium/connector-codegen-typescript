@@ -4,8 +4,8 @@ import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Onboardable {
 
-	getCustomerCategories(): Promise<Array<(ICustomerCategory & Semanticable)>>
+	getCustomerCategories(): Promise<Array<ICustomerCategory>>
 	;
-	addCustomerCategory(customerCategory: (ICustomerCategory & Semanticable)): void;
+	addCustomerCategory(customerCategory: ICustomerCategory): void;
 
 }

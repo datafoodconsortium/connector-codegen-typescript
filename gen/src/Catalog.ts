@@ -22,10 +22,10 @@
  * SOFTWARE.
 */
 
-import Catalogable from "./Catalogable.js"
-import ICatalogItem from "./ICatalogItem.js"
 import ICatalog from "./ICatalog.js"
+import Catalogable from "./Catalogable.js"
 import IEnterprise from "./IEnterprise.js"
+import ICatalogItem from "./ICatalogItem.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -35,7 +35,7 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, maintainers?: (IEnterprise & Semanticable)[], items?: (ICatalogItem & Semanticable)[]}) {
+	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, maintainers?: IEnterprise[], items?: ICatalogItem[]}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Catalog";
 		
 		if (parameters.other) {
@@ -54,7 +54,19 @@ export default class Catalog extends SemanticObject implements ICatalog {
 		if (parameters.items) parameters.items.forEach(e => this.addItem(e));
 	}
 
-	public addItem(item: (Catalogable & Semanticable)): void {
+	public async getItems(options?: IGetterOptions): Promise<Array<ICatalogItem>>
+	 {
+		const results = new Array<ICatalogItem>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<ICatalogItem> semanticObject);
+		}
+		return results;
+	}
+	
+
+	public addItem(item: ICatalogItem): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists";
 		if (item.isSemanticObjectAnonymous()) {
 			if (item.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, item);
@@ -67,19 +79,12 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	}
 	
 
-	public async getMaintainers(options?: IGetterOptions): Promise<Array<(IEnterprise & Semanticable)>>
-	 {
-		const results = new Array<(IEnterprise & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintainedBy");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(IEnterprise & Semanticable)> semanticObject);
-		}
-		return results;
+	public removeItem(item: ICatalogItem): void {
+		throw new Error("Not yet implemented.");
 	}
 	
 
-	public addMaintainer(maintainer: (IEnterprise & Semanticable)): void {
+	public addMaintainer(maintainer: IEnterprise): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintainedBy";
 		if (maintainer.isSemanticObjectAnonymous()) {
 			if (maintainer.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, maintainer);
@@ -92,18 +97,13 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	}
 	
 
-	public removeItem(item: (Catalogable & Semanticable)): void {
-		throw new Error("Not yet implemented.");
-	}
-	
-
-	public async getItems(options?: IGetterOptions): Promise<Array<(Catalogable & Semanticable)>>
+	public async getMaintainers(options?: IGetterOptions): Promise<Array<IEnterprise>>
 	 {
-		const results = new Array<(Catalogable & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists");
+		const results = new Array<IEnterprise>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintainedBy");
 		for await (const semanticId of properties) {
 			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(Catalogable & Semanticable)> semanticObject);
+			if (semanticObject) results.push(<IEnterprise> semanticObject);
 		}
 		return results;
 	}

@@ -4,9 +4,9 @@ import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface TechnicalProductProposer {
 
-	getProposedTechnicalProducts(): Promise<Array<(ITechnicalProduct & Semanticable)>>
+	getProposedTechnicalProducts(): Promise<Array<ITechnicalProduct>>
 	;
-	proposeTechnicalProducts(technicalProducts: (ITechnicalProduct & Semanticable)): void;
-	unproposeTechnicalProducts(technicalProducts: (ITechnicalProduct & Semanticable)): void;
+	proposeTechnicalProducts(technicalProducts: ITechnicalProduct): void;
+	unproposeTechnicalProducts(technicalProducts: ITechnicalProduct): void;
 
 }

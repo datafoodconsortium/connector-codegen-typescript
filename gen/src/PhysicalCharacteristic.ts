@@ -22,11 +22,11 @@
  * SOFTWARE.
 */
 
+import IPhysicalDimension from "./IPhysicalDimension.js"
 import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import IUnit from "./IUnit.js"
 import Characteristic from "./Characteristic.js"
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import IPhysicalDimension from "./IPhysicalDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -35,7 +35,7 @@ import IGetterOptions from "./IGetterOptions.js"
 export default class PhysicalCharacteristic extends Characteristic implements IPhysicalCharacteristic {
 	
 
-	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, physicalDimension?: (IPhysicalDimension & Semanticable)}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, unit?: IUnit, value?: number, physicalDimension?: IPhysicalDimension}) {
 		const type: string = parameters.semanticType? parameters.semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#PhysicalCharacteristic";
 		
 		if (parameters.other) {
@@ -51,20 +51,20 @@ export default class PhysicalCharacteristic extends Characteristic implements IP
 		if (parameters.physicalDimension) this.setQuantityDimension(parameters.physicalDimension);
 	}
 
-	public async getQuantityDimension(options?: IGetterOptions): Promise<(ICharacteristicDimension & Semanticable) | undefined>
+	public async getQuantityDimension(options?: IGetterOptions): Promise<ICharacteristicDimension | undefined>
 	 {
-		let result: (ICharacteristicDimension & Semanticable) | undefined = undefined;
+		let result: ICharacteristicDimension | undefined = undefined;
 		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPhysicalDimension");
 		if (semanticId) {
 			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) result = <(ICharacteristicDimension & Semanticable) | undefined> semanticObject;
+			if (semanticObject) result = <ICharacteristicDimension | undefined> semanticObject;
 		}
 		return result;
 		
 	}
 	
 
-	public setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void {
+	public setQuantityDimension(quantityDimension: ICharacteristicDimension): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPhysicalDimension";
 		this.setSemanticPropertyReference(property, quantityDimension);
 		this.connector.store(quantityDimension);

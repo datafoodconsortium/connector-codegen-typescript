@@ -1,12 +1,12 @@
-import Onboardable from "./Onboardable.js"
+import IEnterprise from "./IEnterprise.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Affiliable {
 
-	getAffiliatedOrganizations(): Promise<Array<(Onboardable & Semanticable)>>
+	getAffiliatedOrganizations(): Promise<Array<IEnterprise>>
 	;
-	affiliateTo(organization: (Onboardable & Semanticable)): void;
-	leaveAffiliatedOrganization(organization: (Onboardable & Semanticable)): void;
+	affiliateTo(organization: IEnterprise): void;
+	leaveAffiliatedOrganization(organization: IEnterprise): void;
 
 }

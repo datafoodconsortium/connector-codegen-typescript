@@ -1,25 +1,25 @@
-import IProductType from "./IProductType.js"
-import Quantifiable from "./Quantifiable.js"
-import Nameable from "./Nameable.js"
-import Manufacturable from "./Manufacturable.js"
-import Describable from "./Describable.js"
+import IClaim from "./IClaim.js"
 import Certifiable from "./Certifiable.js"
-import Claimable from "./Claimable.js"
+import IProductType from "./IProductType.js"
+import Nameable from "./Nameable.js"
+import IQuantity from "./IQuantity.js"
+import Describable from "./Describable.js"
 import Proposable from "./Proposable.js"
+import Manufacturable from "./Manufacturable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
-export default interface IDefinedProduct extends Nameable, Manufacturable, Proposable, Certifiable, Describable {
+export default interface IDefinedProduct extends Semanticable, Certifiable, Nameable, Manufacturable, Describable, Proposable{
 
-	addClaim(claim: (Claimable & Semanticable)): void;
-	getQuantity(): Promise<(Quantifiable & Semanticable) | undefined>
+	addClaim(claim: IClaim): void;
+	getQuantity(): Promise<IQuantity | undefined>
 	;
-	setQuantity(quantity: (Quantifiable & Semanticable)): void;
-	getClaims(): Promise<Array<(Claimable & Semanticable)>>
+	setQuantity(quantity: IQuantity): void;
+	getClaims(): Promise<Array<IClaim>>
 	;
-	getProductType(): Promise<(IProductType & Semanticable) | undefined>
+	getProductType(): Promise<IProductType | undefined>
 	;
-	setProductType(productType: (IProductType & Semanticable)): void;
-	removeClaim(claim: (Claimable & Semanticable)): void;
+	setProductType(productType: IProductType): void;
+	removeClaim(claim: IClaim): void;
 
 }

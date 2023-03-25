@@ -23,10 +23,10 @@
 */
 
 import INutrientCharacteristic from "./INutrientCharacteristic.js"
-import INutrientDimension from "./INutrientDimension.js"
 import IUnit from "./IUnit.js"
-import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import INutrientDimension from "./INutrientDimension.js"
 import Characteristic from "./Characteristic.js"
+import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -35,7 +35,7 @@ import IGetterOptions from "./IGetterOptions.js"
 export default class NutrientCharacteristic extends Characteristic implements INutrientCharacteristic {
 	
 
-	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number, nutrientDimension?: (INutrientDimension & Semanticable)}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, unit?: IUnit, value?: number, nutrientDimension?: INutrientDimension}) {
 		const type: string = parameters.semanticType? parameters.semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#NutrientCharacteristic";
 		
 		if (parameters.other) {
@@ -51,20 +51,20 @@ export default class NutrientCharacteristic extends Characteristic implements IN
 		if (parameters.nutrientDimension) this.setQuantityDimension(parameters.nutrientDimension);
 	}
 
-	public async getQuantityDimension(options?: IGetterOptions): Promise<(ICharacteristicDimension & Semanticable) | undefined>
+	public async getQuantityDimension(options?: IGetterOptions): Promise<ICharacteristicDimension | undefined>
 	 {
-		let result: (ICharacteristicDimension & Semanticable) | undefined = undefined;
+		let result: ICharacteristicDimension | undefined = undefined;
 		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNutrientDimension");
 		if (semanticId) {
 			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) result = <(ICharacteristicDimension & Semanticable) | undefined> semanticObject;
+			if (semanticObject) result = <ICharacteristicDimension | undefined> semanticObject;
 		}
 		return result;
 		
 	}
 	
 
-	public setQuantityDimension(quantityDimension: (ICharacteristicDimension & Semanticable)): void {
+	public setQuantityDimension(quantityDimension: ICharacteristicDimension): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNutrientDimension";
 		this.setSemanticPropertyReference(property, quantityDimension);
 		this.connector.store(quantityDimension);

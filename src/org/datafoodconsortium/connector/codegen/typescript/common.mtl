@@ -117,6 +117,6 @@
 	= invoke('org.datafoodconsortium.connector.codegen.common.Common', 'getUnimplementedOperations(org.eclipse.uml2.uml.Classifier)', Sequence{c})
 /]
 
-[template public generateType(p: Property)][if not (p.type.isPrimitive())]([/if][p.type.getTypeName()/][if not (p.type.isPrimitive())] & Semanticable)[if (p.lower = 0 and p.upper = 1)] | undefined[/if][/if][if (p.upper = -1)]['[ fdf d ]'/] | ['[]'/][/if][/template]
+[template public generateType(p: Property)][p.type.getTypeName()/][if not (p.type.isPrimitive())][if (p.lower = 0 and p.upper = 1)] | undefined[/if][/if][if (p.upper = -1)]['[ fdf d ]'/] | ['[]'/][/if][/template]
 
-[template public generateType(name: String, upper: Integer)][if (name = 'String')]string[elseif (name = 'Real' or name = 'Integer' )]number[elseif (name = 'Boolean')]boolean[else]([name/] & Semanticable)[/if][if (upper = 1)][elseif (upper = -1)]['[]'/][/if][/template]
+[template public generateType(name: String, upper: Integer)][if (name = 'String')]string[elseif (name = 'Real' or name = 'Integer' )]number[elseif (name = 'Boolean')]boolean[else][name/][/if][if (upper = 1)][elseif (upper = -1)]['[]'/][/if][/template]

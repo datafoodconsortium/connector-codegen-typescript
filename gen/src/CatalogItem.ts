@@ -24,8 +24,8 @@
 
 import IDefinedProduct from "./IDefinedProduct.js"
 import IOffer from "./IOffer.js"
-import Browsable from "./Browsable.js"
 import ICatalogItem from "./ICatalogItem.js"
+import ICatalog from "./ICatalog.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -35,7 +35,7 @@ export default class CatalogItem extends SemanticObject implements ICatalogItem 
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, product?: (IDefinedProduct & Semanticable), sku?: string, stockLimitation?: number, offers?: (IOffer & Semanticable)[], catalogs?: (Browsable & Semanticable)[]}) {
+	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, product?: IDefinedProduct, sku?: string, stockLimitation?: number, offers?: IOffer[], catalogs?: ICatalog[]}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#CatalogItem";
 		
 		if (parameters.other) {
@@ -57,7 +57,19 @@ export default class CatalogItem extends SemanticObject implements ICatalogItem 
 		if (parameters.catalogs) parameters.catalogs.forEach(e => this.registerInCatalog(e));
 	}
 
-	public registerInCatalog(repository: (Browsable & Semanticable)): void {
+	public async getCatalogs(options?: IGetterOptions): Promise<Array<ICatalog>>
+	 {
+		const results = new Array<ICatalog>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#listedIn");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<ICatalog> semanticObject);
+		}
+		return results;
+	}
+	
+
+	public registerInCatalog(repository: ICatalog): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#listedIn";
 		if (repository.isSemanticObjectAnonymous()) {
 			if (repository.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, repository);
@@ -67,18 +79,6 @@ export default class CatalogItem extends SemanticObject implements ICatalogItem 
 			this.connector.store(repository);
 			this.addSemanticPropertyReference(property, repository);
 		}
-	}
-	
-
-	public async getCatalogs(options?: IGetterOptions): Promise<Array<(Browsable & Semanticable)>>
-	 {
-		const results = new Array<(Browsable & Semanticable)>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#listedIn");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(Browsable & Semanticable)> semanticObject);
-		}
-		return results;
 	}
 	
 	public setStockLimitation(stockLimitation: number): void {
@@ -92,18 +92,25 @@ export default class CatalogItem extends SemanticObject implements ICatalogItem 
 		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#stockLimitation"));
 	}
 	
-	public setSku(sku: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#sku";
-		this.setSemanticPropertyLiteral(property, sku);
-	}
-	
-
 	public getSku(): string
 	 {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#sku");
 	}
 	
-	public addOffer(offer: (IOffer & Semanticable)): void {
+
+	public setSku(sku: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#sku";
+		this.setSemanticPropertyLiteral(property, sku);
+	}
+	
+	public setOfferedProduct(offeredProduct: IDefinedProduct): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#references";
+		this.setSemanticPropertyReference(property, offeredProduct);
+		this.connector.store(offeredProduct);
+	}
+	
+
+	public addOffer(offer: IOffer): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredThrough";
 		if (offer.isSemanticObjectAnonymous()) {
 			if (offer.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, offer);
@@ -116,35 +123,28 @@ export default class CatalogItem extends SemanticObject implements ICatalogItem 
 	}
 	
 
-	public async getOfferedProduct(options?: IGetterOptions): Promise<(IDefinedProduct & Semanticable) | undefined>
+	public async getOfferedProduct(options?: IGetterOptions): Promise<IDefinedProduct | undefined>
 	 {
-		let result: (IDefinedProduct & Semanticable) | undefined = undefined;
+		let result: IDefinedProduct | undefined = undefined;
 		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#references");
 		if (semanticId) {
 			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) result = <(IDefinedProduct & Semanticable) | undefined> semanticObject;
+			if (semanticObject) result = <IDefinedProduct | undefined> semanticObject;
 		}
 		return result;
 		
 	}
 	
 
-	public async getOfferers(options?: IGetterOptions): Promise<Array<(IOffer & Semanticable)>>
+	public async getOfferers(options?: IGetterOptions): Promise<Array<IOffer>>
 	 {
-		const results = new Array<(IOffer & Semanticable)>();
+		const results = new Array<IOffer>();
 		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredThrough");
 		for await (const semanticId of properties) {
 			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(IOffer & Semanticable)> semanticObject);
+			if (semanticObject) results.push(<IOffer> semanticObject);
 		}
 		return results;
-	}
-	
-
-	public setOfferedProduct(offeredProduct: (IDefinedProduct & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#references";
-		this.setSemanticPropertyReference(property, offeredProduct);
-		this.connector.store(offeredProduct);
 	}
 	
 

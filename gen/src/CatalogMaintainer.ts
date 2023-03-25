@@ -4,9 +4,9 @@ import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface CatalogMaintainer {
 
-	getMaintainedCatalogs(): Promise<Array<(ICatalog & Semanticable)>>
+	getMaintainedCatalogs(): Promise<Array<ICatalog>>
 	;
-	maintainCatalog(catalog: (ICatalog & Semanticable)): void;
-	unmaintainCatalog(catalog: (ICatalog & Semanticable)): void;
+	maintainCatalog(catalog: ICatalog): void;
+	unmaintainCatalog(catalog: ICatalog): void;
 
 }

@@ -22,18 +22,18 @@
  * SOFTWARE.
 */
 
+import IQuantity from "./IQuantity.js"
 import IUnit from "./IUnit.js"
-import Quantifiable from "./Quantifiable.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
-export default class QuantitativeValue extends SemanticObjectAnonymous implements Quantifiable {
+export default class QuantitativeValue extends SemanticObjectAnonymous implements IQuantity {
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, unit?: (IUnit & Semanticable), value?: number}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, unit?: IUnit, value?: number}) {
 		const type: string = parameters.semanticType? parameters.semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#QuantitativeValue";
 		
 		if (parameters.other) {
@@ -50,26 +50,6 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 		if (parameters.value || parameters.value === 0) this.setQuantityValue(parameters.value);
 	}
 
-	public async getQuantityUnit(options?: IGetterOptions): Promise<(IUnit & Semanticable) | undefined>
-	 {
-		let result: (IUnit & Semanticable) | undefined = undefined;
-		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit");
-		if (semanticId) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) result = <(IUnit & Semanticable) | undefined> semanticObject;
-		}
-		return result;
-		
-	}
-	
-
-	public setQuantityUnit(quantityUnit: (IUnit & Semanticable)): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit";
-		this.setSemanticPropertyReference(property, quantityUnit);
-		this.connector.store(quantityUnit);
-	}
-	
-
 	public setQuantityValue(quantityValue: number): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
 		this.setSemanticPropertyLiteral(property, quantityValue);
@@ -79,6 +59,26 @@ export default class QuantitativeValue extends SemanticObjectAnonymous implement
 	public getQuantityValue(): number
 	 {
 		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
+	}
+	
+
+	public async getQuantityUnit(options?: IGetterOptions): Promise<IUnit | undefined>
+	 {
+		let result: IUnit | undefined = undefined;
+		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit");
+		if (semanticId) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) result = <IUnit | undefined> semanticObject;
+		}
+		return result;
+		
+	}
+	
+
+	public setQuantityUnit(quantityUnit: IUnit): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit";
+		this.setSemanticPropertyReference(property, quantityUnit);
+		this.connector.store(quantityUnit);
 	}
 	
 

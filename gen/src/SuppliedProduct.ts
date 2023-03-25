@@ -22,24 +22,25 @@
  * SOFTWARE.
 */
 
-import ICertification from "./ICertification.js"
-import INutrientCharacteristic from "./INutrientCharacteristic.js"
-import IPartOrigin from "./IPartOrigin.js"
-import Quantifiable from "./Quantifiable.js"
 import DefinedProduct from "./DefinedProduct.js"
-import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
-import IProductType from "./IProductType.js"
-import IGeographicalOrigin from "./IGeographicalOrigin.js"
+import IQuantity from "./IQuantity.js"
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import Claimable from "./Claimable.js"
-import INatureOrigin from "./INatureOrigin.js"
 import ICatalogItem from "./ICatalogItem.js"
+import ISuppliedProduct from "./ISuppliedProduct.js"
+import IPartOrigin from "./IPartOrigin.js"
+import INatureOrigin from "./INatureOrigin.js"
+import IProductType from "./IProductType.js"
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import IClaim from "./IClaim.js"
+import IGeographicalOrigin from "./IGeographicalOrigin.js"
+import INutrientCharacteristic from "./INutrientCharacteristic.js"
+import ICertification from "./ICertification.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
-export default class SuppliedProduct extends DefinedProduct {
+export default class SuppliedProduct extends DefinedProduct implements ISuppliedProduct {
 	
 
 	public getTotalTheoreticalStock(): number
@@ -54,7 +55,7 @@ export default class SuppliedProduct extends DefinedProduct {
 	}
 	
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, name?: string, description?: string, productType?: (IProductType & Semanticable), quantity?: (Quantifiable & Semanticable), alcoholPercentage?: number, lifetime?: string, claims?: (Claimable & Semanticable)[], usageOrStorageConditions?: string, allergenCharacteristics?: (IAllergenCharacteristic & Semanticable)[], nutrientCharacteristics?: (INutrientCharacteristic & Semanticable)[], physicalCharacteristics?: (IPhysicalCharacteristic & Semanticable)[], geographicalOrigin?: (IGeographicalOrigin & Semanticable), catalogItems?: (ICatalogItem & Semanticable)[], certifications?: (ICertification & Semanticable)[], natureOrigin?: (INatureOrigin & Semanticable)[], partOrigin?: (IPartOrigin & Semanticable)[], totalTheoreticalStock?: number}) {
+	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, name?: string, description?: string, productType?: IProductType, quantity?: IQuantity, alcoholPercentage?: number, lifetime?: string, claims?: IClaim[], usageOrStorageConditions?: string, allergenCharacteristics?: IAllergenCharacteristic[], nutrientCharacteristics?: INutrientCharacteristic[], physicalCharacteristics?: IPhysicalCharacteristic[], geographicalOrigin?: IGeographicalOrigin, catalogItems?: ICatalogItem[], certifications?: ICertification[], natureOrigin?: INatureOrigin[], partOrigin?: IPartOrigin[], totalTheoreticalStock?: number}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#SuppliedProduct";
 		
 		if (parameters.other) {
@@ -71,6 +72,5 @@ export default class SuppliedProduct extends DefinedProduct {
 			this.connector.store(this);
 		if (parameters.totalTheoreticalStock || parameters.totalTheoreticalStock === 0) this.setTotalTheoreticalStock(parameters.totalTheoreticalStock);
 	}
-
 
 }

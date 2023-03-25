@@ -13,18 +13,19 @@
 [template public generate(model: Model)]
 [comment @main/]
 [file ('index.ts', false, 'UTF-8')]
-[for (importedPackage: PackageImport | model.packageImport->select(pi: PackageImport | pi.importedPackage.name <> 'org.datafoodconsortium.semantizer'))][generateIndex(importedPackage.importedPackage.ownedMember)/][/for]
-[generateIndex(model.ownedMember)/]
+export { default as Semanticable } from '@virtual-assembly/semantizer';
 export { default as Connector } from './Connector.js';
 export { default as ConnectorStoreMap } from './ConnectorStoreMap.js';
 export { default as ConnectorFactory } from './ConnectorFactory.js';
 export { default as ConnectorExporterJsonldStream } from './ConnectorExporterJsonldStream.js';
 export { default as ConnectorImporterJsonldStream } from './ConnectorImporterJsonldStream.js';
+[for (importedPackage: PackageImport | model.packageImport->select(pi: PackageImport | pi.importedPackage.name <> 'org.datafoodconsortium.semantizer'))][generateIndex(importedPackage.importedPackage.ownedMember)/][/for]
+[generateIndex(model.ownedMember)/]
 [/file]
 [/template]
 
 [template public generateIndex(members: Set(NamedElement))]
-[for (member: NamedElement | members->select(ne: NamedElement | ne.oclIsTypeOf(Class)))]
+[for (member: NamedElement | members->select(ne: NamedElement | ne.oclIsTypeOf(Class) or ne.oclIsTypeOf(Interface)))]
 export { default as [member.name/] } from './[member.name/].js';
 [/for]
 [/template]

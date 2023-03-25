@@ -1,9 +1,9 @@
-import IGeographicalOrigin from "./IGeographicalOrigin.js"
 import IPartOrigin from "./IPartOrigin.js"
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
 import INatureOrigin from "./INatureOrigin.js"
 import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
 import INutrientCharacteristic from "./INutrientCharacteristic.js"
+import IGeographicalOrigin from "./IGeographicalOrigin.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
@@ -15,31 +15,31 @@ export default interface Manufacturable {
 	;
 	getUsageOrStorageConditions(): string
 	;
-	getAllergenCharacteristics(): Promise<Array<(IAllergenCharacteristic & Semanticable)>>
+	getAllergenCharacteristics(): Promise<Array<IAllergenCharacteristic>>
 	;
-	getNutrientCharacteristics(): Promise<Array<(INutrientCharacteristic & Semanticable)>>
+	getNutrientCharacteristics(): Promise<Array<INutrientCharacteristic>>
 	;
-	getPhysicalCharacteristics(): Promise<Array<(IPhysicalCharacteristic & Semanticable)>>
+	getPhysicalCharacteristics(): Promise<Array<IPhysicalCharacteristic>>
 	;
-	getGeographicalOrigin(): Promise<(IGeographicalOrigin & Semanticable) | undefined>
+	getGeographicalOrigin(): Promise<IGeographicalOrigin | undefined>
 	;
-	getNatureOrigin(): Promise<Array<(INatureOrigin & Semanticable)>>
+	getNatureOrigin(): Promise<Array<INatureOrigin>>
 	;
-	getPartOrigin(): Promise<Array<(IPartOrigin & Semanticable)>>
+	getPartOrigin(): Promise<Array<IPartOrigin>>
 	;
-	setGeographicalOrigin(geographicalOrigin: (IGeographicalOrigin & Semanticable)): void;
+	setGeographicalOrigin(geographicalOrigin: IGeographicalOrigin): void;
 	setAlcoholPercentage(alcoholPercentage: number): void;
 	setLifetime(lifetime: string): void;
 	setUsageOrStorageConditions(usageOrStorageConditions: string): void;
-	addAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void;
-	addNutrientCharacteristic(nutrientCharacteristic: (INutrientCharacteristic & Semanticable)): void;
-	addPhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void;
-	addNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void;
-	addPartOrigin(partOrigin: (IPartOrigin & Semanticable)): void;
-	removeAllergenCharacteristic(allergenCharacteristic: (IAllergenCharacteristic & Semanticable)): void;
-	removeNutrientCharacteristic(nutrientCharacteristic: (INutrientCharacteristic & Semanticable)): void;
-	removePhysicalCharacteristic(physicalCharacteristic: (IPhysicalCharacteristic & Semanticable)): void;
-	removeNatureOrigin(natureOrigin: (INatureOrigin & Semanticable)): void;
-	removePartOrigin(partOrigin: (IPartOrigin & Semanticable)): void;
+	addAllergenCharacteristic(allergenCharacteristic: IAllergenCharacteristic): void;
+	addNutrientCharacteristic(nutrientCharacteristic: INutrientCharacteristic): void;
+	addPhysicalCharacteristic(physicalCharacteristic: IPhysicalCharacteristic): void;
+	addNatureOrigin(natureOrigin: INatureOrigin): void;
+	addPartOrigin(partOrigin: IPartOrigin): void;
+	removeAllergenCharacteristic(allergenCharacteristic: IAllergenCharacteristic): void;
+	removeNutrientCharacteristic(nutrientCharacteristic: INutrientCharacteristic): void;
+	removePhysicalCharacteristic(physicalCharacteristic: IPhysicalCharacteristic): void;
+	removeNatureOrigin(natureOrigin: INatureOrigin): void;
+	removePartOrigin(partOrigin: IPartOrigin): void;
 
 }

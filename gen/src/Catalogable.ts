@@ -1,11 +1,11 @@
-import Browsable from "./Browsable.js"
+import ICatalog from "./ICatalog.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Catalogable {
 
-	getCatalogs(): Promise<Array<(Browsable & Semanticable)>>
+	getCatalogs(): Promise<Array<ICatalog>>
 	;
-	registerInCatalog(repository: (Browsable & Semanticable)): void;
+	registerInCatalog(repository: ICatalog): void;
 
 }

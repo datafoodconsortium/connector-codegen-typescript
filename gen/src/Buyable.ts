@@ -4,7 +4,7 @@ import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Buyable {
 
-	getBuyableOffer(): Promise<(Marketable & Semanticable) | undefined>
+	getBuyableOffer(): Promise<Marketable | undefined>
 	;
 
 }

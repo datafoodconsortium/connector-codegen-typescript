@@ -33,7 +33,7 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, value?: number, vatRate?: number, unit?: (IUnit & Semanticable)}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, value?: number, vatRate?: number, unit?: IUnit}) {
 		const type: string = parameters.semanticType? parameters.semanticType: "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Price";
 		
 		if (parameters.other) {
@@ -51,47 +51,47 @@ export default class Price extends SemanticObjectAnonymous implements IPrice {
 		if (parameters.unit) this.setUnit(parameters.unit);
 	}
 
-	public setVatRate(vatRate: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate";
-		this.setSemanticPropertyLiteral(property, vatRate);
-	}
-	
-
 	public setValue(value: number): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value";
 		this.setSemanticPropertyLiteral(property, value);
 	}
 	
 
-	public setUnit(unit: (IUnit & Semanticable)): void {
+	public getValue(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
+	}
+	
+
+	public setUnit(unit: IUnit): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit";
 		this.setSemanticPropertyReference(property, unit);
 		this.connector.store(unit);
 	}
 	
 
-	public getVatRate(): number
+	public async getUnit(options?: IGetterOptions): Promise<IUnit | undefined>
 	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate"));
-	}
-	
-
-	public async getUnit(options?: IGetterOptions): Promise<(IUnit & Semanticable) | undefined>
-	 {
-		let result: (IUnit & Semanticable) | undefined = undefined;
+		let result: IUnit | undefined = undefined;
 		const semanticId = this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasUnit");
 		if (semanticId) {
 			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) result = <(IUnit & Semanticable) | undefined> semanticObject;
+			if (semanticObject) result = <IUnit | undefined> semanticObject;
 		}
 		return result;
 		
 	}
 	
 
-	public getValue(): number
+	public setVatRate(vatRate: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate";
+		this.setSemanticPropertyLiteral(property, vatRate);
+	}
+	
+
+	public getVatRate(): number
 	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#value"));
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#VATrate"));
 	}
 	
 

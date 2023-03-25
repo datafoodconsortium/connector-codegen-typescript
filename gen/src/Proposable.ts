@@ -4,8 +4,8 @@ import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Proposable {
 
-	getCatalogItems(): Promise<Array<(ICatalogItem & Semanticable)>>
+	getCatalogItems(): Promise<Array<ICatalogItem>>
 	;
-	addCatalogItem(catalogItem: (ICatalogItem & Semanticable)): void;
+	addCatalogItem(catalogItem: ICatalogItem): void;
 
 }

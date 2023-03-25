@@ -3,13 +3,13 @@ import Ellapsable from "./Ellapsable.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
-export default interface ISaleSession extends Ellapsable {
+export default interface ISaleSession extends Semanticable, Ellapsable{
 
 	getQuantity(): number
 	;
 	setQuantity(quantity: number): void;
-	getOffers(): Promise<Array<(IOffer & Semanticable)>>
+	getOffers(): Promise<Array<IOffer>>
 	;
-	addOffer(offer: (IOffer & Semanticable)): void;
+	addOffer(offer: IOffer): void;
 
 }

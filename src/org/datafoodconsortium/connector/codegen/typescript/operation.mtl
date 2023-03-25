@@ -80,17 +80,17 @@ else {
 [if (property.isPropertyMultiple())]const results = new [type/]();
 [if (returned.type.isBlankNode())]const blankNodesId = this.getSemanticPropertyAnonymousAll("[map/]");
 blankNodesId.forEach(blankNodeId => {
-	const blankNode = <([returned.type.name/] & Semanticable)> this.connector.getDefaultFactory().createFromRdfDataset(blankNodeId);
+	const blankNode = <[returned.type.name/]> this.connector.getDefaultFactory().createFromRdfDataset(blankNodeId);
 	results.push(blankNode);
 });[else]
 const properties = this.getSemanticPropertyAll("[map/]");
 for await (const semanticId of properties) {
 	const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-	if (semanticObject) results.push(<([returned.type.name/] & Semanticable)> semanticObject);
+	if (semanticObject) results.push(<[returned.type.name/]> semanticObject);
 }
 [/if]return results;[elseif (returned.type.isBlankNode())]
 const blankNode: any = this.getSemanticPropertyAnonymous("[map/]");
-return <[returned.type.name /] & Semanticable> this.connector.getDefaultFactory().createFromRdfDataset(blankNode);[elseif (not returned.type.isPrimitive())]
+return <[returned.type.name /]> this.connector.getDefaultFactory().createFromRdfDataset(blankNode);[elseif (not returned.type.isPrimitive())]
 let result: [type/] = undefined;
 const semanticId = this.getSemanticProperty("[map/]");
 if (semanticId) {

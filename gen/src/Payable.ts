@@ -4,8 +4,8 @@ import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Payable {
 
-	getPrice(): Promise<(IPrice & Semanticable) | undefined>
+	getPrice(): Promise<IPrice | undefined>
 	;
-	setPrice(price: (IPrice & Semanticable)): void;
+	setPrice(price: IPrice): void;
 
 }

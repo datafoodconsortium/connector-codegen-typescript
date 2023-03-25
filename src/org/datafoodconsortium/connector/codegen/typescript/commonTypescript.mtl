@@ -3,10 +3,14 @@
 
 [import org::datafoodconsortium::connector::codegen::typescript::common /]
 
-[template public generateGeneralization(classifier: Classifier)]
-[if (not (classifier.generalization->isEmpty()))]extends [for (generalization: Generalization | classifier.generalization) separator(', ')][generalization.general.name/][/for][if (classifier.isSemantic() and classifier.generalization->isEmpty())] SemanticObject[/if] [elseif (classifier.isSemantic())]extends SemanticObject [/if]
+[template public generateGeneralization(aClass: Class)]
+[if (not (aClass.generalization->isEmpty()))]extends [for (generalization: Generalization | aClass.generalization) separator(', ')][generalization.general.name/][/for][if (aClass.isSemantic() and aClass.generalization->isEmpty())] SemanticObject[/if] [elseif (aClass.isSemantic())]extends SemanticObject [/if]
 [/template]
 
-[template public generateType(p: Parameter)][if not (p.type.isPrimitive())][if (p.upper = -1)]Array<[/if]([/if][p.type.getTypeName()/][if not (p.type.isPrimitive())] & Semanticable)[/if][if (not (p.type.isPrimitive()) and p.upper = -1)]>[/if][if (p.type.isPrimitive() and p.upper = -1)]['[]'/][/if][/template]
+[template public generateGeneralization(interface: Interface)]
+[if (not (interface.generalization->isEmpty()) or interface.isSemantic())]extends [if (interface.isSemantic())]Semanticable[if (not (interface.generalization->isEmpty()))], [/if][/if][for (generalization: Generalization | interface.generalization) separator(', ')][generalization.general.name/][/for][/if]
+[/template]
 
-[template public generateTypeWithDefaultUndefined(p: Parameter)][if not (p.type.isPrimitive())][if (p.upper = -1)]Array<[/if]([/if][p.type.getTypeName()/][if not (p.type.isPrimitive())] & Semanticable)[/if][if (not (p.type.isPrimitive()) and p.upper = -1)]>[/if][if (p.type.isPrimitive() and p.upper = -1)]['[]'/][/if][if (not (p.type.isPrimitive()) and p.upper = 1)] | undefined[/if][/template]
+[template public generateType(p: Parameter)][if (p.upper = -1)]Array<[/if][p.type.getTypeName()/][if (not (p.type.isPrimitive()) and p.upper = -1)]>[/if][if (p.type.isPrimitive() and p.upper = -1)]['[]'/][/if][/template]
+
+[template public generateTypeWithDefaultUndefined(p: Parameter)][if (p.upper = -1)]Array<[/if][p.type.getTypeName()/][if (not (p.type.isPrimitive()) and p.upper = -1)]>[/if][if (p.type.isPrimitive() and p.upper = -1)]['[]'/][/if][if (not (p.type.isPrimitive()) and p.upper = 1)] | undefined[/if][/template]

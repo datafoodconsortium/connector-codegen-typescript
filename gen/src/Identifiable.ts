@@ -1,13 +1,13 @@
-import Localizable from "./Localizable.js"
+import IAddress from "./IAddress.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface Identifiable {
 
 	/* Returns the different localizations of the subject. */
-	getLocalizations(): Promise<Array<(Localizable & Semanticable)>>
+	getLocalizations(): Promise<Array<IAddress>>
 	;
-	addLocalization(localization: (Localizable & Semanticable)): void;
-	removeLocalization(localization: (Localizable & Semanticable)): void;
+	addLocalization(localization: IAddress): void;
+	removeLocalization(localization: IAddress): void;
 
 }

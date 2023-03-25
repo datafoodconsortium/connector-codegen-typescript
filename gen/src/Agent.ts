@@ -22,18 +22,18 @@
  * SOFTWARE.
 */
 
-import Localizable from "./Localizable.js"
-import Identifiable from "./Identifiable.js"
+import IAddress from "./IAddress.js"
+import IAgent from "./IAgent.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
 
-export default abstract class Agent extends SemanticObject implements Identifiable {
+export default abstract class Agent extends SemanticObject implements IAgent {
 	
 	protected connector: IConnector;
 
-	protected constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, localizations?: (Localizable & Semanticable)[]}) {
+	protected constructor(parameters: {connector: IConnector, semanticId?: string, semanticType?: string, other?: Semanticable, localizations?: IAddress[]}) {
 		if (parameters.other) super({ semanticId: parameters.semanticId!, other: parameters.other })
 		else super({ semanticId: parameters.semanticId!, semanticType: parameters.semanticType! });
 		
@@ -43,12 +43,7 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 		if (parameters.localizations) parameters.localizations.forEach(e => this.addLocalization(e));
 	}
 
-	public removeLocalization(localization: (Localizable & Semanticable)): void {
-		throw new Error("Not yet implemented.");
-	}
-	
-
-	public addLocalization(localization: (Localizable & Semanticable)): void {
+	public addLocalization(localization: IAddress): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress";
 		if (localization.isSemanticObjectAnonymous()) {
 			if (localization.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, localization);
@@ -61,13 +56,18 @@ export default abstract class Agent extends SemanticObject implements Identifiab
 	}
 	
 
-	public async getLocalizations(options?: IGetterOptions): Promise<Array<(Localizable & Semanticable)>>
+	public removeLocalization(localization: IAddress): void {
+		throw new Error("Not yet implemented.");
+	}
+	
+
+	public async getLocalizations(options?: IGetterOptions): Promise<Array<IAddress>>
 	 {
-		const results = new Array<(Localizable & Semanticable)>();
+		const results = new Array<IAddress>();
 		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress");
 		for await (const semanticId of properties) {
 			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<(Localizable & Semanticable)> semanticObject);
+			if (semanticObject) results.push(<IAddress> semanticObject);
 		}
 		return results;
 	}
