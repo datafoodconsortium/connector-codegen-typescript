@@ -22,10 +22,10 @@
  * SOFTWARE.
 */
 
-import IOrderLine from "./IOrderLine.js"
-import IOffer from "./IOffer.js"
-import IOrder from "./IOrder.js"
 import IPrice from "./IPrice.js"
+import IOffer from "./IOffer.js"
+import IOrderLine from "./IOrderLine.js"
+import IOrder from "./IOrder.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -56,20 +56,23 @@ export default class OrderLine extends SemanticObject implements IOrderLine {
 		if (parameters.order) this.setOrder(parameters.order);
 	}
 
-	public getDescription(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description");
+	public setOffer(offer: IOffer): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#concerns";
+		this.setSemanticPropertyReference(property, offer);
+		this.connector.store(offer);
 	}
 	
 
-	public setDescription(description: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description";
-		this.setSemanticPropertyLiteral(property, description);
+	public setQuantity(quantity: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity";
+		this.setSemanticPropertyLiteral(property, quantity);
 	}
 	
-	public getQuantity(): number
+
+	public async getPrice(options?: IGetterOptions): Promise<IPrice | undefined>
 	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity"));
+		const blankNode: any = this.getSemanticPropertyAnonymous("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPrice");
+		return <IPrice> this.connector.getDefaultFactory().createFromRdfDataset(blankNode);
 	}
 	
 
@@ -93,32 +96,6 @@ export default class OrderLine extends SemanticObject implements IOrderLine {
 	}
 	
 
-	public setPrice(price: IPrice): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPrice";
-		this.setSemanticPropertyAnonymous(property, price);
-	}
-	
-
-	public setQuantity(quantity: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity";
-		this.setSemanticPropertyLiteral(property, quantity);
-	}
-	
-
-	public async getPrice(options?: IGetterOptions): Promise<IPrice | undefined>
-	 {
-		const blankNode: any = this.getSemanticPropertyAnonymous("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPrice");
-		return <IPrice> this.connector.getDefaultFactory().createFromRdfDataset(blankNode);
-	}
-	
-
-	public setOffer(offer: IOffer): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#concerns";
-		this.setSemanticPropertyReference(property, offer);
-		this.connector.store(offer);
-	}
-	
-
 	public async getOrder(options?: IGetterOptions): Promise<IOrder | undefined>
 	 {
 		let result: IOrder | undefined = undefined;
@@ -129,6 +106,29 @@ export default class OrderLine extends SemanticObject implements IOrderLine {
 		}
 		return result;
 		
+	}
+	
+
+	public getQuantity(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity"));
+	}
+	
+
+	public setPrice(price: IPrice): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPrice";
+		this.setSemanticPropertyAnonymous(property, price);
+	}
+	
+	public setDescription(description: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description";
+		this.setSemanticPropertyLiteral(property, description);
+	}
+	
+
+	public getDescription(): string
+	 {
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description");
 	}
 	
 

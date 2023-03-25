@@ -1,13 +1,13 @@
 import ICatalogItem from "./ICatalogItem.js"
-import SuppliedProduct from "./SuppliedProduct.js"
+import ISuppliedProduct from "./ISuppliedProduct.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 
 export default interface ProductSupplier {
 
-	getSuppliedProducts(): Promise<Array<SuppliedProduct>>
+	getSuppliedProducts(): Promise<Array<ISuppliedProduct>>
 	;
-	supplyProduct(suppliedProduct: SuppliedProduct): void;
-	unsupplyProduct(suppliedProduct: SuppliedProduct): void;
+	supplyProduct(suppliedProduct: ISuppliedProduct): void;
+	unsupplyProduct(suppliedProduct: ISuppliedProduct): void;
 
 }

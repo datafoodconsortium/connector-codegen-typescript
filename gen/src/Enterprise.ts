@@ -22,7 +22,7 @@
  * SOFTWARE.
 */
 
-import SuppliedProduct from "./SuppliedProduct.js"
+import ISuppliedProduct from "./ISuppliedProduct.js"
 import ICatalogItem from "./ICatalogItem.js"
 import IEnterprise from "./IEnterprise.js"
 import ICatalog from "./ICatalog.js"
@@ -36,7 +36,6 @@ import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
-import ISuppliedProduct from "./ISuppliedProduct.js"
 
 export default class Enterprise extends Agent implements Onboardable, ProductSupplier, IEnterprise {
 	
@@ -65,17 +64,48 @@ export default class Enterprise extends Agent implements Onboardable, ProductSup
 		if (parameters.technicalProducts) parameters.technicalProducts.forEach(e => this.proposeTechnicalProducts(e));
 	}
 
-	public getDescription(): string
-	 {
-		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription");
+	public manageCatalogItem(catalogItem: ICatalogItem): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#manages";
+		if (catalogItem.isSemanticObjectAnonymous()) {
+			if (catalogItem.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, catalogItem);
+			else this.addSemanticPropertyReference(property, catalogItem);
+		}
+		else {
+			this.connector.store(catalogItem);
+			this.addSemanticPropertyReference(property, catalogItem);
+		}
 	}
 	
 
-	public setDescription(description: string): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription";
-		this.setSemanticPropertyLiteral(property, description);
+	public async getManagedCatalogItems(options?: IGetterOptions): Promise<Array<ICatalogItem>>
+	 {
+		const results = new Array<ICatalogItem>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#manages");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<ICatalogItem> semanticObject);
+		}
+		return results;
 	}
 	
+
+	public unmanageCatalogItem(catalogItem: ICatalogItem): void {
+		throw new Error("Not yet implemented.");
+	}
+	
+	public maintainCatalog(catalog: ICatalog): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintains";
+		if (catalog.isSemanticObjectAnonymous()) {
+			if (catalog.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, catalog);
+			else this.addSemanticPropertyReference(property, catalog);
+		}
+		else {
+			this.connector.store(catalog);
+			this.addSemanticPropertyReference(property, catalog);
+		}
+	}
+	
+
 	public async getMaintainedCatalogs(options?: IGetterOptions): Promise<Array<ICatalog>>
 	 {
 		const results = new Array<ICatalog>();
@@ -92,17 +122,33 @@ export default class Enterprise extends Agent implements Onboardable, ProductSup
 		throw new Error("Not yet implemented.");
 	}
 	
+	public unsupplyProduct(suppliedProduct: ISuppliedProduct): void {
+		throw new Error("Not yet implemented.");
+	}
+	
 
-	public maintainCatalog(catalog: ICatalog): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintains";
-		if (catalog.isSemanticObjectAnonymous()) {
-			if (catalog.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, catalog);
-			else this.addSemanticPropertyReference(property, catalog);
+	public supplyProduct(suppliedProduct: ISuppliedProduct): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies";
+		if (suppliedProduct.isSemanticObjectAnonymous()) {
+			if (suppliedProduct.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, suppliedProduct);
+			else this.addSemanticPropertyReference(property, suppliedProduct);
 		}
 		else {
-			this.connector.store(catalog);
-			this.addSemanticPropertyReference(property, catalog);
+			this.connector.store(suppliedProduct);
+			this.addSemanticPropertyReference(property, suppliedProduct);
 		}
+	}
+	
+
+	public async getSuppliedProducts(options?: IGetterOptions): Promise<Array<ISuppliedProduct>>
+	 {
+		const results = new Array<ISuppliedProduct>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<ISuppliedProduct> semanticObject);
+		}
+		return results;
 	}
 	
 	public unproposeTechnicalProducts(technicalProducts: ITechnicalProduct): void {
@@ -134,62 +180,15 @@ export default class Enterprise extends Agent implements Onboardable, ProductSup
 		return results;
 	}
 	
-	public async getSuppliedProducts(options?: IGetterOptions): Promise<Array<SuppliedProduct>>
+	public setDescription(description: string): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription";
+		this.setSemanticPropertyLiteral(property, description);
+	}
+	
+
+	public getDescription(): string
 	 {
-		const results = new Array<SuppliedProduct>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<SuppliedProduct> semanticObject);
-		}
-		return results;
-	}
-	
-
-	public supplyProduct(suppliedProduct: ISuppliedProduct): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies";
-		if (suppliedProduct.isSemanticObjectAnonymous()) {
-			if (suppliedProduct.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, suppliedProduct);
-			else this.addSemanticPropertyReference(property, suppliedProduct);
-		}
-		else {
-			this.connector.store(suppliedProduct);
-			this.addSemanticPropertyReference(property, suppliedProduct);
-		}
-	}
-	
-
-	public unsupplyProduct(suppliedProduct: SuppliedProduct): void {
-		throw new Error("Not yet implemented.");
-	}
-	
-	public async getManagedCatalogItems(options?: IGetterOptions): Promise<Array<ICatalogItem>>
-	 {
-		const results = new Array<ICatalogItem>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#manages");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<ICatalogItem> semanticObject);
-		}
-		return results;
-	}
-	
-
-	public unmanageCatalogItem(catalogItem: ICatalogItem): void {
-		throw new Error("Not yet implemented.");
-	}
-	
-
-	public manageCatalogItem(catalogItem: ICatalogItem): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#manages";
-		if (catalogItem.isSemanticObjectAnonymous()) {
-			if (catalogItem.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, catalogItem);
-			else this.addSemanticPropertyReference(property, catalogItem);
-		}
-		else {
-			this.connector.store(catalogItem);
-			this.addSemanticPropertyReference(property, catalogItem);
-		}
+		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasDescription");
 	}
 	
 	public setVatNumber(vatNumber: string): void {

@@ -22,9 +22,9 @@
  * SOFTWARE.
 */
 
+import IEnterprise from "./IEnterprise.js"
 import ICatalog from "./ICatalog.js"
 import Catalogable from "./Catalogable.js"
-import IEnterprise from "./IEnterprise.js"
 import ICatalogItem from "./ICatalogItem.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
@@ -66,24 +66,6 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	}
 	
 
-	public addItem(item: ICatalogItem): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists";
-		if (item.isSemanticObjectAnonymous()) {
-			if (item.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, item);
-			else this.addSemanticPropertyReference(property, item);
-		}
-		else {
-			this.connector.store(item);
-			this.addSemanticPropertyReference(property, item);
-		}
-	}
-	
-
-	public removeItem(item: ICatalogItem): void {
-		throw new Error("Not yet implemented.");
-	}
-	
-
 	public addMaintainer(maintainer: IEnterprise): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintainedBy";
 		if (maintainer.isSemanticObjectAnonymous()) {
@@ -97,6 +79,11 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	}
 	
 
+	public removeItem(item: ICatalogItem): void {
+		throw new Error("Not yet implemented.");
+	}
+	
+
 	public async getMaintainers(options?: IGetterOptions): Promise<Array<IEnterprise>>
 	 {
 		const results = new Array<IEnterprise>();
@@ -106,6 +93,19 @@ export default class Catalog extends SemanticObject implements ICatalog {
 			if (semanticObject) results.push(<IEnterprise> semanticObject);
 		}
 		return results;
+	}
+	
+
+	public addItem(item: ICatalogItem): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists";
+		if (item.isSemanticObjectAnonymous()) {
+			if (item.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, item);
+			else this.addSemanticPropertyReference(property, item);
+		}
+		else {
+			this.connector.store(item);
+			this.addSemanticPropertyReference(property, item);
+		}
 	}
 	
 

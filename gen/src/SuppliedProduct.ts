@@ -22,19 +22,19 @@
  * SOFTWARE.
 */
 
-import DefinedProduct from "./DefinedProduct.js"
-import IQuantity from "./IQuantity.js"
+import IClaim from "./IClaim.js"
+import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js"
-import ICatalogItem from "./ICatalogItem.js"
-import ISuppliedProduct from "./ISuppliedProduct.js"
 import IPartOrigin from "./IPartOrigin.js"
 import INatureOrigin from "./INatureOrigin.js"
-import IProductType from "./IProductType.js"
-import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
-import IClaim from "./IClaim.js"
-import IGeographicalOrigin from "./IGeographicalOrigin.js"
-import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import ICertification from "./ICertification.js"
+import IQuantity from "./IQuantity.js"
+import IProductType from "./IProductType.js"
+import ISuppliedProduct from "./ISuppliedProduct.js"
+import DefinedProduct from "./DefinedProduct.js"
+import ICatalogItem from "./ICatalogItem.js"
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js"
+import IGeographicalOrigin from "./IGeographicalOrigin.js"
 import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
@@ -73,4 +73,8 @@ export default class SuppliedProduct extends DefinedProduct implements ISupplied
 		if (parameters.totalTheoreticalStock || parameters.totalTheoreticalStock === 0) this.setTotalTheoreticalStock(parameters.totalTheoreticalStock);
 	}
 
+	public setName(name: string): void {
+		
+	}
+	
 }

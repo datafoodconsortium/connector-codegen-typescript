@@ -1,5 +1,5 @@
-import IOffer from "./IOffer.js"
 import Ellapsable from "./Ellapsable.js"
+import IOffer from "./IOffer.js"
 
 import { Semanticable } from "@virtual-assembly/semantizer"
 

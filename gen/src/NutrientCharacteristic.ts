@@ -22,11 +22,11 @@
  * SOFTWARE.
 */
 
+import ICharacteristicDimension from "./ICharacteristicDimension.js"
+import Characteristic from "./Characteristic.js"
 import INutrientCharacteristic from "./INutrientCharacteristic.js"
 import IUnit from "./IUnit.js"
 import INutrientDimension from "./INutrientDimension.js"
-import Characteristic from "./Characteristic.js"
-import ICharacteristicDimension from "./ICharacteristicDimension.js"
 import { SemanticObjectAnonymous } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";

@@ -54,42 +54,6 @@ export default class SaleSession extends SemanticObject implements ISaleSession 
 		if (parameters.offers) parameters.offers.forEach(e => this.addOffer(e));
 	}
 
-	public async getOffers(options?: IGetterOptions): Promise<Array<IOffer>>
-	 {
-		const results = new Array<IOffer>();
-		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists");
-		for await (const semanticId of properties) {
-			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
-			if (semanticObject) results.push(<IOffer> semanticObject);
-		}
-		return results;
-	}
-	
-
-	public getQuantity(): number
-	 {
-		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity"));
-	}
-	
-
-	public addOffer(offer: IOffer): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists";
-		if (offer.isSemanticObjectAnonymous()) {
-			if (offer.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, offer);
-			else this.addSemanticPropertyReference(property, offer);
-		}
-		else {
-			this.connector.store(offer);
-			this.addSemanticPropertyReference(property, offer);
-		}
-	}
-	
-
-	public setQuantity(quantity: number): void {
-		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity";
-		this.setSemanticPropertyLiteral(property, quantity);
-	}
-	
 	public getBeginDate(): string
 	 {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#beginDate");
@@ -111,6 +75,42 @@ export default class SaleSession extends SemanticObject implements ISaleSession 
 	public setEndDate(endDate: string): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#endDate";
 		this.setSemanticPropertyLiteral(property, endDate);
+	}
+	
+	public setQuantity(quantity: number): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity";
+		this.setSemanticPropertyLiteral(property, quantity);
+	}
+	
+
+	public addOffer(offer: IOffer): void {
+		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists";
+		if (offer.isSemanticObjectAnonymous()) {
+			if (offer.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, offer);
+			else this.addSemanticPropertyReference(property, offer);
+		}
+		else {
+			this.connector.store(offer);
+			this.addSemanticPropertyReference(property, offer);
+		}
+	}
+	
+
+	public async getOffers(options?: IGetterOptions): Promise<Array<IOffer>>
+	 {
+		const results = new Array<IOffer>();
+		const properties = this.getSemanticPropertyAll("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists");
+		for await (const semanticId of properties) {
+			const semanticObject: Semanticable | undefined = await this.connector.fetch(semanticId, options);
+			if (semanticObject) results.push(<IOffer> semanticObject);
+		}
+		return results;
+	}
+	
+
+	public getQuantity(): number
+	 {
+		return Number(this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#quantity"));
 	}
 	
 
