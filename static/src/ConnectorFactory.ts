@@ -17,10 +17,36 @@ import Price from "./Price.js";
 import QuantitativeValue from "./QuantitativeValue.js";
 import SKOSConcept from "./SKOSConcept.js";
 import SuppliedProduct from "./SuppliedProduct.js";
-import Localizable from "./Localizable.js";
+import IAddress from "./IAddress.js";
 import IConnector from "./IConnector.js";
 import DatasetExt from "rdf-ext/lib/Dataset.js";
 import { DatasetCore } from '@rdfjs/types';
+import IAllergenDimension from "./IAllergenDimension.js";
+import IUnit from "./IUnit.js";
+import ICatalogItem from "./ICatalogItem.js";
+import IEnterprise from "./IEnterprise.js";
+import ICatalog from "./ICatalog.js";
+import IOffer from "./IOffer.js";
+import ISuppliedProduct from "./ISuppliedProduct.js";
+import ICustomerCategory from "./ICustomerCategory.js";
+import INutrientDimension from "./INutrientDimension.js";
+import IPrice from "./IPrice.js";
+import IOrderLine from "./IOrderLine.js";
+import IAgent from "./IAgent.js";
+import ISaleSession from "./ISaleSession.js";
+import IOrder from "./IOrder.js";
+import IPhysicalDimension from "./IPhysicalDimension.js";
+import IPartOrigin from "./IPartOrigin.js";
+import INatureOrigin from "./INatureOrigin.js";
+import ICertification from "./ICertification.js";
+import IGeographicalOrigin from "./IGeographicalOrigin.js";
+import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js";
+import INutrientCharacteristic from "./INutrientCharacteristic.js";
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js";
+import IClaim from "./IClaim.js";
+import IQuantity from "./IQuantity.js";
+import IProductType from "./IProductType.js";
+import IPerson from "./IPerson.js";
 
 export default class ConnectorFactory implements IConnectorFactory {
 
@@ -36,8 +62,68 @@ export default class ConnectorFactory implements IConnectorFactory {
         return this.createFromRdfDataset(datasetExt);
     }
     
-    public createAddress(parameters: any): Localizable {
-        throw new Error("Method not implemented.");
+    public createAddress(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, street?: string, postalCode?: string, city?: string, country?: string}): IAddress {
+        return new Address({ connector: this.connector, ...parameters });
+    }
+
+    public createAllergenCharacteristic(parameters: {other?: Semanticable, unit?: IUnit, value?: number, allergenDimension?: IAllergenDimension}): IAllergenCharacteristic {
+        return new AllergenCharacteristic({ connector: this.connector, ...parameters });
+    }
+
+    public createCatalog(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, maintainers?: IEnterprise[], items?: ICatalogItem[]}): ICatalog {
+        return new Catalog({ connector: this.connector, ...parameters });
+    }
+
+    public createCatalogItem(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, product?: ISuppliedProduct, sku?: string, stockLimitation?: number, offers?: IOffer[], catalogs?: ICatalog[]}): ICatalogItem {
+        return new CatalogItem({ connector: this.connector, ...parameters });
+    }
+
+    public createCustomerCategory(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, description?: string}): ICustomerCategory {
+        return new CustomerCategory({ connector: this.connector, ...parameters });
+    }
+
+    public createEnterprise(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, localizations?: IAddress[], description?: string, vatNumber?: string, customerCategories?: ICustomerCategory[], catalogs?: ICatalog[], catalogItems?: ICatalogItem[], suppliedProducts?: ISuppliedProduct[]}): IEnterprise {
+        return new Enterprise({ connector: this.connector, ...parameters });
+    }
+
+    public createNutrientCharacteristic(parameters: {other?: Semanticable, unit?: IUnit, value?: number, nutrientDimension?: INutrientDimension}): INutrientCharacteristic {
+        return new NutrientCharacteristic({ connector: this.connector, ...parameters });
+    }
+
+    public createOffer(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, offeredItem?: ICatalogItem, offeredTo?: ICustomerCategory, price?: IPrice, stockLimitation?: number}): IOffer {
+        return new Offer({ connector: this.connector, ...parameters });
+    }
+
+    public createOrder(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, number?: string, date?: string, saleSession?: ISaleSession, client?: IAgent, lines?: IOrderLine[]}): IOrder {
+        return new Order({ connector: this.connector, ...parameters });
+    }
+
+    public createOrderLine(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, quantity?: number, price?: IPrice, offer?: IOffer, order?: IOrder}): IOrderLine {
+        return new OrderLine({ connector: this.connector, ...parameters });
+    }
+
+    public createPerson(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, firstName?: string, lastName?: string, localizations?: IAddress[], organizations?: IEnterprise[]}): IPerson {
+        return new Person({ connector: this.connector, ...parameters });
+    }
+
+    public createPhysicalCharacteristic(parameters: {other?: Semanticable, unit?: IUnit, value?: number, physicalDimension?: IPhysicalDimension}): IPhysicalCharacteristic {
+        return new PhysicalCharacteristic({ connector: this.connector, ...parameters });
+    }
+
+    public createPrice(parameters: {other?: Semanticable, value?: number, vatRate?: number, unit?: IUnit}): IPrice {
+        return new Price({ connector: this.connector, ...parameters });
+    }
+
+    public createQuantity(parameters: {other?: Semanticable, unit?: IUnit, value?: number}): IQuantity {
+        return new QuantitativeValue({ connector: this.connector, ...parameters });
+    }
+
+    public createSaleSession(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, beginDate?: string, endDate?: string, quantity?: number, offers?: IOffer[]}): ISaleSession {
+        return new SaleSession({ connector: this.connector, ...parameters });
+    }
+
+    public createSuppliedProduct(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, name?: string, description?: string, productType?: IProductType, quantity?: IQuantity, alcoholPercentage?: number, lifetime?: string, claims?: IClaim[], usageOrStorageConditions?: string, allergenCharacteristics?: IAllergenCharacteristic[], nutrientCharacteristics?: INutrientCharacteristic[], physicalCharacteristics?: IPhysicalCharacteristic[], geographicalOrigin?: IGeographicalOrigin, catalogItems?: ICatalogItem[], certifications?: ICertification[], natureOrigin?: INatureOrigin[], partOrigin?: IPartOrigin[], totalTheoreticalStock?: number}): ISuppliedProduct {
+        return new SuppliedProduct({ connector: this.connector, ...parameters });
     }
 
     public createFromType(type: string): Semanticable | undefined {
@@ -45,67 +131,67 @@ export default class ConnectorFactory implements IConnectorFactory {
         const prefix: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#";
         switch (type) {
             case prefix + "Enterprise":
-                result = new Enterprise({ connector: this.connector, semanticId: "" });
+                result = this.createEnterprise({ semanticId: "" });
                 break;
             
             case prefix + "Address":
-                result = new Address({ connector: this.connector, semanticId: "" });
+                result = this.createAddress({ semanticId: "" });
                 break;
 
             case prefix + "Person":
-                result = new Person({ connector: this.connector, semanticId: "" });
+                result = this.createPerson({ semanticId: "" });
                 break;
             
             case prefix + "CustomerCategory":
-                result = new CustomerCategory({ connector: this.connector, semanticId: "" });
+                result = this.createCustomerCategory({ semanticId: "" });
                 break;
 
             case prefix + "QuantitativeValue":
-                result = new QuantitativeValue({ connector: this.connector });
+                result = this.createQuantity({});
                 break;
             
             case prefix + "AllergenCharacteristic":
-                result = new AllergenCharacteristic({ connector: this.connector });
+                result = this.createAllergenCharacteristic({});
                 break;
 
             case prefix + "NutrientCharacteristic":
-                result = new NutrientCharacteristic({ connector: this.connector });
+                result = this.createNutrientCharacteristic({});
                 break;
             
             case prefix + "PhysicalCharacteristic":
-                result = new PhysicalCharacteristic({ connector: this.connector });
+                result = this.createPhysicalCharacteristic({});
                 break;
 
             case prefix + "SuppliedProduct":
-                result = new SuppliedProduct({ connector: this.connector, semanticId: "" });
+                result = this.createSuppliedProduct({ semanticId: "" });
                 break;
             
             case prefix + "Price":
-                result = new Price({ connector: this.connector });
+                result = this.createPrice({});
                 break;
 
             case prefix + "Catalog":
-                result = new Catalog({ connector: this.connector, semanticId: "" });
+                result = this.createCatalog({ semanticId: "" });
                 break;
 
             case prefix + "CatalogItem":
-                result = new CatalogItem({ connector: this.connector, semanticId: "" });
+                result = this.createCatalogItem({ semanticId: "" });
                 break;
             
             case prefix + "Offer":
-                result = new Offer({ connector: this.connector, semanticId: "" });
+                result = this.createOffer({ semanticId: "" });
                 break;
 
             case prefix + "Order":
-                result = new Order({ connector: this.connector, semanticId: "" });
+                result = this.createOrder({ semanticId: "" });
                 break;
 
             case prefix + "OrderLine":
-                result = new OrderLine({ connector: this.connector, semanticId: "" });
+                result = this.createOrderLine({ semanticId: "" });
                 break;
 
             case prefix + "SaleSession":
-                result = new SaleSession({ connector: this.connector, semanticId: "" });
+                result = this.createSaleSession({ semanticId: "" });
                 break;
 
             case "http://www.w3.org/2004/02/skos/core#Concept":

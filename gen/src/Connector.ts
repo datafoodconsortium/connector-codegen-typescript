@@ -10,11 +10,37 @@ import IConnectorStore from "./IConnectorStore";
 import IGetterOptions from "./IGetterOptions.js";
 import ISKOSConcept from "./ISKOSConcept";
 import context from "./context.js";
-import Localizable from "./Localizable.js";
 import IConnectorImportOptions from "./IConnectorImportOptions.js";
 import IConnectorExportOptions from "./IConnectorExportOptions.js";
 import ConnectorFactory from "./ConnectorFactory.js";
 import IConnector from "./IConnector.js";
+import IAddress from "./IAddress.js";
+import ICatalog from "./ICatalog.js";
+import ICatalogItem from "./ICatalogItem.js";
+import ICustomerCategory from "./ICustomerCategory.js";
+import IEnterprise from "./IEnterprise.js";
+import INutrientCharacteristic from "./INutrientCharacteristic.js";
+import IAllergenCharacteristic from "./IAllergenCharacteristic.js";
+import IOffer from "./IOffer.js";
+import IOrder from "./IOrder.js";
+import IOrderLine from "./IOrderLine.js";
+import IPerson from "./IPerson.js";
+import IPhysicalCharacteristic from "./IPhysicalCharacteristic.js";
+import IPrice from "./IPrice.js";
+import IQuantity from "./IQuantity.js";
+import ISaleSession from "./ISaleSession.js";
+import ISuppliedProduct from "./ISuppliedProduct.js";
+import IAllergenDimension from "./IAllergenDimension.js";
+import IUnit from "./IUnit.js";
+import INutrientDimension from "./INutrientDimension.js";
+import IAgent from "./IAgent.js";
+import IPhysicalDimension from "./IPhysicalDimension.js";
+import IPartOrigin from "./IPartOrigin.js";
+import INatureOrigin from "./INatureOrigin.js";
+import ICertification from "./ICertification.js";
+import IGeographicalOrigin from "./IGeographicalOrigin.js";
+import IClaim from "./IClaim.js";
+import IProductType from "./IProductType.js";
 
 export default class Connector implements IConnector {
 
@@ -37,8 +63,68 @@ export default class Connector implements IConnector {
         this.exporter = new ConnectorExporterJsonldStream(context, outputContext);
     }
 
-    public createAddress(): Localizable {
-        return this.factory.createAddress({});
+    public createAddress(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, street?: string, postalCode?: string, city?: string, country?: string}): IAddress {
+        return this.factory.createAddress(parameters);
+    }
+
+    public createAllergenCharacteristic(parameters: {other?: Semanticable, unit?: IUnit, value?: number, allergenDimension?: IAllergenDimension}): IAllergenCharacteristic {
+        return this.factory.createAllergenCharacteristic(parameters);
+    }
+
+    public createCatalog(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, maintainers?: IEnterprise[], items?: ICatalogItem[]}): ICatalog {
+        return this.factory.createCatalog(parameters);
+    }
+
+    public createCatalogItem(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, product?: ISuppliedProduct, sku?: string, stockLimitation?: number, offers?: IOffer[], catalogs?: ICatalog[]}): ICatalogItem {
+        return this.factory.createCatalogItem(parameters);
+    }
+
+    public createCustomerCategory(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, description?: string}): ICustomerCategory {
+        return this.factory.createCustomerCategory(parameters);
+    }
+
+    public createEnterprise(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, localizations?: IAddress[], description?: string, vatNumber?: string, customerCategories?: ICustomerCategory[], catalogs?: ICatalog[], catalogItems?: ICatalogItem[], suppliedProducts?: ISuppliedProduct[]}): IEnterprise {
+        return this.factory.createEnterprise(parameters);
+    }
+
+    public createNutrientCharacteristic(parameters: {other?: Semanticable, unit?: IUnit, value?: number, nutrientDimension?: INutrientDimension}): INutrientCharacteristic {
+        return this.factory.createNutrientCharacteristic(parameters);
+    }
+
+    public createOffer(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, offeredItem?: ICatalogItem, offeredTo?: ICustomerCategory, price?: IPrice, stockLimitation?: number}): IOffer {
+        return this.factory.createOffer(parameters);
+    }
+
+    public createOrder(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, number?: string, date?: string, saleSession?: ISaleSession, client?: IAgent, lines?: IOrderLine[]}): IOrder {
+        return this.factory.createOrder(parameters);
+    }
+
+    public createOrderLine(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, quantity?: number, price?: IPrice, offer?: IOffer, order?: IOrder}): IOrderLine {
+        return this.factory.createOrderLine(parameters);
+    }
+
+    public createPerson(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, firstName?: string, lastName?: string, localizations?: IAddress[], organizations?: IEnterprise[]}): IPerson {
+        return this.factory.createPerson(parameters);
+    }
+
+    public createPhysicalCharacteristic(parameters: {other?: Semanticable, unit?: IUnit, value?: number, physicalDimension?: IPhysicalDimension}): IPhysicalCharacteristic {
+        return this.factory.createPhysicalCharacteristic(parameters);
+    }
+
+    public createPrice(parameters: {other?: Semanticable, value?: number, vatRate?: number, unit?: IUnit}): IPrice {
+        return this.factory.createPrice(parameters);
+    }
+
+    public createQuantity(parameters: {other?: Semanticable, unit?: IUnit, value?: number}): IQuantity {
+        return this.factory.createQuantity(parameters);
+    }
+
+    public createSaleSession(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, beginDate?: string, endDate?: string, quantity?: number, offers?: IOffer[]}): ISaleSession {
+        return this.factory.createSaleSession(parameters);
+    }
+
+    public createSuppliedProduct(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, name?: string, description?: string, productType?: IProductType, quantity?: IQuantity, alcoholPercentage?: number, lifetime?: string, claims?: IClaim[], usageOrStorageConditions?: string, allergenCharacteristics?: IAllergenCharacteristic[], nutrientCharacteristics?: INutrientCharacteristic[], physicalCharacteristics?: IPhysicalCharacteristic[], geographicalOrigin?: IGeographicalOrigin, catalogItems?: ICatalogItem[], certifications?: ICertification[], natureOrigin?: INatureOrigin[], partOrigin?: IPartOrigin[], totalTheoreticalStock?: number}): ISuppliedProduct {
+        return this.factory.createSuppliedProduct(parameters);
     }
 
     public async export(objects: Array<Semanticable>, options?: IConnectorExportOptions): Promise<string> {

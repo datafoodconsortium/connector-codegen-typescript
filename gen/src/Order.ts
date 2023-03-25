@@ -30,12 +30,13 @@ import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
+import IAgent from "./IAgent.js"
 
 export default class Order extends SemanticObject implements IOrder {
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, number?: string, date?: string, saleSession?: ISaleSession, client?: Agent, lines?: IOrderLine[]}) {
+	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, number?: string, date?: string, saleSession?: ISaleSession, client?: IAgent, lines?: IOrderLine[]}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Order";
 		
 		if (parameters.other) {
@@ -127,7 +128,7 @@ export default class Order extends SemanticObject implements IOrder {
 	}
 	
 
-	public setClient(client: Agent): void {
+	public setClient(client: IAgent): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#orderedBy";
 		this.setSemanticPropertyReference(property, client);
 		this.connector.store(client);

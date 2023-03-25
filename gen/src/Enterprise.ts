@@ -36,11 +36,12 @@ import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
+import ISuppliedProduct from "./ISuppliedProduct.js"
 
 export default class Enterprise extends Agent implements Onboardable, ProductSupplier, IEnterprise {
 	
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, localizations?: IAddress[], description?: string, vatNumber?: string, customerCategories?: ICustomerCategory[], catalogs?: ICatalog[], catalogItems?: ICatalogItem[], suppliedProducts?: SuppliedProduct[], technicalProducts?: ITechnicalProduct[]}) {
+	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, localizations?: IAddress[], description?: string, vatNumber?: string, customerCategories?: ICustomerCategory[], catalogs?: ICatalog[], catalogItems?: ICatalogItem[], suppliedProducts?: ISuppliedProduct[], technicalProducts?: ITechnicalProduct[]}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Enterprise";
 		
 		if (parameters.other) {
@@ -145,7 +146,7 @@ export default class Enterprise extends Agent implements Onboardable, ProductSup
 	}
 	
 
-	public supplyProduct(suppliedProduct: SuppliedProduct): void {
+	public supplyProduct(suppliedProduct: ISuppliedProduct): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies";
 		if (suppliedProduct.isSemanticObjectAnonymous()) {
 			if (suppliedProduct.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, suppliedProduct);
