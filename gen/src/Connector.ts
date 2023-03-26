@@ -139,6 +139,12 @@ export default class Connector implements IConnector {
         return this.factory;
     }
 
+    public async importOne(data: string, options?: IConnectorImportOptions): Promise<Semanticable | undefined> {
+        const opts = { ...options, limit: 1 };
+        const results = await this.import(data, opts);
+        return results.length > 0? results[0]: undefined;
+    }
+
     public async import(data: string, options?: IConnectorImportOptions): Promise<Array<Semanticable>> {
         return new Promise(async (resolve, reject) => {
             try { 
