@@ -139,13 +139,12 @@ export default class Connector implements IConnector {
         return this.factory;
     }
 
-    // TODO: handle only and limit optional parameters.
     public async import(data: string, options?: IConnectorImportOptions): Promise<Array<Semanticable>> {
         return new Promise(async (resolve, reject) => {
             try { 
                 const importer = options?.importer? options.importer : this.importer;
                 const factory = options?.factory? options.factory : this.factory;
-                const results: Array<Semanticable> = new Array<Semanticable>();
+                let results: Array<Semanticable> = new Array<Semanticable>();
                 const datasets: Array<DatasetExt> = await importer.import(data, { context: options?.context });
 
                 datasets.forEach(dataset => {
@@ -158,6 +157,14 @@ export default class Connector implements IConnector {
                             options.callbacks.forEach((callback: Function) => callback(semanticObject));
                     }
                 });
+
+                if (options) {
+                    if (options.only)
+                        results = results.filter(r => r.isSemanticTypeOf(options.only!));
+
+                    if (options.limit && options.limit < results.length)
+                        results = results.slice(0, options.limit);
+                }
 
                 resolve(results);
             }
