@@ -30,6 +30,7 @@ import { SemanticObject } from "@virtual-assembly/semantizer"
 import { Semanticable } from "@virtual-assembly/semantizer"
 import IConnector from "./IConnector.js";
 import IGetterOptions from "./IGetterOptions.js"
+import IPrice from "./IPrice.js"
 
 export default class Order extends SemanticObject implements IOrder {
 	
@@ -143,6 +144,16 @@ export default class Order extends SemanticObject implements IOrder {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#belongsTo";
 		this.setSemanticPropertyReference(property, saleSession);
 		this.connector.store(saleSession);
+	}
+
+	public async getTotalPrice(): Promise<number> {
+		let result: number = 0;
+		const lines = await this.getLines();
+		lines.forEach(async (line) => {
+			const price = await line.getEffectivePrice();
+			result += price?.getValue() ?? 0;
+		});
+		return result;
 	}
 	
 

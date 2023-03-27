@@ -63,67 +63,99 @@ export default class Connector implements IConnector {
         this.exporter = new ConnectorExporterJsonldStream(context, outputContext);
     }
 
-    public createAddress(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, street?: string, postalCode?: string, city?: string, country?: string}): IAddress {
+    public createAddress(parameters: {semanticId: string, street?: string, postalCode?: string, city?: string, country?: string, doNotStore?: boolean}): IAddress;
+    public createAddress(parameters: {other: IAddress, doNotStore?: boolean}): IAddress;
+    public createAddress(parameters: {doNotStore?: boolean, semanticId?: string, other?: IAddress, street?: string, postalCode?: string, city?: string, country?: string}): IAddress {
         return this.factory.createAddress(parameters);
     }
 
-    public createAllergenCharacteristic(parameters: {other?: Semanticable, unit?: IUnit, value?: number, allergenDimension?: IAllergenDimension}): IAllergenCharacteristic {
+    public createAllergenCharacteristic(parameters: {unit?: IUnit, value?: number, allergenDimension?: IAllergenDimension}): IAllergenCharacteristic
+    public createAllergenCharacteristic(parameters: {other: IAllergenCharacteristic}): IAllergenCharacteristic;
+    public createAllergenCharacteristic(parameters: {other?: IAllergenCharacteristic, unit?: IUnit, value?: number, allergenDimension?: IAllergenDimension}): IAllergenCharacteristic {
         return this.factory.createAllergenCharacteristic(parameters);
     }
 
-    public createCatalog(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, maintainers?: IEnterprise[], items?: ICatalogItem[]}): ICatalog {
+    public createCatalog(parameters: {semanticId: string, maintainers?: IEnterprise[], items?: ICatalogItem[], doNotStore?: boolean}): ICatalog;
+    public createCatalog(parameters: {other: ICatalog, doNotStore?: boolean}): ICatalog;
+    public createCatalog(parameters: {doNotStore?: boolean, semanticId?: string, other?: ICatalog, maintainers?: IEnterprise[], items?: ICatalogItem[]}): ICatalog {
         return this.factory.createCatalog(parameters);
     }
 
-    public createCatalogItem(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, product?: ISuppliedProduct, sku?: string, stockLimitation?: number, offers?: IOffer[], catalogs?: ICatalog[]}): ICatalogItem {
+    public createCatalogItem(parameters: {semanticId: string, product?: ISuppliedProduct, sku?: string, stockLimitation?: number, offers?: IOffer[], catalogs?: ICatalog[], doNotStore?: boolean}): ICatalogItem;
+    public createCatalogItem(parameters: {other: ICatalogItem, doNotStore?: boolean}): ICatalogItem;
+    public createCatalogItem(parameters: {doNotStore?: boolean, semanticId?: string, other?: ICatalogItem, product?: ISuppliedProduct, sku?: string, stockLimitation?: number, offers?: IOffer[], catalogs?: ICatalog[]}): ICatalogItem {
         return this.factory.createCatalogItem(parameters);
     }
 
-    public createCustomerCategory(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, description?: string}): ICustomerCategory {
+    public createCustomerCategory(parameters: {semanticId: string, description?: string, doNotStore?: boolean}): ICustomerCategory
+    public createCustomerCategory(parameters: {other: ICustomerCategory, doNotStore?: boolean}): ICustomerCategory
+    public createCustomerCategory(parameters: {doNotStore?: boolean, semanticId?: string, other?: ICustomerCategory, description?: string}): ICustomerCategory {
         return this.factory.createCustomerCategory(parameters);
     }
 
-    public createEnterprise(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, localizations?: IAddress[], description?: string, vatNumber?: string, customerCategories?: ICustomerCategory[], catalogs?: ICatalog[], catalogItems?: ICatalogItem[], suppliedProducts?: ISuppliedProduct[]}): IEnterprise {
+    public createEnterprise(parameters: {semanticId: string, localizations?: IAddress[], description?: string, vatNumber?: string, customerCategories?: ICustomerCategory[], catalogs?: ICatalog[], catalogItems?: ICatalogItem[], suppliedProducts?: ISuppliedProduct[], doNotStore?: boolean}): IEnterprise
+    public createEnterprise(parameters: {other: IEnterprise, doNotStore?: boolean}): IEnterprise
+    public createEnterprise(parameters: {doNotStore?: boolean, semanticId?: string, other?: IEnterprise, localizations?: IAddress[], description?: string, vatNumber?: string, customerCategories?: ICustomerCategory[], catalogs?: ICatalog[], catalogItems?: ICatalogItem[], suppliedProducts?: ISuppliedProduct[]}): IEnterprise {
         return this.factory.createEnterprise(parameters);
     }
 
-    public createNutrientCharacteristic(parameters: {other?: Semanticable, unit?: IUnit, value?: number, nutrientDimension?: INutrientDimension}): INutrientCharacteristic {
+    public createNutrientCharacteristic(parameters: {unit?: IUnit, value?: number, nutrientDimension?: INutrientDimension}): INutrientCharacteristic
+    public createNutrientCharacteristic(parameters: {other: INutrientCharacteristic, doNotStore?: boolean}): INutrientCharacteristic
+    public createNutrientCharacteristic(parameters: {other?: INutrientCharacteristic, unit?: IUnit, value?: number, nutrientDimension?: INutrientDimension}): INutrientCharacteristic {
         return this.factory.createNutrientCharacteristic(parameters);
     }
 
-    public createOffer(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, offeredItem?: ICatalogItem, offeredTo?: ICustomerCategory, price?: IPrice, stockLimitation?: number}): IOffer {
+    public createOffer(parameters: {semanticId: string, offeredItem?: ICatalogItem, offeredTo?: ICustomerCategory, price?: IPrice, stockLimitation?: number, doNotStore?: boolean}): IOffer
+    public createOffer(parameters: {other: IOffer, doNotStore?: boolean}): IOffer
+    public createOffer(parameters: {doNotStore?: boolean, semanticId?: string, other?: IOffer, offeredItem?: ICatalogItem, offeredTo?: ICustomerCategory, price?: IPrice, stockLimitation?: number}): IOffer {
         return this.factory.createOffer(parameters);
     }
 
-    public createOrder(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, number?: string, date?: string, saleSession?: ISaleSession, client?: IAgent, lines?: IOrderLine[]}): IOrder {
+    public createOrder(parameters: {semanticId: string, number?: string, date?: string, saleSession?: ISaleSession, client?: IAgent, lines?: IOrderLine[], doNotStore?: boolean}): IOrder
+    public createOrder(parameters: {other: IOrder, doNotStore?: boolean}): IOrder
+    public createOrder(parameters: {doNotStore?: boolean, semanticId?: string, other?: IOrder, number?: string, date?: string, saleSession?: ISaleSession, client?: IAgent, lines?: IOrderLine[]}): IOrder {
         return this.factory.createOrder(parameters);
     }
 
-    public createOrderLine(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, quantity?: number, price?: IPrice, offer?: IOffer, order?: IOrder}): IOrderLine {
+    public createOrderLine(parameters: {semanticId: string, quantity?: number, price?: IPrice, offer?: IOffer, order?: IOrder, doNotStore?: boolean}): IOrderLine
+    public createOrderLine(parameters: {other: IOrderLine, doNotStore?: boolean}): IOrderLine
+    public createOrderLine(parameters: {doNotStore?: boolean, semanticId?: string, other?: IOrderLine, quantity?: number, price?: IPrice, offer?: IOffer, order?: IOrder}): IOrderLine {
         return this.factory.createOrderLine(parameters);
     }
 
-    public createPerson(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, firstName?: string, lastName?: string, localizations?: IAddress[], organizations?: IEnterprise[]}): IPerson {
+    public createPerson(parameters: {semanticId: string, firstName?: string, lastName?: string, localizations?: IAddress[], organizations?: IEnterprise[], doNotStore?: boolean}): IPerson
+    public createPerson(parameters: {other: IPerson, doNotStore?: boolean}): IPerson
+    public createPerson(parameters: {doNotStore?: boolean, semanticId?: string, other?: IPerson, firstName?: string, lastName?: string, localizations?: IAddress[], organizations?: IEnterprise[]}): IPerson {
         return this.factory.createPerson(parameters);
     }
 
-    public createPhysicalCharacteristic(parameters: {other?: Semanticable, unit?: IUnit, value?: number, physicalDimension?: IPhysicalDimension}): IPhysicalCharacteristic {
+    public createPhysicalCharacteristic(parameters: {unit: IUnit, value?: number, physicalDimension?: IPhysicalDimension}): IPhysicalCharacteristic
+    public createPhysicalCharacteristic(parameters: {other: IPhysicalCharacteristic, doNotStore?: boolean}): IPhysicalCharacteristic
+    public createPhysicalCharacteristic(parameters: {other?: IPhysicalCharacteristic, unit?: IUnit, value?: number, physicalDimension?: IPhysicalDimension}): IPhysicalCharacteristic {
         return this.factory.createPhysicalCharacteristic(parameters);
     }
 
-    public createPrice(parameters: {other?: Semanticable, value?: number, vatRate?: number, unit?: IUnit}): IPrice {
+    public createPrice(parameters: {value?: number, vatRate?: number, unit?: IUnit}): IPrice
+    public createPrice(parameters: {other: IPrice, doNotStore?: boolean}): IPrice
+    public createPrice(parameters: {other?: IPrice, value?: number, vatRate?: number, unit?: IUnit}): IPrice {
         return this.factory.createPrice(parameters);
     }
 
-    public createQuantity(parameters: {other?: Semanticable, unit?: IUnit, value?: number}): IQuantity {
+    public createQuantity(parameters: {unit?: IUnit, value?: number}): IQuantity
+    public createQuantity(parameters: {other: IQuantity, doNotStore?: boolean}): IQuantity
+    public createQuantity(parameters: {other?: IQuantity, unit?: IUnit, value?: number}): IQuantity {
         return this.factory.createQuantity(parameters);
     }
 
-    public createSaleSession(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, beginDate?: string, endDate?: string, quantity?: number, offers?: IOffer[]}): ISaleSession {
+    public createSaleSession(parameters: {semanticId: string, beginDate?: string, endDate?: string, quantity?: number, offers?: IOffer[], doNotStore?: boolean}): ISaleSession
+    public createSaleSession(parameters: {other: ISaleSession, doNotStore?: boolean}): ISaleSession
+    public createSaleSession(parameters: {doNotStore?: boolean, semanticId?: string, other?: ISaleSession, beginDate?: string, endDate?: string, quantity?: number, offers?: IOffer[]}): ISaleSession {
         return this.factory.createSaleSession(parameters);
     }
 
-    public createSuppliedProduct(parameters: {doNotStore?: boolean, semanticId?: string, other?: Semanticable, name?: string, description?: string, productType?: IProductType, quantity?: IQuantity, alcoholPercentage?: number, lifetime?: string, claims?: IClaim[], usageOrStorageConditions?: string, allergenCharacteristics?: IAllergenCharacteristic[], nutrientCharacteristics?: INutrientCharacteristic[], physicalCharacteristics?: IPhysicalCharacteristic[], geographicalOrigin?: IGeographicalOrigin, catalogItems?: ICatalogItem[], certifications?: ICertification[], natureOrigin?: INatureOrigin[], partOrigin?: IPartOrigin[], totalTheoreticalStock?: number}): ISuppliedProduct {
+    public createSuppliedProduct(parameters: {semanticId: string, name?: string, description?: string, productType?: IProductType, quantity?: IQuantity, alcoholPercentage?: number, lifetime?: string, claims?: IClaim[], usageOrStorageConditions?: string, allergenCharacteristics?: IAllergenCharacteristic[], nutrientCharacteristics?: INutrientCharacteristic[], physicalCharacteristics?: IPhysicalCharacteristic[], geographicalOrigin?: IGeographicalOrigin, catalogItems?: ICatalogItem[], certifications?: ICertification[], natureOrigin?: INatureOrigin[], partOrigin?: IPartOrigin[], totalTheoreticalStock?: number, doNotStore?: boolean}): ISuppliedProduct
+    public createSuppliedProduct(parameters: {other: ISuppliedProduct, doNotStore?: boolean}): ISuppliedProduct
+    public createSuppliedProduct(parameters: {doNotStore?: boolean, semanticId?: string, other?: ISuppliedProduct, name?: string, description?: string, productType?: IProductType, quantity?: IQuantity, alcoholPercentage?: number, lifetime?: string, claims?: IClaim[], usageOrStorageConditions?: string, allergenCharacteristics?: IAllergenCharacteristic[], nutrientCharacteristics?: INutrientCharacteristic[], physicalCharacteristics?: IPhysicalCharacteristic[], geographicalOrigin?: IGeographicalOrigin, catalogItems?: ICatalogItem[], certifications?: ICertification[], natureOrigin?: INatureOrigin[], partOrigin?: IPartOrigin[], totalTheoreticalStock?: number}): ISuppliedProduct {
         return this.factory.createSuppliedProduct(parameters);
     }
 
@@ -137,12 +169,6 @@ export default class Connector implements IConnector {
 
     public getDefaultFactory(): IConnectorFactory {
         return this.factory;
-    }
-
-    public async importOne(data: string, options?: IConnectorImportOptions): Promise<Semanticable | undefined> {
-        const opts = { ...options, limit: 1 };
-        const results = await this.import(data, opts);
-        return results.length > 0? results[0]: undefined;
     }
 
     public async import(data: string, options?: IConnectorImportOptions): Promise<Array<Semanticable>> {
@@ -176,6 +202,18 @@ export default class Connector implements IConnector {
             }
             catch(error) { reject(error) }
         });
+    }
+
+    public async importOne(data: string, options?: IConnectorImportOptions): Promise<Semanticable | undefined> {
+        const opts = { ...options, limit: 1 };
+        const results = await this.import(data, opts);
+        return results.length > 0? results[0]: undefined;
+    }
+
+    public async importOneTyped<Type>(data: string, options?: IConnectorImportOptions): Promise<Type | undefined> {
+        const opts = { ...options, limit: 1 };
+        const results = await this.import(data, opts);
+        return results.length > 0? <Type> results[0]: undefined;
     }
 
     // TODO: manage options overriding.

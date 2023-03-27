@@ -14,17 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add optional parameters in constructors.
-- Add the import function:
-  - We use the node fetch API by default, be sure to have node >= v17.15 installed. 
+- Add the import functions:
+  - We use the node fetch API by default, be sure to have node >= v17.15 installed
+  - use `importOne` to get only one result
 - Add a store:
   - `IConnectorStore`
-  - `ConnectorStoreMap`
+  - `ConnectorStoreMap`: basic store implemented using a Map.
 - Add a factory:
   - `IConnectorFactory`
-  - `ConnectorFactoryDefault`
   - `ConnectorFactory`
 - Support basic `Catalog`, `SaleSession`, `Order` and `OrderLine`.
 - Add options to importer and exporter (`IGetterOptions`).
+- Test all classes.
+- Add create functions in the Connector class
 
 ### Changed
 

@@ -130,6 +130,19 @@ export default class OrderLine extends SemanticObject implements IOrderLine {
 	 {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description");
 	}
+
+	public async getEffectivePrice(): Promise<IPrice | undefined> {
+		const thisPrice = await this.getPrice();
+		if (thisPrice !== undefined )
+			return thisPrice;
+		
+		const offer = await this.getOffer();
+
+		if (offer)
+			return await offer.getPrice()
+		
+		return undefined;
+	}
 	
 
 }
