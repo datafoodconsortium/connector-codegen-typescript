@@ -32,7 +32,7 @@ export default class Address extends SemanticObject implements IAddress {
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, street?: string, postalCode?: string, city?: string, country?: string}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, other?: Semanticable, street?: string, postalCode?: string, city?: string, country?: string, doNotStore?: boolean}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Address";
 		
 		if (parameters.other) {

@@ -23,7 +23,7 @@ export default class ConnectorExporterJsonldStream implements IConnectorExporter
         const input = new Readable({
             objectMode: true,
             read: () => {
-                semanticObjets.forEach((semanticObject) => semanticObject.toRdfDataset().forEach((quad) => input.push(quad)));
+                semanticObjets.forEach((semanticObject) => semanticObject.toRdfDatasetExt().forEach((quad) => input.push(quad)));
                 input.push(null)
             }
         });

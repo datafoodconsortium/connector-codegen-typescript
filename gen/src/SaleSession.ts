@@ -33,7 +33,7 @@ export default class SaleSession extends SemanticObject implements ISaleSession 
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, beginDate?: string, endDate?: string, quantity?: number, offers?: IOffer[]}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, other?: Semanticable, beginDate?: string, endDate?: string, quantity?: number, offers?: IOffer[], doNotStore?: boolean}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#SaleSession";
 		
 		if (parameters.other) {
@@ -86,8 +86,7 @@ export default class SaleSession extends SemanticObject implements ISaleSession 
 	public addOffer(offer: IOffer): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists";
 		if (offer.isSemanticObjectAnonymous()) {
-			if (offer.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, offer);
-			else this.addSemanticPropertyReference(property, offer);
+			this.addSemanticPropertyAnonymous(property, offer);
 		}
 		else {
 			this.connector.store(offer);

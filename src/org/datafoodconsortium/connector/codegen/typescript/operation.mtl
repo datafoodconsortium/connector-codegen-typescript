@@ -21,9 +21,9 @@
 [/if]
 [/template]
 
-[template public genConstructorSignatureWithSemanticId(aClass: Class, operation: Operation)][if (aClass.isAbstract)]protected[else]public[/if] constructor(parameters: {connector: IConnector[if (not (aClass.isBlankNode() or aClass.isAbstract))], doNotStore?: boolean[/if][if (aClass.isSemantic())], semanticId[if (aClass.isBlankNode())]?[/if]: string[if (aClass.isBlankNode() or aClass.isAbstract)], semanticType?: string[/if][/if][comment if (aClass.isSemantic() and aClass.isBlankNode())semanticType: string[/if /][if not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/]});[/template]
-[template public genConstructorSignatureCopy(aClass: Class, operation: Operation)][if (aClass.isAbstract)]protected[else]public[/if] constructor(parameters: {connector: IConnector[if (not (aClass.isBlankNode() or aClass.isAbstract))], doNotStore?: boolean[/if][if (aClass.isSemantic())], semanticId: string, other: Semanticable[/if]});[/template]
-[template public genConstructorSignatureImplementation(aClass: Class, operation: Operation)][if (aClass.isAbstract)]protected[else]public[/if] constructor(parameters: {connector: IConnector[if (not (aClass.isBlankNode() or aClass.isAbstract))], doNotStore?: boolean[/if][if (aClass.isSemantic() or aClass.isAbstract)], semanticId?: string, [if (aClass.isAbstract or aClass.isBlankNode())]semanticType?: string, [/if]other?: Semanticable[/if][if (aClass.isSemantic() or aClass.isAbstract) and not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/]}) {
+[template public genConstructorSignatureWithSemanticId(aClass: Class, operation: Operation)][if (aClass.isAbstract)]protected[else]public[/if] constructor(parameters: {connector: IConnector[if (aClass.isSemantic())], semanticId[if (aClass.isBlankNode())]?[/if]: string[if (aClass.isBlankNode() or aClass.isAbstract)], semanticType?: string[/if][/if][if not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/][if (not (aClass.isBlankNode() or aClass.isAbstract))], doNotStore?: boolean[/if]});[/template]
+[template public genConstructorSignatureCopy(aClass: Class, operation: Operation)][if (aClass.isAbstract)]protected[else]public[/if] constructor(parameters: {connector: IConnector[if (aClass.isSemantic())], semanticId: string, other: Semanticable[/if][if (not (aClass.isBlankNode() or aClass.isAbstract))], doNotStore?: boolean[/if]});[/template]
+[template public genConstructorSignatureImplementation(aClass: Class, operation: Operation)][if (aClass.isAbstract)]protected[else]public[/if] constructor(parameters: {connector: IConnector[if (aClass.isSemantic() or aClass.isAbstract)], semanticId?: string, [if (aClass.isAbstract or aClass.isBlankNode())]semanticType?: string, [/if]other?: Semanticable[/if][if (aClass.isSemantic() or aClass.isAbstract) and not (operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->isEmpty())], [/if][genConstructorParameters(aClass, operation)/][if (not (aClass.isBlankNode() or aClass.isAbstract))], doNotStore?: boolean[/if]}) {
 	[generateConstructorBody(aClass, operation)/]
 }[/template]
 
@@ -63,8 +63,7 @@ if (parameters.other) {
 [let parameter: Parameter = operation.ownedParameter->select(p: Parameter | (p.direction = ParameterDirectionKind::_in))->at(1)][let property: Property = getPropertyOfAdder(aClass, operation)]
 const property: string = "[property.getValue(property.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]";
 [if (parameter.type.isPrimitive())]this.addSemanticPropertyLiteral(property, [parameter.name/]);[else]if ([parameter.name/].isSemanticObjectAnonymous()) {
-	if ([parameter.name/].hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, [parameter.name/]);
-	else this.addSemanticPropertyReference(property, [parameter.name/]);
+	this.addSemanticPropertyAnonymous(property, [parameter.name/]);
 }
 else {
 	this.connector.store([parameter.name/]);

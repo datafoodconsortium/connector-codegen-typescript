@@ -35,7 +35,7 @@ export default class OrderLine extends SemanticObject implements IOrderLine {
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, quantity?: number, price?: IPrice, offer?: IOffer, order?: IOrder}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, other?: Semanticable, quantity?: number, price?: IPrice, offer?: IOffer, order?: IOrder, doNotStore?: boolean}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#OrderLine";
 		
 		if (parameters.other) {
@@ -129,19 +129,6 @@ export default class OrderLine extends SemanticObject implements IOrderLine {
 	public getDescription(): string
 	 {
 		return this.getSemanticProperty("http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#description");
-	}
-
-	public async getEffectivePrice(): Promise<IPrice | undefined> {
-		const thisPrice = await this.getPrice();
-		if (thisPrice !== undefined )
-			return thisPrice;
-		
-		const offer = await this.getOffer();
-
-		if (offer)
-			return await offer.getPrice()
-		
-		return undefined;
 	}
 	
 

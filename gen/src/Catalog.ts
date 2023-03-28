@@ -35,7 +35,7 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, maintainers?: IEnterprise[], items?: ICatalogItem[]}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, other?: Semanticable, maintainers?: IEnterprise[], items?: ICatalogItem[], doNotStore?: boolean}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Catalog";
 		
 		if (parameters.other) {
@@ -69,8 +69,7 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	public addMaintainer(maintainer: IEnterprise): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintainedBy";
 		if (maintainer.isSemanticObjectAnonymous()) {
-			if (maintainer.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, maintainer);
-			else this.addSemanticPropertyReference(property, maintainer);
+			this.addSemanticPropertyAnonymous(property, maintainer);
 		}
 		else {
 			this.connector.store(maintainer);
@@ -99,8 +98,7 @@ export default class Catalog extends SemanticObject implements ICatalog {
 	public addItem(item: ICatalogItem): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#lists";
 		if (item.isSemanticObjectAnonymous()) {
-			if (item.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, item);
-			else this.addSemanticPropertyReference(property, item);
+			this.addSemanticPropertyAnonymous(property, item);
 		}
 		else {
 			this.connector.store(item);

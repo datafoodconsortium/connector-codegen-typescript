@@ -34,7 +34,7 @@ import IGetterOptions from "./IGetterOptions.js"
 export default class Person extends Agent implements IPerson {
 	
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, firstName?: string, lastName?: string, localizations?: IAddress[], organizations?: IEnterprise[]}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, other?: Semanticable, firstName?: string, lastName?: string, localizations?: IAddress[], organizations?: IEnterprise[], doNotStore?: boolean}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Person";
 		
 		if (parameters.other) {
@@ -80,8 +80,7 @@ export default class Person extends Agent implements IPerson {
 	public affiliateTo(organization: IEnterprise): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#affiliates";
 		if (organization.isSemanticObjectAnonymous()) {
-			if (organization.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, organization);
-			else this.addSemanticPropertyReference(property, organization);
+			this.addSemanticPropertyAnonymous(property, organization);
 		}
 		else {
 			this.connector.store(organization);

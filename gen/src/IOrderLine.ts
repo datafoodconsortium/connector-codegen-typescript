@@ -15,7 +15,6 @@ export default interface IOrderLine extends Semanticable, Describable{
 	;
 	getOrder(): Promise<IOrder | undefined>
 	;
-	getEffectivePrice(): Promise<IPrice | undefined>;
 	setQuantity(quantity: number): void;
 	setPrice(price: IPrice): void;
 	setOffer(offer: IOffer): void;

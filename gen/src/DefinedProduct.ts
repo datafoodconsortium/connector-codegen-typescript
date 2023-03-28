@@ -94,8 +94,7 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	public addNutrientCharacteristic(nutrientCharacteristic: INutrientCharacteristic): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNutrientCharacteristic";
 		if (nutrientCharacteristic.isSemanticObjectAnonymous()) {
-			if (nutrientCharacteristic.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, nutrientCharacteristic);
-			else this.addSemanticPropertyReference(property, nutrientCharacteristic);
+			this.addSemanticPropertyAnonymous(property, nutrientCharacteristic);
 		}
 		else {
 			this.connector.store(nutrientCharacteristic);
@@ -176,8 +175,7 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	public addPartOrigin(partOrigin: IPartOrigin): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPartOrigin";
 		if (partOrigin.isSemanticObjectAnonymous()) {
-			if (partOrigin.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, partOrigin);
-			else this.addSemanticPropertyReference(property, partOrigin);
+			this.addSemanticPropertyAnonymous(property, partOrigin);
 		}
 		else {
 			this.connector.store(partOrigin);
@@ -206,8 +204,7 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	public addPhysicalCharacteristic(physicalCharacteristic: IPhysicalCharacteristic): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasPhysicalCharacteristic";
 		if (physicalCharacteristic.isSemanticObjectAnonymous()) {
-			if (physicalCharacteristic.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, physicalCharacteristic);
-			else this.addSemanticPropertyReference(property, physicalCharacteristic);
+			this.addSemanticPropertyAnonymous(property, physicalCharacteristic);
 		}
 		else {
 			this.connector.store(physicalCharacteristic);
@@ -236,8 +233,7 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	public addNatureOrigin(natureOrigin: INatureOrigin): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasNatureOrigin";
 		if (natureOrigin.isSemanticObjectAnonymous()) {
-			if (natureOrigin.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, natureOrigin);
-			else this.addSemanticPropertyReference(property, natureOrigin);
+			this.addSemanticPropertyAnonymous(property, natureOrigin);
 		}
 		else {
 			this.connector.store(natureOrigin);
@@ -249,8 +245,7 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	public addAllergenCharacteristic(allergenCharacteristic: IAllergenCharacteristic): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAllergenCharacteristic";
 		if (allergenCharacteristic.isSemanticObjectAnonymous()) {
-			if (allergenCharacteristic.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, allergenCharacteristic);
-			else this.addSemanticPropertyReference(property, allergenCharacteristic);
+			this.addSemanticPropertyAnonymous(property, allergenCharacteristic);
 		}
 		else {
 			this.connector.store(allergenCharacteristic);
@@ -312,8 +307,7 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	public addCertification(certification: ICertification): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasCertification";
 		if (certification.isSemanticObjectAnonymous()) {
-			if (certification.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, certification);
-			else this.addSemanticPropertyReference(property, certification);
+			this.addSemanticPropertyAnonymous(property, certification);
 		}
 		else {
 			this.connector.store(certification);
@@ -361,8 +355,7 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	public addClaim(claim: IClaim): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasClaim";
 		if (claim.isSemanticObjectAnonymous()) {
-			if (claim.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, claim);
-			else this.addSemanticPropertyReference(property, claim);
+			this.addSemanticPropertyAnonymous(property, claim);
 		}
 		else {
 			this.connector.store(claim);
@@ -386,8 +379,7 @@ export default abstract class DefinedProduct extends SemanticObject implements I
 	public addCatalogItem(catalogItem: ICatalogItem): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#referencedBy";
 		if (catalogItem.isSemanticObjectAnonymous()) {
-			if (catalogItem.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, catalogItem);
-			else this.addSemanticPropertyReference(property, catalogItem);
+			this.addSemanticPropertyAnonymous(property, catalogItem);
 		}
 		else {
 			this.connector.store(catalogItem);

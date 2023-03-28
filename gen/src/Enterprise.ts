@@ -40,7 +40,7 @@ import IGetterOptions from "./IGetterOptions.js"
 export default class Enterprise extends Agent implements Onboardable, ProductSupplier, IEnterprise {
 	
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, localizations?: IAddress[], description?: string, vatNumber?: string, customerCategories?: ICustomerCategory[], catalogs?: ICatalog[], catalogItems?: ICatalogItem[], suppliedProducts?: ISuppliedProduct[], technicalProducts?: ITechnicalProduct[]}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, other?: Semanticable, localizations?: IAddress[], description?: string, vatNumber?: string, customerCategories?: ICustomerCategory[], catalogs?: ICatalog[], catalogItems?: ICatalogItem[], suppliedProducts?: ISuppliedProduct[], technicalProducts?: ITechnicalProduct[], doNotStore?: boolean}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Enterprise";
 		
 		if (parameters.other) {
@@ -67,8 +67,7 @@ export default class Enterprise extends Agent implements Onboardable, ProductSup
 	public manageCatalogItem(catalogItem: ICatalogItem): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#manages";
 		if (catalogItem.isSemanticObjectAnonymous()) {
-			if (catalogItem.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, catalogItem);
-			else this.addSemanticPropertyReference(property, catalogItem);
+			this.addSemanticPropertyAnonymous(property, catalogItem);
 		}
 		else {
 			this.connector.store(catalogItem);
@@ -96,8 +95,7 @@ export default class Enterprise extends Agent implements Onboardable, ProductSup
 	public maintainCatalog(catalog: ICatalog): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#maintains";
 		if (catalog.isSemanticObjectAnonymous()) {
-			if (catalog.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, catalog);
-			else this.addSemanticPropertyReference(property, catalog);
+			this.addSemanticPropertyAnonymous(property, catalog);
 		}
 		else {
 			this.connector.store(catalog);
@@ -130,8 +128,7 @@ export default class Enterprise extends Agent implements Onboardable, ProductSup
 	public supplyProduct(suppliedProduct: ISuppliedProduct): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#supplies";
 		if (suppliedProduct.isSemanticObjectAnonymous()) {
-			if (suppliedProduct.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, suppliedProduct);
-			else this.addSemanticPropertyReference(property, suppliedProduct);
+			this.addSemanticPropertyAnonymous(property, suppliedProduct);
 		}
 		else {
 			this.connector.store(suppliedProduct);
@@ -159,8 +156,7 @@ export default class Enterprise extends Agent implements Onboardable, ProductSup
 	public proposeTechnicalProducts(technicalProducts: ITechnicalProduct): void {
 		const property: string = "";
 		if (technicalProducts.isSemanticObjectAnonymous()) {
-			if (technicalProducts.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, technicalProducts);
-			else this.addSemanticPropertyReference(property, technicalProducts);
+			this.addSemanticPropertyAnonymous(property, technicalProducts);
 		}
 		else {
 			this.connector.store(technicalProducts);
@@ -217,8 +213,7 @@ export default class Enterprise extends Agent implements Onboardable, ProductSup
 	public addCustomerCategory(customerCategory: ICustomerCategory): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#defines";
 		if (customerCategory.isSemanticObjectAnonymous()) {
-			if (customerCategory.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, customerCategory);
-			else this.addSemanticPropertyReference(property, customerCategory);
+			this.addSemanticPropertyAnonymous(property, customerCategory);
 		}
 		else {
 			this.connector.store(customerCategory);

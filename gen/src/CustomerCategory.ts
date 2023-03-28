@@ -32,7 +32,7 @@ export default class CustomerCategory extends SemanticObject implements ICustome
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, description?: string}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, other?: Semanticable, description?: string, doNotStore?: boolean}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#CustomerCategory";
 		
 		if (parameters.other) {

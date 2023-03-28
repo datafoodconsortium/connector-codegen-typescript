@@ -43,8 +43,9 @@ export default abstract class Characteristic extends QuantitativeValue implement
 		
 		
 	}
-	
+
 	abstract getQuantityDimension(): Promise<ICharacteristicDimension | undefined>;
 	abstract setQuantityDimension(quantityDimension: ICharacteristicDimension): void
+
 
 }

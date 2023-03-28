@@ -35,7 +35,7 @@ export default class CatalogItem extends SemanticObject implements ICatalogItem 
 	
 	protected connector: IConnector;
 
-	public constructor(parameters: {connector: IConnector, doNotStore?: boolean, semanticId?: string, other?: Semanticable, product?: IDefinedProduct, sku?: string, stockLimitation?: number, offers?: IOffer[], catalogs?: ICatalog[]}) {
+	public constructor(parameters: {connector: IConnector, semanticId?: string, other?: Semanticable, product?: IDefinedProduct, sku?: string, stockLimitation?: number, offers?: IOffer[], catalogs?: ICatalog[], doNotStore?: boolean}) {
 		const type: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#CatalogItem";
 		
 		if (parameters.other) {
@@ -60,8 +60,7 @@ export default class CatalogItem extends SemanticObject implements ICatalogItem 
 	public registerInCatalog(repository: ICatalog): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#listedIn";
 		if (repository.isSemanticObjectAnonymous()) {
-			if (repository.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, repository);
-			else this.addSemanticPropertyReference(property, repository);
+			this.addSemanticPropertyAnonymous(property, repository);
 		}
 		else {
 			this.connector.store(repository);
@@ -116,8 +115,7 @@ export default class CatalogItem extends SemanticObject implements ICatalogItem 
 	public addOffer(offer: IOffer): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#offeredThrough";
 		if (offer.isSemanticObjectAnonymous()) {
-			if (offer.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, offer);
-			else this.addSemanticPropertyReference(property, offer);
+			this.addSemanticPropertyAnonymous(property, offer);
 		}
 		else {
 			this.connector.store(offer);

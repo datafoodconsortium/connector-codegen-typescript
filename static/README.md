@@ -372,7 +372,8 @@ const Semanticable | undefined = await connector.importOne(jsonAsAString);
 
 You can pass the `only` option to target one type using the `importOneTyped` method:
 ```JS
-const IOrder | undefined = await connector.importOneTyped<IOrder>(jsonAsAString, { only: connector.TERMS.ORDER });
+const order: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Order";
+const IOrder | undefined = await connector.importOneTyped<IOrder>(jsonAsAString, { only: order });
 ```
 
 ## Configure
@@ -451,7 +452,7 @@ parameters: {
   semanticId: string, 
   maintainers?: IEnterprise[], 
   items?: ICatalogItem[],
-  doNotStore?: boolean
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -460,7 +461,7 @@ parameters: {
 ```JS
 parameters: {
   other: ICatalog, // construct the object by copy
-  doNotStore?: boolean
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -476,7 +477,7 @@ parameters: {
   stockLimitation?: number, 
   offers?: IOffer[], 
   catalogs?: ICatalog[],
-  doNotStore?: boolean
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -485,7 +486,7 @@ parameters: {
 ```JS
 parameters: {
   other: ICatalogItem, // construct the object by copy
-  doNotStore?: boolean
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -497,7 +498,7 @@ parameters: {
 parameters: {
   semanticId: string, 
   description?: string,
-  doNotStore?: boolean 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -506,7 +507,7 @@ parameters: {
 ```JS
 parameters: {
   other: ICustomerCategory, // construct the object by copy
-  doNotStore?: boolean 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -524,7 +525,7 @@ parameters: {
   catalogs?: ICatalog[], 
   catalogItems?: ICatalogItem[], 
   suppliedProducts?: ISuppliedProduct[],
-  doNotStore?: boolean 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -533,7 +534,7 @@ parameters: {
 ```JS
 parameters: {
   other: IEnterprise, // construct the object by copy
-  doNotStore?: boolean 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -568,7 +569,7 @@ parameters: {
   offeredTo?: ICustomerCategory, 
   price?: IPrice, 
   stockLimitation?: number,
-  doNotStore?: boolean 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -577,7 +578,7 @@ parameters: {
 ```JS
 parameters: {
   other: IOffer, // construct the object by copy
-  doNotStore?: boolean 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -592,8 +593,8 @@ parameters: {
   date?: string, 
   saleSession?: ISaleSession, 
   client?: IAgent, 
-  lines?: IOrderLine[]
-  doNotStore?: boolean, 
+  lines?: IOrderLine[],
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -602,7 +603,7 @@ parameters: {
 ```JS
 parameters: {
   other: IOrder, // construct the object by copy
-  doNotStore?: boolean, 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -617,7 +618,7 @@ parameters: {
   price?: IPrice, 
   offer?: IOffer, 
   order?: IOrder,
-  doNotStore?: boolean 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -626,7 +627,7 @@ parameters: {
 ```JS
 parameters: {
   other: IOrderLine, // construct the object by copy
-  doNotStore?: boolean 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -641,7 +642,7 @@ parameters: {
   lastName?: string, 
   localizations?: IAddress[], 
   organizations?: IEnterprise[],
-  doNotStore?: boolean 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -650,7 +651,7 @@ parameters: {
 ```JS
 parameters: {
   other: IPerson, // construct the object by copy
-  doNotStore?: boolean 
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -724,7 +725,7 @@ parameters: {
   endDate?: string, 
   quantity?: number, 
   offers?: IOffer[],
-  doNotStore?: boolean,
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -733,7 +734,7 @@ parameters: {
 ```JS
 parameters: {
   other: ISaleSession, // construct the object by copy
-  doNotStore?: boolean,
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -761,7 +762,7 @@ parameters: {
   natureOrigin?: INatureOrigin[], 
   partOrigin?: IPartOrigin[], 
   totalTheoreticalStock?: number,
-  doNotStore?: boolean
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```
 
@@ -770,6 +771,6 @@ parameters: {
 ```JS
 parameters: {
   other: ISuppliedProduct, // construct the object by copy 
-  doNotStore?: boolean
+  doNotStore?: boolean // if true, do not save the object into the connector store
 }
 ```

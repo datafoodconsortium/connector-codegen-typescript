@@ -46,8 +46,7 @@ export default abstract class Agent extends SemanticObject implements IAgent {
 	public addLocalization(localization: IAddress): void {
 		const property: string = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#hasAddress";
 		if (localization.isSemanticObjectAnonymous()) {
-			if (localization.hasSemanticPropertiesOtherThanType()) this.addSemanticPropertyAnonymous(property, localization);
-			else this.addSemanticPropertyReference(property, localization);
+			this.addSemanticPropertyAnonymous(property, localization);
 		}
 		else {
 			this.connector.store(localization);
