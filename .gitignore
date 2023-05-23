@@ -2,3 +2,4 @@ bin/
 gen/lib
 gen/node_modules
 tasks/
+*.code-workspace

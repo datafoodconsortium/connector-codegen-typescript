@@ -4,7 +4,7 @@
   "author": "Maxime Lecoq",
   "license": "MIT",
   "type": "module",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/datafoodconsortium/connector-typescript.git",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@rdfjs/serializer-jsonld-ext": "^4.0.0",
-    "@virtual-assembly/semantizer": "^1.0.0-alpha.1",
+    "@virtual-assembly/semantizer": "^1.0.0-alpha.2",
     "jsonld": "^8.1.0",
     "jsonld-streaming-parser": "^3.2.0",
     "rdf-ext": "^2.2.0",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@types/jsonld": "^1.5.7",
-    "@types/rdf-ext": "^2.0.0",
+    "@types/rdf-ext": "^2.2.0",
     "@types/rdfjs__serializer-jsonld-ext": "^2.0.5",
     "jest": "^29.2.2",
     "typescript": "^4.5"
